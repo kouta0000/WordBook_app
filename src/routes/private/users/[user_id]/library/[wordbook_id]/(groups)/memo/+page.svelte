@@ -22,17 +22,17 @@ let isClickeds: Array<boolean> = $state(new Array(length).fill(true));
 
 </script>
 
-<div class="flex justify-center items-center fixed absolute top-25 w-full flex flex-row flex-wrap gap-4 mb-15  z-11 opacity-90">
-    <button class="btn btn-soft btn-success grow" onclick={() => isClickeds.fill(true)}>
+<div class="flex justify-center items-center fixed absolute top-20 lg:top-25 w-full flex flex-row flex-wrap gap-4 mb-15  z-11 opacity-90">
+    <button class="btn btn-soft btn-success grow basis-0" onclick={() => isClickeds.fill(true)}>
         全て見せる
     </button>
-    <button class="btn btn-soft btn-success grow" onclick={()=> isClickeds.fill(false)}>
+    <button class="btn btn-soft btn-success grow basis-0" onclick={()=> isClickeds.fill(false)}>
         全てかくす
     </button>
-    <button class="btn btn-soft btn-success grow" onclick={() => shuffleWords(words)}>
+    <button class="btn btn-soft btn-success grow basis-0" onclick={() => shuffleWords(words)}>
         シャッフル
     </button>
-    <button class="btn btn-soft btn-success grow" onclick={() => isFlipped = !isFlipped}>
+    <button class="btn btn-soft btn-success grow basis-0" onclick={() => isFlipped = !isFlipped}>
         フリップ
     </button>
     
