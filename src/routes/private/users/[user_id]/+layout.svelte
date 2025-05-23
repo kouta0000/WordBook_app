@@ -1,5 +1,6 @@
 
 <script lang="ts">
+import { goto } from "$app/navigation";
 import "/src/styles/style.css";
 let { data, children } = $props()
 let { supabase } = $derived(data)
@@ -8,6 +9,7 @@ const logout = async () => {
     if (error) {
       console.error(error);
         };
+    goto("/auth");
     };
 </script>
 
