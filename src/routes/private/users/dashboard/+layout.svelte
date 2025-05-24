@@ -18,6 +18,7 @@ const logout = async () => {
     <span class="mx-auto"><h1 class="text-xl md:text-2xl font-serif font-bold">MonVocab</h1></span>
     <a onclick={logout}><object data="/images/logout_icon.svg" style="pointer-events: none;" type="image/svg+xml" class="h-8 w-8 m-6 z-11">ログアウト</object></a>
 </div>
+
 <dialog id="my_modal" class="modal">
     <div class="modal-box flex flex-col items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
         <form method="post" class="w-full flex flex-col items-center gap-10">

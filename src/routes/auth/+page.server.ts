@@ -26,9 +26,7 @@ export const actions: Actions = {
       console.error(error)
       redirect(303, '/auth/error')
     } else {
-      const { data: { user } } = await supabase.auth.getUser()
-      const user_id: string = user.id
-      redirect(303, `/private/users/${user_id}/wordbooks`)
+      redirect(303, `/private/users/dashboard`)
     }
   },
 }

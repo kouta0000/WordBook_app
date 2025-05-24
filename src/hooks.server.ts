@@ -1,7 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { type Handle, redirect } from '@sveltejs/kit'
 import { sequence } from '@sveltejs/kit/hooks'
-
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
 
 const supabase: Handle = async ({ event, resolve }) => {
@@ -33,6 +32,7 @@ const supabase: Handle = async ({ event, resolve }) => {
       // JWT validation has failed
       return { session: null, user: null }
     }
+    event.locals.user = user;
 
     return { session, user }
   }
@@ -58,8 +58,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
   }
 
   if (event.locals.session && event.url.pathname === '/auth') {
-    const user_id: string = user.id
-    redirect(303, `/private/users/${user_id}/wordbooks`)
+    redirect(303, `/private/users/dashboard`)
   }
 
   return resolve(event)
