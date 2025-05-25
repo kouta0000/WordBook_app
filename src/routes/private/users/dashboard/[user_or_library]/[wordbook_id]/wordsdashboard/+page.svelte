@@ -76,11 +76,11 @@
 
 
 <dialog bind:this={dialog} id="my_modal2" class="modal modal-bottom md:modal-middle">
-    <div class="modal-box flex flex-col items-center w-full md:w-1/2 lg:w-3/10 max-w-none max-h-4/5 overflow-auto">
-        <form method="post" use:enhance action="?/createWord" class="bg-stone-50 w-full flex flex-col items-center gap-4">
+    <div class="modal-box flex flex-col items-center bg-stone-50 w-full md:w-1/2 lg:w-3/10 max-w-none max-h-4/5 overflow-auto">
+        <form method="post" use:enhance action="?/createWord" class="w-full flex flex-col items-center gap-4">
             <h1>単語を追加しよう!</h1>
-            <button type="button" class="w-9/10 btn btn-soft" onclick={() => wordidstoadd.push(index++)}>ふやす</button>
-            <button type="button" class="w-9/10 btn btn-soft" onclick={() => wordidstoadd.pop()}>へらす</button>
+            <button type="button" class="w-9/10 btn btn-soft shadow-lg" onclick={() => wordidstoadd.push(index++)}>ふやす</button>
+            <button type="button" class="w-9/10 btn btn-soft shadow-lg" onclick={() => wordidstoadd.pop()}>へらす</button>
             {#each wordidstoadd as wids,i (wids)}
             <div in:fly={{duration:200, y:20}} out:fly={{duration:200, y:-20}} class="bg-white w-full gap-2 p-2 border-1 border-stone-200 shadow-lg flex flex-col justify-center items-center">
             <input type="text" id="term" name="term" placeholder="単語" class="input input-neutral w-9/10" required>
@@ -89,7 +89,7 @@
             </div>
             {/each}
             
-            <button class="btn w-9/10 mt-7" type="submit" onclick={() => dialog?.close()}>追加</button>
+            <button class="btn w-9/10 mt-5 shadow-lg" type="submit" onclick={() => dialog?.close()}>追加</button>
         </form>
         <div class="flex-grow"></div>
         <div class="modal-action">

@@ -186,7 +186,7 @@
             </div>
             <div class="w-full hidden lg:block h-3"></div>
 
-            <div id="test_buttons" class="w-full flex flex-row gap-3 items-center mt-5 lg:mt-3 lg:mr-5 ">
+            <div id="test_buttons" class="w-full flex flex-row gap-3 items-center mt-4 lg:mt-3 lg:mr-5 ">
                 <button class={{
                     "btn btn-outline  rounded-2xl lg:grow": true,
                     "btn-info": user_or_library=="user",
