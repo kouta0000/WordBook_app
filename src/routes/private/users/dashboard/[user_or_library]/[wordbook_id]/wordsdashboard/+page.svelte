@@ -13,6 +13,7 @@
      let currentView: string = $state("memo");
      let index:number = $state(1);
      let wordidstoadd: Array<number> = $state([0]);
+     let dialog: HTMLDialogElement | undefined = $state();
 </script>
 
 {#if currentView == "memo"}
@@ -74,7 +75,7 @@
 </div>
 
 
-<dialog id="my_modal2" class="modal modal-bottom md:modal-middle">
+<dialog bind:this={dialog} id="my_modal2" class="modal modal-bottom md:modal-middle">
     <div class="modal-box flex flex-col items-center w-full md:w-1/2 lg:w-3/10 max-w-none max-h-4/5 overflow-auto">
         <form method="post" use:enhance action="?/createWord" class="bg-stone-50 w-full flex flex-col items-center gap-4">
             <h1>単語を追加しよう!</h1>
@@ -88,7 +89,7 @@
             </div>
             {/each}
             
-            <button class="btn w-9/10 mt-7" type="submit">追加</button>
+            <button class="btn w-9/10 mt-7" type="submit" onclick={() => dialog?.close()}>追加</button>
         </form>
         <div class="flex-grow"></div>
         <div class="modal-action">

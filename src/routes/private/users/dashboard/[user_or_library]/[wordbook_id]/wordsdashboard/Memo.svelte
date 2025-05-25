@@ -11,15 +11,14 @@
             meaning: string;
             id: string;
     }
-    const length: number = $state(words.length);
     const shuffleWords = (words: Array<Word>) => {
-        for (let i = length-1; i > 0; i--) {
+        for (let i = words.length-1; i > 0; i--) {
             const random: number = Math.floor(Math.random()*(i+1));
             [words[i], words[random]] = [words[random], words[i]];
         }
     }
     
-    let isClickeds: Array<boolean> = $state(new Array(length+1).fill(true));
+    let isClickeds: Array<boolean> = $derived(new Array(words.length).fill(true));
     
     </script>
     
