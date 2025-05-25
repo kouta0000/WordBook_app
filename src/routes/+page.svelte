@@ -10,7 +10,7 @@
                 <feDropShadow dx="6" dy="6" stdDeviation="3" flood-color="gray" />
               </filter>
             </defs>
-            <text x="35" y="80" font-size="100" fill="black" filter="url(#shadow)">MonVocab</text>
+            <text x="39" y="80" font-size="90" fill="black" filter="url(#shadow)">MonVocab</text>
           </svg>          
     </h2>
 
