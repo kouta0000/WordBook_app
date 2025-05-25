@@ -16,10 +16,17 @@ export const load:PageServerLoad = async ({cookies, params, locals}) => {
 };
 
   export const actions = {
-    default: async ({ request, locals }) => {
+    add: async ({ request, locals }) => {
         const data = await request.formData();
         const wb_name: string = data.get("wb_name");
         const user_id = locals.user?.id
         const {error} = await supabase.from("WordBooks").insert({"user_id": user_id, "wb_name": wb_name})
+    },
+    delete: async ({request}) => {
+        const data: FormData = await request.formData();
+        const wordbook_id = data.get("wordbook_id");
+        console.log(typeof wordbook_id)
+        const {error} = await supabase.from("WordBooks").delete().eq("id", wordbook_id);  
+        console.log(wordbook_id)
     }
 };

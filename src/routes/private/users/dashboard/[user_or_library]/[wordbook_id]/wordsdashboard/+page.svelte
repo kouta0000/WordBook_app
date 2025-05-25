@@ -2,18 +2,21 @@
     import Memo from "./Memo.svelte";
     import Test from "./Test.svelte";
     import type { PageProps } from "./$types";
+    import {enhance} from "$app/forms";
+    import {fly} from "svelte/transition";
      
-     let { data }: PageProps = $props();
+     let { data, form }: PageProps = $props();
      let words = $state(data.loaddata.words.data);
      let user_or_library = $state(data.loaddata.user_or_library);
      const wordbook_id: string = data.loaddata.wordbook_id;
      const wb_name = data.loaddata.wb_name.data?.[0].wb_name;
      let currentView: string = $state("memo");
-
+     let index:number = $state(1);
+     let wordidstoadd: Array<number> = $state([0]);
 </script>
 
 {#if currentView == "memo"}
-<Memo words={words} user_or_library={user_or_library} wb_name={wb_name}/>  
+<Memo words={data.loaddata.words.data} user_or_library={user_or_library} wb_name={wb_name}/>  
 {:else if currentView == "test"}
 <Test wordslist={words} user_or_library={user_or_library} />
 {/if}
@@ -71,15 +74,20 @@
 </div>
 
 
-<dialog id="my_modal2" class="modal">
-    <div class="modal-box flex flex-col items-center w-4/5 md:w-1/2 lg:w-3/10 max-w-none">
-        <form method="post" action="?/createWord" class="w-full flex flex-col items-center gap-4">
+<dialog id="my_modal2" class="modal modal-bottom md:modal-middle">
+    <div class="modal-box flex flex-col items-center w-full md:w-1/2 lg:w-3/10 max-w-none max-h-4/5 overflow-auto">
+        <form method="post" use:enhance action="?/createWord" class="bg-stone-50 w-full flex flex-col items-center gap-4">
             <h1>単語を追加しよう!</h1>
-            <label for="term" class="label-base"></label>
-            <input type="text" id="term" name="term" placeholder="単語" class="input w-9/10" required>
-            <label for="meaning" class="label-base"></label>
-            <input type="text" id="meaning" name="meaning" placeholder="意味" class="input w-9/10" required>
-            <input type="text" id="wordbook_id" name="wordbook_id" value={wordbook_id} class="invisible" required>
+            <button type="button" class="w-9/10 btn btn-soft" onclick={() => wordidstoadd.push(index++)}>ふやす</button>
+            <button type="button" class="w-9/10 btn btn-soft" onclick={() => wordidstoadd.pop()}>へらす</button>
+            {#each wordidstoadd as wids,i (wids)}
+            <div in:fly={{duration:200, y:20}} out:fly={{duration:200, y:-20}} class="bg-white w-full gap-2 p-2 border-1 border-stone-200 shadow-lg flex flex-col justify-center items-center">
+            <input type="text" id="term" name="term" placeholder="単語" class="input input-neutral w-9/10" required>
+            <input type="text" id="meaning" name="meaning" placeholder="意味" class="input input-neutral w-9/10" required>
+            <input type="hidden" id="wordbook_id" name="wordbook_id" value={wordbook_id} class="invisible" required>
+            </div>
+            {/each}
+            
             <button class="btn w-9/10 mt-7" type="submit">追加</button>
         </form>
         <div class="flex-grow"></div>

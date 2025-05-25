@@ -144,12 +144,15 @@
 
 <div id="displays" class="w-full h-screen pt-35 lg:pt-30 pb-35 md:pb-40 lg:pb-30 flex flex-col lg:flex-row gap-7 justify-spacearound items-center relative overflow-clip z-19 bg-stone-50">
     {#if showdisplays} 
-        <div id="main_display" class="flex w-4/5 md:w-3/5 lg:w-2/5 lg:ml-5 rounded-3xl bg-white border-1 border-emerald-300 grow-2 mb-10 lg:mb-6 relative" in:fly={{duration:300, x:300}} out:fly={{duration:400, x:-500}}>
+        <div id="main_display" class={{
+            "flex w-4/5 md:w-3/5 lg:w-2/5 lg:ml-5 rounded-3xl bg-white border-1 grow-2 mb-10 lg:mb-6 relative":true,
+            "border-sky-300": user_or_library == "user",
+            "border-emerald-300": user_or_library == "library"}} in:fly={{duration:300, x:300}} out:fly={{duration:400, x:-500}}>
             <h1 class="m-auto text-2xl sm:text-3xl md:text-6xl p-4 lg:p-15 font-bold ">{ typeof main_display == "string" ? main_display : main_display.term }</h1>
-            <svg height="110" width="110" class="absolute -right-8 lg:right-10 -top-15 fill-none rotate-140">
+            <svg preserveAspectRatio="xMidYMidmeet" height="110" width="110" class="absolute -right-8 lg:right-10 -top-15 fill-none rotate-140">
                 <circle cx="55" cy="55" r="50" stroke-linecap="round" class="overflow-visible stroke-red-400 transition-all duration-500 ease-out" stroke-width="10" stroke-dasharray="314" style="stroke-dashoffset:{isCorrect? 0: 314};" />
             </svg>
-            <svg height="110" width="110" class="absolute -right-8 lg:right-auto lg:left-10 -top-15 fill-none">
+            <svg preserveAspectRatio="xMidYMidmeet" height="110" width="110" class="absolute -right-8 lg:right-auto lg:left-10 -top-15 fill-none">
                 <line x1="105" y1="5" x2="5" y2="105" stroke-linecap="round" class="stroke-sky-500 transition-all duration-200" stroke-width="10" stroke-dasharray="142" style="stroke-dashoffset:{isWrong? 0: 142};" />
                 <line x1="5" y1="5" x2="105" y2="105" stroke-linecap="round" class="stroke-sky-500 transition-all delay-200 duration-200" stroke-width="10" stroke-dasharray="142" style="stroke-dashoffset:{isWrong? 0: 142};" />
             </svg>
@@ -157,20 +160,33 @@
         
         <div class="w-4/5 md:w-3/5 lg:w-2/5 flex flex-col grow justify-center items-center gap-5">
         
-            <div class="flex w-full rounded-3xl bg-white border-1 border-emerald-300 grow-1 lg:mr-5" in:fly={{duration:300, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[0].meaning)}}>
+            <div class={{
+                "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
+                "border-sky-300": user_or_library == "user",
+                "border-emerald-300": user_or_library == "library"}} in:fly={{duration:300, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[0].meaning)}}>
                 <h1 class="m-auto p-3 lg-py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[0].meaning }</h1>
             </div>
-            <div class="flex w-full rounded-3xl bg-white border-1 border-emerald-300 grow-1 lg:mr-5" in:fly={{duration:350, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[1].meaning)}}>
+            <div class={{
+                "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
+                "border-sky-300": user_or_library == "user",
+                "border-emerald-300": user_or_library == "library"}} in:fly={{duration:350, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[1].meaning)}}>
                 <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[1].meaning }</h1>
             </div>
-            <div class="flex w-full rounded-3xl bg-white border-1 border-emerald-300 grow-1 lg:mr-5" in:fly={{duration:400, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[2].meaning)}}>
+            <div class={{
+                "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
+                "border-sky-300": user_or_library == "user",
+                "border-emerald-300": user_or_library == "library"}} in:fly={{duration:400, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[2].meaning)}}>
                 <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[2].meaning }</h1>
             </div>
-            <div onoutroend={() => testend? showCurtain(): displayNewWords()} class="lg:mr-5 flex w-full rounded-3xl bg-white border-1 border-emerald-300 grow-1" in:fly={{duration:450, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[3].meaning)}}>
+            <div onoutroend={() => testend? showCurtain(): displayNewWords()} class={{
+                "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
+                "border-sky-300": user_or_library == "user",
+                "border-emerald-300": user_or_library == "library"}} in:fly={{duration:450, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[3].meaning)}}>
                 <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[3].meaning }</h1>
             </div>
             <div class="w-full hidden lg:block h-3"></div>
-            <div id="test_buttons" class="w-full flex flex-row gap-3 items-center mt-6 lg:mt-3 lg:mr-5 ">
+
+            <div id="test_buttons" class="w-full flex flex-row gap-3 items-center mt-5 lg:mt-3 lg:mr-5 ">
                 <button class={{
                     "btn btn-outline  rounded-2xl lg:grow": true,
                     "btn-info": user_or_library=="user",

@@ -26,19 +26,24 @@ export const load: PageServerLoad = async ({cookies, params, locals}) => {
 export const actions = {
     createWord: async ({ request, locals }) => {
         const data = await request.formData();
-        const term: string = data.get("term");
-        const meaning: string = data.get("meaning");
-        const wordbook_id: string = data.get("wordbook_id")
+        const terms: string[] = data.getAll("term");
+        const meanings: string[] = data.getAll("meaning");
+        const wordbook_ids: string[] = data.getAll("wordbook_id")
         const user_id = locals.user?.id;
-        const {error} = await supabase.from("Words").insert({"user_id": user_id, "wb_id": wordbook_id, "term": term, "meaning": meaning})
+        for (let i = 0; i < terms.length; i++) {
+            const term: string = terms[i];
+            const meaning: string = meanings[i];
+            const wordbook_id: string = wordbook_ids[i];
+            const {error} = await supabase.from("Words").insert({"user_id": user_id, "wb_id": wordbook_id, "term": term, "meaning": meaning})
+        }
     },
-    deleteWord: async ({ cookies, request }) => {
+    deleteWords: async ({ request, locals, params }) => {
         const data: FormData = await request.formData();
+        const wordbook_id = params.wordbook_id;
         const erros = [];
         for (const [key, value] of data) {
             const {error} = await supabase.from("Words").delete().eq("id", value);
             erros.push(error);
-        };
-        
+        };    
     },
 };

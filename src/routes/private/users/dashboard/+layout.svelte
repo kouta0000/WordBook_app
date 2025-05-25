@@ -2,6 +2,7 @@
 <script lang="ts">
 import { goto } from "$app/navigation";
 import "/src/styles/style.css";
+import {enhance} from "$app/forms";
 let { data, children } = $props()
 let { supabase } = $derived(data)
 const logout = async () => {
@@ -21,7 +22,7 @@ const logout = async () => {
 
 <dialog id="my_modal" class="modal">
     <div class="modal-box flex flex-col items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
-        <form method="post" class="w-full flex flex-col items-center gap-10">
+        <form method="post" action="?/add" class="w-full flex flex-col items-center gap-10">
             <label for="wb_name" class="label-base">単語帳の名前を決めよう!</label>
             <input type="text" id="wb_name" name="wb_name" placeholder="wordbook_name" class="input w-9/10" required>
             <button class="btn w-9/10" type="submit">作成</button>

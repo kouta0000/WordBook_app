@@ -12,7 +12,7 @@
     let currentView: string = $state("user_wordbooks");
 </script>
 {#if currentView == "user_wordbooks"}
-<UserWordBooks wordbooks={user_wordbooks ?? []} />
+<UserWordBooks wordbooks={data.loaddata.user_wordbooks.data ?? []} />
 {:else if currentView == "library_wordbooks"}
 <LibraryWordBooks wordbooks={library_wordbooks ?? []} />
 {/if}
