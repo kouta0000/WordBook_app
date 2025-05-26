@@ -33,7 +33,7 @@
         "text-sky-500":user_or_library=="user" && currentView=="memo",
         "text-emerald-500":user_or_library=="library" && currentView=="memo",
         "text-gray-500": currentView=="test" || currentView == "edit"
-        }}>{currentView}覚える</button>
+        }}>覚える</button>
     
     <button onclick={()=> currentView = "edit"} class={{
         "btn btn-ghost font-bold h-15 md:h-20 grow-1 basis-0":true,
