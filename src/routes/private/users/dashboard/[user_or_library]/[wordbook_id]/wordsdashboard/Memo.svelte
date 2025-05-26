@@ -49,8 +49,8 @@
     </div>
     
     <div class="w-full pt-18 pb-15 md:pb-20 flex flex-col min-h-screen gap-5 items-center">
-        <h1 class="text mt-34 lg:mt-25 mb-2">{wb_name}</h1> 
-        <form method="POST" action="?/deleteWords" use:enhance class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
+        <h1 class="text mt-25 lg:mt-25 mb-2">{wb_name}</h1> 
+        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
             <button onclick={() => isChecked = false} class={{"w-4/5 md:w-2/5 lg:w-1/5 lg:h-20 absolute fixed opacity-95 z-11 bottom-24 lg:bottom-25 lg:right-5 btn btn-info rounded-2xl grow opacity-80":true, "hidden":!isChecked, "block":isChecked}}>
                 <p class="text-white">削除</p>
             </button>
@@ -62,8 +62,6 @@
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl">{isFlipped ? word.meaning: word.term}</p>
                 </span>
                 <div class="flex w-full shadow-lg rounded-3xl bg-white border-1 border-sky-300 relative">
-                    <input type="checkbox" name="deletecheck" value={word.id} class={{"mx-1 my-auto checkbox checkbox-xl checkbox-accent z-10":true, "hidden":!isChecked, "block":isChecked}}>
-    
                     <Overlay i={i} hide={hide}/> 
                     <p class="mx-auto my-4 max-w-9/10 font-sans teext-lg">{isFlipped? word.term: word.meaning}</p>
                 </div>
@@ -84,7 +82,7 @@
             </div>
             {/each}
             {/if}
-        </form>
+        </div>
         <div class="w-full h-50"></div>
     </div>
     

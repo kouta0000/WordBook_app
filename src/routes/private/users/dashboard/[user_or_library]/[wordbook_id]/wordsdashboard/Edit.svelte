@@ -18,25 +18,27 @@
 
 
     <div class="w-full pt-18 pb-15 md:pb-20 flex flex-col min-h-screen gap-5 items-center ">
-        <h1 class="text mt-34 lg:mt-25 mb-2">{wb_name}</h1> 
+        <h1 class="text mt-25 lg:mt-25 mb-2">{wb_name}</h1> 
         <form method="POST" action="?/deleteWords" use:enhance={() => {
             isChecked = !isChecked;
             return async ({update}) => {
                 await update();
             }
         }} class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
-            <div class="w-full md:w-4/5 lg:w-1/2 flex gap-3 justify-center items-center absolute fixed bottom-22 lg:right-5 z-10">
+            <div class="w-full px-4 md:w-4/5 lg:w-1/2 flex gap-3 justify-center items-center absolute fixed bottom-22 lg:right-5 z-20">
                 {#if isChecked}
                 <button type="submit" class="btn btn-active btn-warning rounded-2xl grow w-min basis-0">
                     <p class="text-white">削除</p>
                 </button>
                 {/if}
-                <button type="button" onclick={() => isChecked=!isChecked} class="btn btn-active btn-secondary rounded-2xl grow w-min basis-0 opacity-80">
+                <button type="button" onclick={() => isChecked=!isChecked} class="btn btn-active btn-secondary rounded-2xl grow w-min basis-0 opacity-70">
                     <p class="whitespace-nowrap">{ !isChecked? "選択": "元に戻す"}</p>
                 </button>
-                <button type="button" class="btn btn-active btn-secondary rounded-2xl grow w-min basis-0 opacity-80" onclick={() => dialog?.showModal()}>
+                {#if !isChecked}
+                <button type="button" class="btn btn-active btn-secondary rounded-2xl grow w-min basis-0 opacity-70" onclick={() => dialog?.showModal()}>
                     <p class="whitespace-nowrap">追加</p>
                 </button>
+                {/if}
             </div>
             {#each words as word (word.id)}
             <div out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-4/5 sm:grow flex flex-col justify-center items-start">

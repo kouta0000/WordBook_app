@@ -12,26 +12,43 @@ interface Wordbook {
     let isChecked: boolean = $state(false);
     let dialogs: Array<HTMLDialogElement> = $state([]);
     let forms:Array<HTMLFormElement> = $state([]);
-    let pending: boolean = $state(true);
     let deleting: boolean = $state(false);
-
-    const handleSubmit = (id:number) => {
-        forms[id].submit();
-        dialogs[id]?.close();
-  }
+    let dialog: HTMLDialogElement | undefined = $state();
 </script>
    
+<dialog bind:this={dialog} id="my_modal" class="modal">
+    <div class="modal-box flex flex-col items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
+        <form method="post" use:enhance action="?/add" class="w-full flex flex-col items-center gap-10">
+            <label for="wb_name" class="label-base">単語帳の名前を決めよう!</label>
+            <input type="text" id="wb_name" name="wb_name" placeholder="wordbook_name" class="input w-9/10" required>
+            <button class="btn w-9/10" type="submit" onclick={()=>dialog?.close()}>作成</button>
+        </form>
+        <div class="flex-grow"></div>
+        <div class="modal-action">
+        <form method="dialog" class="mb-3">
+            <button class="btn">Close</button>
+        </form>
+        </div>
+    </div>
+</dialog>
     <div class="w-full min-h-screen pt-30 flex flex-col items-center">
         <h1 class="text mb-10 mx-auto">あなたの単語帳</h1>
-        {#if !isChecked}
-        <button onclick={() => isChecked = true} class={{"w-4/5 md:w-2/5 lg:w-1/5 md:h-20 lg:h-15 absolute fixed opacity-95 z-11 bottom-24 lg:bottom-25 lg:right-5 btn btn-info rounded-2xl grow opacity-80":true}}>
-            <p class="text-white">削除</p>
-        </button>
-        {:else}
-        <button onclick={() => isChecked = false} class={{"w-4/5 md:w-2/5 lg:w-1/5 md:h-20 lg:h-15 absolute fixed opacity-95 z-11 bottom-24 lg:bottom-25 lg:right-5 btn btn-info rounded-2xl grow opacity-80":true}}>
-            <p class="text-white">元に戻す</p>
-        </button>
-        {/if}
+        <div class="w-full px-4 md:w-4/5 lg:w-1/2 flex gap-3 justify-center items-center absolute fixed bottom-22 lg:right-5 z-10">
+            
+            {#if !isChecked}
+            <button onclick={() => isChecked = true} class="btn btn-active bg-sky-500 rounded-2xl grow w-min basis-0 opacity-80">
+                <p class="text-white">削除</p>
+            </button>
+            {:else}
+            <button onclick={() => isChecked=false} class="btn btn-active bg-sky-500 rounded-2xl grow w-min basis-0 opacity-70">
+                <p class="text-white">元に戻す</p>
+            </button>
+            {/if}
+            <button onclick={() => dialog?.showModal()} class="btn btn-active btn-secondary rounded-2xl grow w-min basis-0 opacity-70">
+                <p class="text-white">追加</p>
+            </button>
+            </div>
+        
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-13 sm:gap-x-0 items-center place-items-center">
             {#each wordbooks as wordbook, id (wordbook.id)}
             <dialog bind:this={dialogs[id]} class="modal">

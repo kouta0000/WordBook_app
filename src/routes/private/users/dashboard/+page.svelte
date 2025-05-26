@@ -45,33 +45,7 @@
     </svg>
     {/if}
 </button>
-{#if currentView == "user_wordbooks"}
-<div class="h-15 md:h-20 flex-grow basis-0">
-    <svg class="h-full scale-150 active:scale-125 mx-auto" viewBox="0 0 40 40" onclick={()=>document.getElementById('my_modal').showModal()} >
-        <defs>
-        <filter id='f' color-interpolation-filters="sRGB">
-        <feDropShadow dx="0" dy="2" stdDeviation="1" flood-opacity="0.5"/>
-        </filter>
-        </defs>
-        <circle class="fill-sky-400" cx="20" cy="20" r="10" filter="url(#f)" />
-        <line x1="17" y1="20" x2="23" y2="20" class="stroke-1 rounded-2xl stroke-white" stroke-linecap="round"/>
-        <line x1="20" y1="17" x2="20" y2="23" class="stroke-1 rounded-2xl stroke-white" stroke-linecap="round"/>
-    </svg>
-</div>
-{:else if currentView == "library_wordbooks"}
-<div class="h-15 md:h-20 flex-grow basis-0">
-    <svg class="h-full scale-150 mx-auto" viewBox="0 0 40 40">
-        <defs>
-        <filter id='f' color-interpolation-filters="sRGB">
-        <feDropShadow dx="0" dy="2" stdDeviation="1" flood-opacity="0.5"/>
-        </filter>
-        </defs>
-        <circle class="fill-gray-400" cx="20" cy="20" r="10" filter="url(#f)" />
-        <line x1="17" y1="20" x2="23" y2="20" class="stroke-1 rounded-2xl stroke-white" stroke-linecap="round"/>
-        <line x1="20" y1="17" x2="20" y2="23" class="stroke-1 rounded-2xl stroke-white" stroke-linecap="round"/>
-    </svg>
-</div>
-{/if}
+
 <button onclick={() => currentView = "library_wordbooks"} class="btn btn-ghost md:hover:bg-base-400 active:bg-base-400 h-15 md:h-20 flex-grow basis-0 md:scale-105">
     {#if currentView == "user_wordbooks"}
     <svg class="h-full" viewBox="0 0 40 40" fill="none">
