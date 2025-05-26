@@ -40,7 +40,7 @@ interface Wordbook {
                 <p class="text-white">削除</p>
             </button>
             {:else}
-            <button onclick={() => isChecked=false} class="btn btn-active bg-sky-500 rounded-2xl grow w-min basis-0 opacity-70">
+            <button onclick={() => isChecked=false} class="btn btn-active btn-warning rounded-2xl grow w-min basis-0 opacity-70">
                 <p class="text-white">元に戻す</p>
             </button>
             {/if}
@@ -59,7 +59,7 @@ interface Wordbook {
                 </div>
             </dialog>
            
-            <div in:fly={{duration:300, y:20}} out:fade class="shadow-lg flex w-4/5 sm:grow rounded-3xl bg-white border-1 border-sky-300 relative">
+            <div in:fly={{duration:300, y:20}} out:fade class="shadow-lg hover:bg-sky-100 transition-all duration-200 flex w-4/5 sm:grow rounded-3xl bg-white border-1 border-sky-300 relative">
                 <a href="./dashboard/user/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
                 {#if isChecked}
                 <form use:enhance={ async (submitEvent) => {

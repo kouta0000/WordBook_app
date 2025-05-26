@@ -20,19 +20,4 @@ const logout = async () => {
     <a onclick={logout}><object data="/images/logout_icon.svg" style="pointer-events: none;" type="image/svg+xml" class="h-8 w-8 m-6 z-11">ログアウト</object></a>
 </div>
 
-<dialog id="my_modal" class="modal">
-    <div class="modal-box flex flex-col items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
-        <form method="post" action="?/add" class="w-full flex flex-col items-center gap-10">
-            <label for="wb_name" class="label-base">単語帳の名前を決めよう!</label>
-            <input type="text" id="wb_name" name="wb_name" placeholder="wordbook_name" class="input w-9/10" required>
-            <button class="btn w-9/10" type="submit">作成</button>
-        </form>
-        <div class="flex-grow"></div>
-        <div class="modal-action">
-        <form method="dialog" class="mb-3">
-            <button class="btn">Close</button>
-        </form>
-        </div>
-    </div>
-</dialog>
 {@render children()}

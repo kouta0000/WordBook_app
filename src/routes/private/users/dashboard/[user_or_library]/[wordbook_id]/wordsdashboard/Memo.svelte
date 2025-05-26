@@ -63,7 +63,7 @@
                 </span>
                 <div class="flex w-full shadow-lg rounded-3xl bg-white border-1 border-sky-300 relative">
                     <Overlay i={i} hide={hide}/> 
-                    <p class="mx-auto my-4 max-w-9/10 font-sans teext-lg">{isFlipped? word.term: word.meaning}</p>
+                    <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{isFlipped? word.term: word.meaning}</p>
                 </div>
             </div>
             {/each}

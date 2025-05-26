@@ -42,10 +42,10 @@
             </div>
             {#each words as word (word.id)}
             <div out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-4/5 sm:grow flex flex-col justify-center items-start">
-                <span  class="flex bg-white border-1 border-pink-300 rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1">
+                <span  class="flex bg-white border-1 border-sky-300 rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1">
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl">{word.term}</p>
                 </span>
-                <div class="flex w-full shadow-lg rounded-3xl bg-white border-1 border-pink-300 relative">
+                <div class="flex w-full shadow-lg rounded-3xl bg-white border-1 border-sky-300 relative">
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{word.meaning}</p>
                     <input type="checkbox" name="deletecheck" value={word.id} class={{"checkbox-xl my-auto mr-2 checkbox checkbox-warning z-10":true, "hidden":!isChecked, "block":isChecked}}>
                     
