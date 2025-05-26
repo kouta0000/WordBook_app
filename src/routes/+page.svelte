@@ -4,7 +4,7 @@
 </script>
 <div class="flex flex-col gap-15 justify-center items-center w-full h-screen pt-18">
     <h2 class="flex justify-center w-full text-4xl font-serif mt-15" out:fade={{duration:500}}>
-        <svg  preserveAspectRatio="xMidYMidmeet" class="mr-4 lg:mr-0 w-9/10 md:w-1/2 lg:w-3/10" viewBox="0 0 500 100">
+        <svg  preserveAspectRatio="xMidYMidmeet" class="mr-8 lg:mr-0 w-9/10 md:w-1/2 lg:w-3/10" viewBox="0 0 500 100">
             <defs>
               <filter id="shadow">
                 <feDropShadow dx="6" dy="6" stdDeviation="3" flood-color="gray" />
