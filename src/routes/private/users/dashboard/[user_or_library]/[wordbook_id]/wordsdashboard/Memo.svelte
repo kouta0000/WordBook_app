@@ -1,12 +1,14 @@
 <script lang="ts">
     import {fly, slide, fade} from "svelte/transition";
     import {enhance} from"$app/forms";
+    import Overlay from "./Overlay.svelte";
+    import Overlay2 from "./Overlay2.svelte";
     let { words, wb_name, user_or_library } = $props();
-
+    let overlays = $state([])
     let wordsl = $state(words);
+    let hide:boolean = $state(false)
     let isChecked: boolean = $state(false);
     let isFlipped: boolean = $state(false);
-    let isMasked: boolean = $state(false);
     interface Word {
             term: string;
             meaning: string;
@@ -20,41 +22,22 @@
         }
     }
     let length = $derived(words.length)
-    let isClickeds: Array<boolean> = $state(new Array(length).fill(true));
     
     </script>
     
     <div style="background-color: rgba(250, 250, 249, 0.75);" class="flex justify-center items-center fixed absolute top-18 pt-2 lg:h-15 w-full flex flex-row flex-wrap gap-3 mb-10 z-11">
         {#if user_or_library == "user"}
-        <button class={{
-        "btn rounded-2xl grow w-min basis-0":true, 
-        "btn-outline btn-info":!(isMasked && isClickeds.some(value => value)), 
-        "btn-disabled": (isMasked && isClickeds.some(value => value))
-        }} 
-        onclick={() => isMasked && isClickeds.some(value => value) || isClickeds.fill(true) && (isMasked = false)}>
-            <p class="whitespace-nowrap">全て見せる</p>
+        <button class="btn btn-outline btn-info rounded-2xl grow w-min basis-0" onclick={()=> {hide=!hide}}>
+            <p class="whitespace-nowrap">{!hide? "隠すモード":"元に戻す"}</p>
         </button>
-        <button class="btn btn-outline btn-info rounded-2xl grow w-min basis-0" onclick={()=> {isMasked = true; isClickeds.fill(false)}}>
-            <p class="whitespace-nowrap">全てかくす</p>
-        </button>
-        <button class="btn btn-outline btn-info rounded-2xl grow w-min basis-0" onclick={() => isChecked = !isChecked}>
-            <p class="whitespace-nowrap">選択</p>
-        </button>
+        
         <button class="btn btn-outline btn-info rounded-2xl grow w-min basis-0" onclick={() => isFlipped = !isFlipped}>
             <p class="whitespace-nowrap">フリップ</p>
         </button>
         {:else if user_or_library == "library"}
-        <button class={{
-            "btn rounded-2xl grow w-min basis-0":true, 
-            "btn-outline btn-success":!(isMasked && isClickeds.some(value => value)), 
-            "btn-disabled": (isMasked && isClickeds.some(value => value))
-            }} 
-            onclick={() => isMasked && isClickeds.some(value => value) || isClickeds.fill(true) && (isMasked = false)}>
-                <p class="whitespace-nowrap">全て見せる</p>
-            </button>
-            <button class="btn btn-outline btn-success rounded-2xl grow w-min basis-0" onclick={()=> {isMasked = true; isClickeds.fill(false)}}>
-                <p class="whitespace-nowrap">全てかくす</p>
-            </button>
+        <button class="btn btn-outline btn-success rounded-2xl grow w-min basis-0" onclick={()=> {hide=!hide}}>
+                <p class="whitespace-nowrap">{!hide? "隠すモード":"元に戻す"}</p>
+        </button>
         <button class="btn btn-outline btn-success rounded-2xl grow w-min basis-0" onclick={() => shuffleWords(wordsl)}>
             <p class="whitespace-nowrap ">シャッフル</p>
         </button>
@@ -78,28 +61,10 @@
                 <span  class="flex bg-white border-1 border-sky-300 rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1">
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl">{isFlipped ? word.meaning: word.term}</p>
                 </span>
-                <div  onclick={()=> {
-                    if (!isClickeds[i]) {
-                        isClickeds[i] = !isClickeds[i];
-                        setTimeout(() => isClickeds[i] = !isClickeds[i], 2000);
-                    }
-                }} class="flex w-full shadow-lg rounded-3xl bg-white border-1 border-sky-300 relative">
+                <div class="flex w-full shadow-lg rounded-3xl bg-white border-1 border-sky-300 relative">
                     <input type="checkbox" name="deletecheck" value={word.id} class={{"mx-1 my-auto checkbox checkbox-xl checkbox-accent z-10":true, "hidden":!isChecked, "block":isChecked}}>
-                    {#if !isClickeds[i]}
-                    <div transition:fade={{duration:150}} id="curtain"class={
-                        {
-                            "flex w-full h-full absolute left-0 top-0 rounded-3xl":true,
-                            "bg-sky-400": (i % 6 == 0),
-                            "bg-sky-200 md:bg-sky-400": (i % 6 == 1),
-                            "bg-sky-400 md:bg-sky-200 lg:bg-sky-400": (i % 6 == 2),
-                            "bg-sky-200  ": (i % 6 == 3),
-                            "bg-sky-400 lg:bg-sky-200": (i % 6 == 4),
-                            "bg-sky-200 md:bg-sky-400 lg:bg-sky-200": (i % 6 == 5)
-                        }
-                    }>
-                        <p class="m-auto text-white">show</p>
-                    </div>
-                    {/if}
+    
+                    <Overlay i={i} hide={hide}/> 
                     <p class="mx-auto my-4 max-w-9/10 font-sans teext-lg">{isFlipped? word.term: word.meaning}</p>
                 </div>
             </div>
@@ -113,26 +78,7 @@
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl">{isFlipped ? word.meaning: word.term}</p>
                 </span>
                 <div class="flex w-full shadow-lg rounded-3xl bg-white border-1 border-emerald-300 relative">
-                    <div id="curtain"class={
-                        {
-                            "flex w-full h-full absolute left-0 top-0 rounded-3xl transition duration-250":true,
-                            "opacity-0":isClickeds[i],
-                            "bg-emerald-500": (i % 6 == 0),
-                            "bg-emerald-300 md:bg-emerald-500": (i % 6 == 1),
-                            "bg-emerald-500 md:bg-emerald-300 lg:bg-emerald-500": (i % 6 == 2),
-                            "bg-emerald-300  ": (i % 6 == 3),
-                            "bg-emerald-500 lg:bg-emerald-300": (i % 6 == 4),
-                            "bg-emerald-300 md:bg-emerald-500 lg:bg-emerald-300": (i % 6 == 5)
-                        }
-                    }
-                    onclick={()=> {
-                        if (!isClickeds[i]) {
-                            isClickeds[i] = !isClickeds[i];
-                            setTimeout(() => isClickeds[i] = !isClickeds[i], 2000);
-                        }
-                    }}>
-                        <p class="m-auto text-white">show</p>
-                    </div>
+                    <Overlay2 hide={hide} i={i} />
                     <p class="mx-auto my-4 max-w-9/10 font-sans teext-lg">{isFlipped? word.term: word.meaning}</p>
                 </div>
             </div>

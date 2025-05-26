@@ -150,7 +150,7 @@
             "border-emerald-300": user_or_library == "library"}} in:fly={{duration:300, x:300}} out:fly={{duration:400, x:-500}}>
             <h1 class="m-auto text-2xl sm:text-3xl md:text-6xl p-4 lg:p-15 font-bold ">{ typeof main_display == "string" ? main_display : main_display.term }</h1>
             <svg preserveAspectRatio="xMidYMidmeet" height="110" width="110" class="absolute -right-8 lg:right-10 -top-15 fill-none rotate-140">
-                <circle cx="55" cy="55" r="50" stroke-linecap="round" class="overflow-visible stroke-red-400 transition-all duration-500 ease-out" stroke-width="10" stroke-dasharray="314" style="stroke-dashoffset:{isCorrect? 0: 314};" />
+                <circle cx="55" cy="55" r="50" stroke-linecap="round" class="overflow-visible stroke-red-400 transition-all duration-500 ease-out" stroke-width="10" stroke-dasharray="314 315" style="stroke-dashoffset:{isCorrect? 0: 315};" />
             </svg>
             <svg preserveAspectRatio="xMidYMidmeet" height="110" width="110" class="absolute -right-8 lg:right-auto lg:left-10 -top-15 fill-none">
                 <line x1="105" y1="5" x2="5" y2="105" stroke-linecap="round" class="stroke-sky-500 transition-all duration-200" stroke-width="10" stroke-dasharray="142" style="stroke-dashoffset:{isWrong? 0: 142};" />
@@ -204,7 +204,7 @@
     {#if showarrow}
     <div id="swipe_arrow" class="flex justify-center items-end lg:hidden w-1/3 h-full absolute right-10 bottom-0" 
     ontouchstart={handleOnTouchStart} ontouchend={handleOnTouchEnd}>
-        <svg  viewBox="0 0 100 100" height="50" width="50" class="mb-50 animate-bounce opacity-10" >
+        <svg  viewBox="0 0 100 100" height="50" width="50" class="mb-60 animate-bounce opacity-10" >
             <polyline points="50,0 0,50 50,100" stroke-width="10" stroke-linecap="round"/>
             <polyline points="100,0 50,50 100,100" stroke-width="10" stroke-linecap="round"/>
         </svg>
