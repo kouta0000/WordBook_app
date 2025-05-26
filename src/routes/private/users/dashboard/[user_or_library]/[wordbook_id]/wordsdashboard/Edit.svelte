@@ -31,12 +31,12 @@
                     <p class="text-white">削除</p>
                 </button>
                 {/if}
-                <button type="button" onclick={() => isChecked=!isChecked} class="btn btn-active btn-secondary rounded-2xl grow w-min basis-0 opacity-70">
-                    <p class="whitespace-nowrap">{ !isChecked? "選択": "元に戻す"}</p>
+                <button type="button" onclick={() => isChecked=!isChecked} class="btn btn-active bg-pink-300 rounded-2xl grow w-min basis-0 opacity-90">
+                    <p class="whitespace-nowrap text-white">{ !isChecked? "選択": "元に戻す"}</p>
                 </button>
                 {#if !isChecked}
-                <button type="button" class="btn btn-active btn-secondary rounded-2xl grow w-min basis-0 opacity-70" onclick={() => dialog?.showModal()}>
-                    <p class="whitespace-nowrap">追加</p>
+                <button type="button" class="btn btn-active bg-pink-300 rounded-2xl grow w-min basis-0 opacity-90" onclick={() => dialog?.showModal()}>
+                    <p class="whitespace-nowrap text-white">追加</p>
                 </button>
                 {/if}
             </div>
