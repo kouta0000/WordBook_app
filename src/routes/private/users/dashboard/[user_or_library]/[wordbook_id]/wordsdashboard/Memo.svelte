@@ -25,23 +25,23 @@
     
     </script>
     
-    <div style="background-color: rgba(250, 250, 249, 0.75);" class="flex justify-center items-center fixed absolute top-18 pt-2 lg:h-15 w-full flex flex-row flex-wrap gap-3 mb-10 z-11">
+    <div style="background-color: rgba(250, 250, 249, 0.75);" class="px-4 flex justify-center items-center fixed absolute top-18 pt-2 lg:h-15 w-full flex flex-row flex-wrap gap-3 mb-10 z-11">
         {#if user_or_library == "user"}
-        <button class="btn btn-outline btn-info rounded-2xl grow w-min basis-0" onclick={()=> {hide=!hide}}>
+        <button class="btn btn-outline btn-info rounded-3xl grow w-min basis-0" onclick={()=> {hide=!hide}}>
             <p class="whitespace-nowrap">{!hide? "隠すモード":"元に戻す"}</p>
         </button>
         
-        <button class="btn btn-outline btn-info rounded-2xl grow w-min basis-0" onclick={() => isFlipped = !isFlipped}>
+        <button class="btn btn-outline btn-info rounded-3xl grow w-min basis-0" onclick={() => isFlipped = !isFlipped}>
             <p class="whitespace-nowrap">フリップ</p>
         </button>
         {:else if user_or_library == "library"}
-        <button class="btn btn-outline btn-success rounded-2xl grow w-min basis-0" onclick={()=> {hide=!hide}}>
+        <button class="btn btn-outline btn-success rounded-3xl grow w-min basis-0" onclick={()=> {hide=!hide}}>
                 <p class="whitespace-nowrap">{!hide? "隠すモード":"元に戻す"}</p>
         </button>
-        <button class="btn btn-outline btn-success rounded-2xl grow w-min basis-0" onclick={() => shuffleWords(wordsl)}>
+        <button class="btn btn-outline btn-success rounded-3xl grow w-min basis-0" onclick={() => shuffleWords(wordsl)}>
             <p class="whitespace-nowrap ">シャッフル</p>
         </button>
-        <button class="btn btn-outline btn-success rounded-2xl grow w-min basis-0" onclick={() => isFlipped = !isFlipped}>
+        <button class="btn btn-outline btn-success rounded-3xl grow w-min basis-0" onclick={() => isFlipped = !isFlipped}>
             <p class="whitespace-nowrap ">フリップ</p>
         </button>
         {/if}
@@ -49,7 +49,14 @@
     </div>
     
     <div class="w-full pt-18 pb-15 md:pb-20 flex flex-col min-h-screen gap-5 items-center">
-        <h1 class="text mt-25 lg:mt-25 mb-2">{wb_name}</h1> 
+        <div class="text mt-25 lg:mt-25 mb-2 w-full flex justify-center items-center realtive h-20">
+            <h1>{wb_name}</h1>
+            {#if user_or_library == "user"}
+            <a href="../../../dashboard/user" class="btn border-sky-300 bg-stone-50 absolute right-6 lg:right-40  rounded-3xl inset-y-auto">一覧に戻る</a>
+            {:else}
+            <a href="../../../dashboard/library" class="btn border-emerald-300 bg-stone-50 absolute right-6 lg:right-40 rounded-3xl inset-y-auto">一覧に戻る</a>
+            {/if}
+        </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
             <button onclick={() => isChecked = false} class={{"w-4/5 md:w-2/5 lg:w-1/5 lg:h-20 absolute fixed opacity-95 z-11 bottom-24 lg:bottom-25 lg:right-5 btn btn-info rounded-2xl grow opacity-80":true, "hidden":!isChecked, "block":isChecked}}>
                 <p class="text-white">削除</p>

@@ -26,7 +26,7 @@ export const actions: Actions = {
       console.error(error)
       redirect(303, '/auth/error')
     } else {
-      redirect(303, `/private/users/dashboard`)
+      redirect(303, `/private/users/dashboard/user`)
     }
   },
 }

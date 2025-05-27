@@ -33,18 +33,18 @@ interface Wordbook {
 </dialog>
     <div class="w-full min-h-screen pt-30 flex flex-col items-center">
         <h1 class="text mb-10 mx-auto">あなたの単語帳</h1>
-        <div class="w-full px-4 md:w-4/5 lg:w-1/2 flex gap-3 justify-center items-center absolute fixed bottom-22 lg:right-5 z-10">
+        <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-center items-center absolute fixed bottom-22 lg:right-5 z-10">
             
             {#if !isChecked}
-            <button onclick={() => isChecked = true} class="btn btn-active bg-sky-500 rounded-2xl grow w-min basis-0 opacity-80">
+            <button onclick={() => isChecked = true} class="btn btn-active bg-sky-500 rounded-3xl grow w-min basis-0 opacity-80">
                 <p class="text-white">削除</p>
             </button>
             {:else}
-            <button onclick={() => isChecked=false} class="btn btn-active btn-warning rounded-2xl grow w-min basis-0 opacity-70">
+            <button onclick={() => isChecked=false} class="btn btn-active bg-sky-600 rounded-3xl grow w-min basis-0 opacity-70">
                 <p class="text-white">元に戻す</p>
             </button>
             {/if}
-            <button onclick={() => dialog?.showModal()} class="btn btn-active bg-pink-300 rounded-2xl grow w-min basis-0 opacity-90">
+            <button onclick={() => dialog?.showModal()} class="btn btn-active bg-sky-500 rounded-3xl grow w-min basis-0 opacity-90">
                 <p class="text-white">追加</p>
             </button>
             </div>
@@ -60,7 +60,7 @@ interface Wordbook {
             </dialog>
            
             <div in:fly={{duration:300, y:20}} out:fade class="shadow-lg active:bg-sky-100 transition-all duration-200 flex w-4/5 sm:grow rounded-3xl bg-white border-1 border-sky-300 relative">
-                <a href="./dashboard/user/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
+                <a href="./user/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
                 {#if isChecked}
                 <form use:enhance={ async (submitEvent) => {
                     dialogs[id]?.showModal();
