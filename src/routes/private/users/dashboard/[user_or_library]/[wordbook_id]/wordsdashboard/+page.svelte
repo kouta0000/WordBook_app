@@ -21,7 +21,7 @@
 {#if currentView == "memo"}
 <Memo words={data.loaddata.words.data} user_or_library={user_or_library} wb_name={wb_name}/> 
 {:else if currentView == "edit"}
-<Edit words={data.loaddata.words.data} wb_name={wb_name} wordbook_id={wordbook_id}/>
+<Edit words={data.loaddata.words.data} wb_name={wb_name} wordbook_id={wordbook_id} user_or_library={user_or_library}/>
 {:else if currentView == "test"}
 <Test wordslist={words} user_or_library={user_or_library} />
 {/if}

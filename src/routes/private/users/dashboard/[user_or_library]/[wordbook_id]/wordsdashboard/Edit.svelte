@@ -1,9 +1,9 @@
 <script lang="ts">
     import {fly, slide, fade} from "svelte/transition";
     import {enhance} from"$app/forms";
-    let { words, wb_name, wordbook_id } = $props();
+    let { words, wb_name, wordbook_id, user_or_library } = $props();
     let dialog: HTMLDialogElement | undefined = $state();
-    let isChecked: boolean = $state(false)
+    let isChecked: boolean = $state(false);
     interface Word {
             term: string;
             meaning: string;
@@ -18,7 +18,14 @@
 
 
     <div class="w-full pt-18 pb-15 md:pb-20 flex flex-col min-h-screen gap-5 items-center ">
-        <h1 class="text mt-25 lg:mt-25 mb-2">{wb_name}</h1> 
+        <div class="text mt-25 lg:mt-20 mb-2 w-full flex justify-center items-center realtive h-20">
+            <h1>{wb_name}</h1>
+            {#if user_or_library == "user"}
+            <a href="../../../dashboard/user" class="btn border-sky-300 bg-stone-50 absolute right-6 lg:right-40 active:bg-sky-100  rounded-3xl inset-y-auto">一覧に戻る</a>
+            {:else}
+            <a href="../../../dashboard/library" class="btn border-emerald-300 bg-stone-50 absolute right-6 active:bg-emerald-100 lg:right-40 rounded-3xl inset-y-auto">一覧に戻る</a>
+            {/if}
+        </div> 
         <form method="POST" action="?/deleteWords" use:enhance={() => {
             isChecked = !isChecked;
             return async ({update}) => {

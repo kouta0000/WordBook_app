@@ -52,9 +52,9 @@
         <div class="text mt-25 lg:mt-25 mb-2 w-full flex justify-center items-center realtive h-20">
             <h1>{wb_name}</h1>
             {#if user_or_library == "user"}
-            <a href="../../../dashboard/user" class="btn border-sky-300 bg-stone-50 absolute right-6 lg:right-40  rounded-3xl inset-y-auto">一覧に戻る</a>
+            <a href="../../../dashboard/user" class="btn border-sky-300 bg-stone-50 absolute right-6 lg:right-40 active:bg-sky-100  rounded-3xl inset-y-auto">一覧に戻る</a>
             {:else}
-            <a href="../../../dashboard/library" class="btn border-emerald-300 bg-stone-50 absolute right-6 lg:right-40 rounded-3xl inset-y-auto">一覧に戻る</a>
+            <a href="../../../dashboard/library" class="btn border-emerald-300 bg-stone-50 absolute right-6 active:bg-emerald-100 lg:right-40 rounded-3xl inset-y-auto">一覧に戻る</a>
             {/if}
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
