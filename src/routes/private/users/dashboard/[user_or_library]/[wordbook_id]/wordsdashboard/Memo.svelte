@@ -25,7 +25,7 @@
     
     </script>
     
-    <div style="background-color: rgba(250, 250, 249, 0.75);" class="px-4 flex justify-center items-center fixed absolute top-18 pt-2 lg:h-15 w-full flex flex-row flex-wrap gap-3 mb-10 z-11">
+    <div style="background-color: rgba(250, 250, 249, 0.75);" class="px-4 flex justify-center items-center fixed absolute top-18 pt-2 lg:h-15 w-full flex flex-row flex-wrap gap-1 mb-10 z-11">
         {#if user_or_library == "user"}
         <button class="btn btn-outline btn-info rounded-3xl grow w-min basis-0" onclick={()=> {hide=!hide}}>
             <p class="whitespace-nowrap">{!hide? "隠すモード":"元に戻す"}</p>
@@ -56,8 +56,8 @@
         {/if}
     </div>
     
-    <div class="w-full pt-18 pb-15 md:pb-20 flex flex-col min-h-screen gap-5 items-center">
-        <div class="text mt-25 lg:mt-25 mb-2 w-full flex justify-center items-center realtive h-20">
+    <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-5 items-center">
+        <div class="text mt-25 lg:mt-25  w-full flex justify-center items-center realtive h-20">
             <h1>{wb_name}</h1>
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">

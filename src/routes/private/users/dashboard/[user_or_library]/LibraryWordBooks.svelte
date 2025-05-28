@@ -1,6 +1,7 @@
 
 <script lang="ts">
 import {fly, scale} from "svelte/transition";
+import {elasticOut} from "svelte/easing";
 interface Props {
 	wordbooks: Wordbook[];
 }

@@ -17,27 +17,34 @@
 
 
     
-
-
-    <div class="w-full pt-18 pb-15 md:pb-20 flex flex-col min-h-screen gap-5 items-center ">
-        <div class="text mt-25 lg:mt-20 mb-2 w-full flex justify-center items-center realtive h-20">
+<div style="background-color: rgba(250, 250, 249, 0.75);" class="px-4 flex justify-end items-center fixed absolute top-18 pt-2 lg:h-15 w-full flex flex-row flex-wrap gap-3 mb-10 z-11">
+{#if user_or_library == "user"}
+<a href="../../../dashboard/user" class="btn btn-outline btn-info rounded-3xl w-1/3 w-min basis-0 text-black">
+   <p class="whitespace-nowrap">一覧に戻る</p>
+</a>
+{:else}
+<a href="../../../dashboard/library" class="btn btn-outline btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
+    <p class="whitespace-nowrap">一覧に戻る</p>
+</a>
+{/if}
+</div>
+    <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-5 items-center ">
+        <div class="text mt-25 lg:mt-20 w-full flex justify-center items-center realtive h-20">
             <h1>{wb_name}</h1>
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
-            <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-center items-center absolute fixed bottom-22 lg:right-5 z-20">
-                {#if isChecked}
-                <button type="submit" class="btn btn-active bg-sky-500 rounded-3xl grow w-min basis-0">
-                    <p class="text-white">削除</p>
-                </button>
-                {/if}
-                <button type="button" onclick={() => isChecked=!isChecked} class="btn btn-active bg-sky-300 rounded-3xl grow w-min basis-0 opacity-90">
+            <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 lg:bottom-22 lg:right-5 z-20">
+                <button type="button" onclick={() => isChecked=!isChecked} class={{"btn btn-lg btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-sky-500":!isChecked, "bg-indigo-500":isChecked}}>
                     <p class="whitespace-nowrap text-white">{ !isChecked? "選択": "元に戻す"}</p>
                 </button>
-                {#if !isChecked}
-                <button type="button" class="btn btn-active bg-sky-400 rounded-3xl grow w-min basis-0 opacity-90" onclick={() => dialog?.showModal()}>
-                    <p class="whitespace-nowrap text-white">追加</p>
-                </button>
-                {/if}
+                <svg onclick={()=> dialog?.showModal()} xmlns="http://www.w3.org/2000/svg" class="active:scale-80" viewBox="0 0 64 64" width="56" height="56">
+                    <!-- 楕円形の背景（空色） -->
+                    <ellipse cx="32" cy="32" rx="30" ry="28" class="fill-sky-500" />
+                    <!-- 中心の白い横線 -->
+                    <rect x="22" y="30" width="20" height="4" rx="2" fill="#FFFFFF" />
+                    <!-- 中心の白い縦線 -->
+                    <rect x="30" y="22" width="4" height="20" ry="2" fill="#FFFFFF" />
+                </svg>  
             </div>
 
             {#each words as word, id (word.id)}

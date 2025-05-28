@@ -11,7 +11,7 @@
      let user_or_library = $state(data.loaddata.user_or_library);
      
      const wb_name = data.loaddata.wb_name.data?.[0].wb_name;
-     let currentView: string = $state("memo");
+     let currentView: string = $state(user_or_library=="user"? "edit": "memo");
      const wordbook_id = data.loaddata.wordbook_id;
      
      
@@ -27,20 +27,20 @@
 {/if}
 
 <div class="w-full h-15 md:h-20 bg-white fixed absolute bottom-0 flex flex-row justify-center gap-2 z-20">
-    
+    {#if user_or_library == "user"}
+    <button onclick={()=> currentView = "edit"} class={{
+        "btn btn-ghost font-bold h-15 md:h-20 grow-1 basis-0":true,
+        "text-sky-500":currentView =="edit",
+        "text-gray-500":currentView=="memo" || currentView=="test"
+        }}>ホーム</button>
+    {/if}
     <button onclick={()=> currentView = "memo"} class={{
         "btn btn-ghost font-bold h-15 md:h-20 grow-1 basis-0":true,
         "text-sky-500":user_or_library=="user" && currentView=="memo",
         "text-emerald-500":user_or_library=="library" && currentView=="memo",
         "text-gray-500": currentView=="test" || currentView == "edit"
         }}>覚える</button>
-    {#if user_or_library == "user"}
-    <button onclick={()=> currentView = "edit"} class={{
-        "btn btn-ghost font-bold h-15 md:h-20 grow-1 basis-0":true,
-        "text-sky-500":currentView =="edit",
-        "text-gray-500":currentView=="memo" || currentView=="test"
-        }}>編集</button>
-    {/if}
+    
     <button onclick={() => currentView = "test"} class="btn btn-ghost h-15 md:h-20 grow-1 basis-0">
         <svg class="h-full" viewBox="0 0 40 40" fill="none">
             <rect x="15" y="15" width="10" height="10" class={{

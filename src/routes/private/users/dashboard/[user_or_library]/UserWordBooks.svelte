@@ -1,6 +1,7 @@
 <script lang="ts">
 import {fly, fade} from "svelte/transition";
 import {enhance} from "$app/forms";
+import {elasticOut} from "svelte/easing";
 interface Props {
     wordbooks: Wordbook[];
 }
@@ -33,21 +34,19 @@ interface Wordbook {
 </dialog>
     <div class="w-full min-h-screen pt-30 flex flex-col items-center">
         <h1 class="text mb-10 mx-auto">あなたの単語帳</h1>
-        <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-center items-center absolute fixed bottom-22 lg:right-5 z-10">
-            
-            {#if !isChecked}
-            <button onclick={() => isChecked = true} class="btn btn-active bg-sky-500 rounded-3xl grow w-min basis-0 opacity-80">
-                <p class="text-white">削除</p>
+        <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 lg:bottom-22 lg:right-5 z-20">
+            <button type="button" onclick={() => isChecked=!isChecked} class={{"btn btn-lg btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-sky-500":!isChecked, "bg-indigo-500":isChecked}}>
+                <p class="whitespace-nowrap text-white">{ !isChecked? "選択": "元に戻す"}</p>
             </button>
-            {:else}
-            <button onclick={() => isChecked=false} class="btn btn-active bg-sky-600 rounded-3xl grow w-min basis-0 opacity-70">
-                <p class="text-white">元に戻す</p>
-            </button>
-            {/if}
-            <button onclick={() => dialog?.showModal()} class="btn btn-active bg-sky-500 rounded-3xl grow w-min basis-0 opacity-90">
-                <p class="text-white">追加</p>
-            </button>
-            </div>
+            <svg onclick={()=> dialog?.showModal()} xmlns="http://www.w3.org/2000/svg" class="active:scale-80" viewBox="0 0 64 64" width="56" height="56">
+                <!-- 楕円形の背景（空色） -->
+                <ellipse cx="32" cy="32" rx="30" ry="28" class="fill-sky-500" />
+                <!-- 中心の白い横線 -->
+                <rect x="22" y="30" width="20" height="4" rx="2" fill="#FFFFFF" />
+                <!-- 中心の白い縦線 -->
+                <rect x="30" y="22" width="4" height="20" ry="2" fill="#FFFFFF" />
+            </svg>  
+        </div>
         
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-13 sm:gap-x-0 items-center place-items-center">
             {#each wordbooks as wordbook, id (wordbook.id)}
