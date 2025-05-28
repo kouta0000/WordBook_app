@@ -9,7 +9,7 @@
 </div>
 {:else}
 <div transition:fade={{duration:150}} class={{
-    "inset-0 absolute rounded-3xl z-10 transition-all duration-300 flex":true,
+    "inset-0 absolute rounded-3xl z-9 transition-all duration-300 flex":true,
     "bg-emerald-500": (i % 6 == 0),
     "bg-emerald-300 md:bg-emerald-500": (i % 6 == 1),
     "bg-emerald-500 md:bg-emerald-300 lg:bg-emerald-500": (i % 6 == 2),

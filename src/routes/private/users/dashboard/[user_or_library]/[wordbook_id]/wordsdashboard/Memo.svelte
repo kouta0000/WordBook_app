@@ -45,17 +45,20 @@
             <p class="whitespace-nowrap ">フリップ</p>
         </button>
         {/if}
-        
+        {#if user_or_library == "user"}
+        <a href="../../../dashboard/user" class="btn btn-outline btn-info rounded-3xl grow w-min basis-0 text-black">
+           <p class="whitespace-nowrap">一覧に戻る</p>
+        </a>
+        {:else}
+        <a href="../../../dashboard/library" class="btn btn-outline btn-success rounded-3xl grow w-min basis-0 text-black">
+            <p class="whitespace-nowrap">一覧に戻る</p>
+        </a>
+        {/if}
     </div>
     
     <div class="w-full pt-18 pb-15 md:pb-20 flex flex-col min-h-screen gap-5 items-center">
         <div class="text mt-25 lg:mt-25 mb-2 w-full flex justify-center items-center realtive h-20">
             <h1>{wb_name}</h1>
-            {#if user_or_library == "user"}
-            <a href="../../../dashboard/user" class="btn border-sky-300 bg-stone-50 absolute right-6 lg:right-40 active:bg-sky-100  rounded-3xl inset-y-auto">一覧に戻る</a>
-            {:else}
-            <a href="../../../dashboard/library" class="btn border-emerald-300 bg-stone-50 absolute right-6 active:bg-emerald-100 lg:right-40 rounded-3xl inset-y-auto">一覧に戻る</a>
-            {/if}
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
             <button onclick={() => isChecked = false} class={{"w-4/5 md:w-2/5 lg:w-1/5 lg:h-20 absolute fixed opacity-95 z-11 bottom-24 lg:bottom-25 lg:right-5 btn btn-info rounded-2xl grow opacity-80":true, "hidden":!isChecked, "block":isChecked}}>

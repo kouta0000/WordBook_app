@@ -37,7 +37,7 @@
     {#if user_or_library == "user"}
     <button onclick={()=> currentView = "edit"} class={{
         "btn btn-ghost font-bold h-15 md:h-20 grow-1 basis-0":true,
-        "text-pink-400":currentView =="edit",
+        "text-sky-500":currentView =="edit",
         "text-gray-500":currentView=="memo" || currentView=="test"
         }}>編集</button>
     {/if}
