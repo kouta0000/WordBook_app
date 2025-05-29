@@ -89,8 +89,7 @@
                     updating=true;
                     return async ({update}) => {
                         update();
-                        updating=false;
-                        updatings[id]=false;             
+                        updating=false;             
                   }
                 }} class={{"absolute inset-0 flex flex-col justifry-center items-start z-12":true}}>
                     {#if !updating}
