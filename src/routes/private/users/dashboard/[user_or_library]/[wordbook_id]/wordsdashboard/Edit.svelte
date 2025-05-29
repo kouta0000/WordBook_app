@@ -5,7 +5,10 @@
     let dialog: HTMLDialogElement | undefined = $state();
     let dialogs: Array<HTMLDialogElement> = $state([]);
     let isChecked: boolean = $state(false);
-    let updating: boolean = $state(false);
+    let updatings: boolean[] = $state([]);
+    let updating: boolean =$state(false);
+    let deleting:boolean =$state(false);
+    let creating:boolean = $state(false);
     interface Word {
             term: string;
             meaning: string;
@@ -17,25 +20,49 @@
 
 
     
-<div style="background-color: rgba(250, 250, 249, 0.75);" class="px-4 flex justify-end items-center fixed absolute top-18 pt-2 lg:h-15 w-full flex flex-row flex-wrap gap-3 mb-10 z-11">
+<div style="background-color: rgba(250, 250, 249, 0.75);" class="px-4 flex justify-start md:justify-end items-center fixed absolute top-18 pt-4 lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-11">
 {#if user_or_library == "user"}
-<a href="../../../dashboard/user" class="btn btn-outline btn-info rounded-3xl w-1/3 w-min basis-0 text-black">
-   <p class="whitespace-nowrap">一覧に戻る</p>
+<a href="../../../dashboard/user" class="btn bg-sky-50 rounded-3xl w-1/3 w-min basis-0 text-black">
+   <p class="whitespace-nowrap text-sky-400 font-bold">戻る</p>
 </a>
 {:else}
-<a href="../../../dashboard/library" class="btn btn-outline btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
-    <p class="whitespace-nowrap">一覧に戻る</p>
+<a href="../../../dashboard/library" class="btn bg-sky-50 btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
+    <p class="whitespace-nowrap text-sky-400 font-bold">戻る</p>
 </a>
 {/if}
+{#if creating}
+<div out:fade={{duration:500}} class="flex gap-1">
+    <p>追加中</p>
+    <span class="loading loading-dots loading-xs"></span>
+    <span class="loading loading-dots loading-xs"></span>
+    <span class="loading loading-dots loading-xs"></span>
 </div>
-    <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-5 items-center ">
-        <div class="text mt-25 lg:mt-20 w-full flex justify-center items-center realtive h-20">
-            <h1>{wb_name}</h1>
+{/if}
+{#if deleting}
+<div class="flex gap-1" out:fade={{duration:500}}>
+    <p>削除中</p>
+    <span class="loading loading-dots loading-xs"></span>
+    <span class="loading loading-dots loading-xs"></span>
+    <span class="loading loading-dots loading-xs"></span>
+</div>
+{/if}
+{#if updating}
+<div class="flex gap-1" out:fade={{duration:500}}>
+    <p>変更中</p>
+    <span class="loading loading-dots loading-xs"></span>
+    <span class="loading loading-dots loading-xs"></span>
+    <span class="loading loading-dots loading-xs"></span>
+</div>
+{/if}
+</div>
+    <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center ">
+        <div class="text mt-20 lg:mt-20 w-full flex justify-center items-center realtive h-20">
+            <h1 class="border-sky-400 p-4 border-1 rounded-3xl">{wb_name}</h1>
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
-            <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 lg:bottom-22 lg:right-5 z-20">
-                <button type="button" onclick={() => isChecked=!isChecked} class={{"btn btn-lg btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-sky-500":!isChecked, "bg-indigo-500":isChecked}}>
-                    <p class="whitespace-nowrap text-white">{ !isChecked? "選択": "元に戻す"}</p>
+            <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 md:bottom-22 md:right-20 z-20">
+                <button type="button" onclick={() => {isChecked=!isChecked;updatings.fill(false)}} class={{"btn btn-lg btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-sky-500":!isChecked, "bg-indigo-500":isChecked}}>
+                    <p class="whitespace-nowrap text-white text-base font-bold">{ !isChecked? "選択": "元に戻す"}</p>
                 </button>
                 <svg onclick={()=> dialog?.showModal()} xmlns="http://www.w3.org/2000/svg" class="active:scale-80" viewBox="0 0 64 64" width="56" height="56">
                     <!-- 楕円形の背景（空色） -->
@@ -51,7 +78,13 @@
             <dialog bind:this={dialogs[id]} class="modal w-full">
                 <div class="modal-box flex flex-col gap-4 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
                     <p>本当に削除しますか？</p>
-                    <form use:enhance transition:fade={{duration:150}}  method="POST" action="?/deleteWords" class="w-1/3 flex flex-col gap-3">
+                    <form use:enhance={()=>{
+                        deleting=true;
+                        return async ({update}) => {
+                            update();
+                            deleting=false;
+                        }
+                    }} transition:fade={{duration:150}}  method="POST" action="?/deleteWords" class="w-1/3 flex flex-col gap-3">
                         <input type="hidden" name="word_id" value={word.id}>
                         <button type="submit" class="btn btn-base" onclick={() => {dialogs[id]?.close()}}>はい</button>
                         <button type="button" class="btn btn-base" onclick={() => {dialogs[id]?.close()}}>いいえ</button>
@@ -59,10 +92,34 @@
                 </div>
             </dialog>
             <div out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-4/5 sm:grow flex flex-col justify-center items-start relative">
-                <span  class="flex bg-white border-1 border-sky-300 rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1">
+                {#if updatings[id]}
+                <form method="POST" action="?/updateWord" use:enhance={() => {
+                    updating=true;
+                    return async ({update}) => {
+                        updatings[id]=false;
+                        update();
+                        updating=false;
+                    }
+                }} class="absolute inset-0 flex flex-col justifry-center items-start z-12">
+                    <span  class="pl-2 pr-2 flex bg-white border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1">
+                        <input type="text" id="term" name="term" value={word.term} class="rounded-3xl my-1 input m-auto  font-semibold font-sans text-xl">
+                        <button type="submit" class="btn btn-base rounded-full my-auto btn-xs">
+                            保存
+                        </button>
+                        <button type="button" onclick={()=>updatings[id] = false} class="btn btn-base rounded-full my-auto btn-xs">
+                            戻る
+                        </button>
+                    </span>
+                    <div class="px-2 flex w-full shadow-lg border-1 border-stone-300 rounded-3xl bg-white relative">
+                        <input type="text" id="meaning" name="meaning" value={word.meaning} class="rounded-3xl my-3 py-2 input mx-auto max-w-9/10 font-sans text-lg">
+                    </div>
+                    <input type="hidden" id="id" name="id" value={word.id}>
+                </form>
+                {/if}
+                <span  class="flex bg-white border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1">
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl">{word.term}</p>
                 </span>
-                <div class="flex w-full shadow-lg rounded-3xl bg-white border-1 border-sky-300 relative">
+                <div class="flex w-full shadow-lg border-1 border-stone-300 rounded-3xl bg-white relative">
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{word.meaning}</p>
                     {#if isChecked}
                     <div class="flex absolute right-2 top-0 bottom-0 p-2">
@@ -75,7 +132,7 @@
                             <line x1="15" y1="8" x2="15" y2="16" stroke="gray" stroke-width="1"/>
                         </svg>
                     </button>
-                    <button onclick={() => updating=true}>
+                    <button onclick={() => updatings[id]=true}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-full h-full m-auto bg-white">
                             <g transform="translate(32,32) scale(1.6) rotate(-45) translate(-32,-32)">
                               <!-- 鉛筆の先端（尖った部分） -->
@@ -99,7 +156,13 @@
     </div>
     <dialog bind:this={dialog} id="my_modal2" class="modal modal-bottom md:modal-middle">
         <div class="modal-box flex flex-col items-center bg-stone-50 w-full md:w-1/2  max-w-none max-h-4/5 overflow-auto">
-            <form method="post" use:enhance action="?/createWord" class="w-full flex flex-col items-center gap-4">
+            <form method="post" use:enhance={()=>{
+                creating=true;
+                return async ({update}) => {
+                    update();
+                    creating=false;
+                }
+            }} action="?/createWord" class="w-full flex flex-col items-center gap-4">
                 <h1>単語を追加しよう!</h1>
                 <button type="button" class="w-9/10 btn  shadow-lg" onclick={() => wordidstoadd.push(index++)}>ふやす</button>
                 <button type="button" class="w-9/10 btn shadow-lg" onclick={() => wordidstoadd.pop()}>へらす</button>

@@ -39,11 +39,18 @@ export const actions = {
     },
     deleteWords: async ({ request, locals, params }) => {
         const data: FormData = await request.formData();
-        const wordbook_id = params.wordbook_id;
         const erros = [];
         for (const [key, value] of data) {
             const {error} = await supabase.from("Words").delete().eq("id", value);
             erros.push(error);
         };    
     },
+    updateWord: async ({request}) => {
+        const data: FormData = await request.formData();
+        const word_id = data.get("id");
+        const term = data.get("term");
+        const meaning = data.get("meaning");
+        const {error} = await supabase.from("Words").update({term: term, meaning:meaning}).eq("id", word_id)
+
+    }
 };

@@ -131,15 +131,9 @@
 
 {#if showcurtain}
     <div id="start_curtain" out:scale={{duration:500, opacity:0, start:2}} onoutroend={displayNewWords} class="w-full h-screen fixed absolute pt-18 pb-15 md:pb-20 flex justify-center items-center bg-base-100 z-20">
-        {#if user_or_library == "user" }
         <button class="btn bg-sky-400 rounded-xl w-9/10 md:w-1/2 lg:w-1/5 h-1/5" onclick={eraseCurtain}>
             <p class="text-white font-bold text-xl">テスト開始</p>
         </button>
-        {:else if user_or_library == "library"}
-        <button class="btn bg-emerald-400 rounded-xl w-9/10 md:w-1/2 lg:w-1/5 h-1/5" onclick={eraseCurtain}>
-            <p class="text-white font-bold text-xl">テスト開始</p>
-        </button>
-        {/if}
     </div>
 {/if}
 {#if progress==50}
@@ -163,8 +157,7 @@
         </div> 
         <div id="main_display" class={{
             "flex w-4/5 md:w-3/5 lg:w-2/5 lg:ml-5 rounded-3xl bg-white border-1 grow-2 mb-10 lg:mb-6 relative":true,
-            "border-sky-300": user_or_library == "user",
-            "border-emerald-300": user_or_library == "library"}} in:fly={{duration:300, x:300}} out:fly={{duration:400, x:-500}}>
+            "border-stone-300 shadow-lg": true}} in:fly={{duration:300, x:300}} out:fly={{duration:400, x:-500}}>
             <h1 class="m-auto text-2xl sm:text-3xl md:text-6xl p-4 lg:p-15 font-bold ">{ typeof main_display == "string" ? main_display : main_display.term }</h1>
             <svg preserveAspectRatio="xMidYMidmeet" height="110" width="110" class={{"absolute -right-8 lg:right-10 -top-15 fill-none rotate-140":true, "opacity-0":!isCorrect}}>
                 <circle cx="55" cy="55" r="50" stroke-linecap="round" class="overflow-visible stroke-red-400 transition-all duration-500 ease-out" stroke-width="10" stroke-dasharray="314 315" style="stroke-dashoffset:{isCorrect? 0: 315};" />
@@ -178,26 +171,22 @@
         <div class="w-4/5 md:w-3/5 lg:w-2/5 flex flex-col grow justify-center items-center gap-5">
             <div class={{
                 "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
-                "border-sky-300": user_or_library == "user",
-                "border-emerald-300": user_or_library == "library"}} in:fly={{duration:300, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[0].meaning)}}>
+                "border-stone-300 shadow-lg": true}} in:fly={{duration:300, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[0].meaning)}}>
                 <h1 class="m-auto p-3 lg-py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[0].meaning }</h1>
             </div>
             <div class={{
                 "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
-                "border-sky-300": user_or_library == "user",
-                "border-emerald-300": user_or_library == "library"}} in:fly={{duration:350, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[1].meaning)}}>
+                "border-stone-300 shadow-lg": true}} in:fly={{duration:350, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[1].meaning)}}>
                 <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[1].meaning }</h1>
             </div>
             <div class={{
                 "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
-                "border-sky-300": user_or_library == "user",
-                "border-emerald-300": user_or_library == "library"}} in:fly={{duration:400, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[2].meaning)}}>
+                "border-stone-300 shadow-lg":true}} in:fly={{duration:400, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[2].meaning)}}>
                 <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[2].meaning }</h1>
             </div>
             <div onoutroend={() => testend? showCurtain(): displayNewWords()} class={{
                 "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
-                "border-sky-300": user_or_library == "user",
-                "border-emerald-300": user_or_library == "library"}} in:fly={{duration:450, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[3].meaning)}}>
+                "border-stone-300 shadow-lg": true}} in:fly={{duration:450, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[3].meaning)}}>
                 <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[3].meaning }</h1>
             </div>
             <div class="w-full hidden lg:block h-3"></div>
@@ -205,13 +194,11 @@
             <div id="test_buttons" class="w-full flex flex-row gap-3 items-center mt-4 lg:mt-3 lg:mr-5 ">
                 <button class={{
                     "btn btn-outline  rounded-2xl lg:grow": true,
-                    "btn-info": user_or_library=="user",
-                    "btn-success": user_or_library=="library"
+                    "btn-info": true
                     }} onclick={() => {testend=true; showdisplays=false; isCorrect=false; isWrong=false;showarrow=false;progress=0}}>テスト終了</button>
                 <button class={{
                     "hidden lg:block btn btn-outline rounded-2xl grow": true, 
-                    "btn-info": user_or_library=="user",
-                    "btn-success": user_or_library=="library"
+                    "btn-info": true
                     }} onclick={() => {showdisplays = false;isCorrect=false;isWrong=false;progress++}}>次の問題</button>
             </div>
         </div>
