@@ -161,6 +161,7 @@
     <dialog bind:this={dialog} id="my_modal2" class="modal modal-bottom md:modal-middle">
         <div class="modal-box flex flex-col items-center bg-stone-50 w-full md:w-1/2  max-w-none max-h-4/5 overflow-auto">
             <form method="post" use:enhance={()=>{
+                dialog.close();
                 creating=true;
                 return async ({update}) => {
                     update();
@@ -168,7 +169,7 @@
                 }
             }} action="?/createWord" class="w-full flex flex-col items-center gap-4">
                 <h1>単語を追加しよう!</h1>
-                <button type="button" class="w-9/10 btn  shadow-lg" onclick={() => wordidstoadd.push(index++)}>ふやす</button>
+                <button type="button" class="w-9/10 btn shadow-lg" onclick={() => wordidstoadd.push(index++)}>ふやす</button>
                 <button type="button" class="w-9/10 btn shadow-lg" onclick={() => wordidstoadd.pop()}>へらす</button>
                 <div class="w-9/10 flex lg:grid grid-cols-2 flex-col items-center gap-2">
                 {#each wordidstoadd as wids,i (wids)}
@@ -179,7 +180,7 @@
                 </div>
                 {/each}
                 </div>
-                <button class="btn w-9/10 mt-5 shadow-lg" type="submit" onclick={() => dialog?.close()}>追加</button>
+                <button class="btn w-9/10 mt-5 shadow-lg" type="submit">追加</button>
             </form>
             <div class="flex-grow"></div>
             <div class="modal-action">
