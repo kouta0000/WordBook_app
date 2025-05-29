@@ -38,16 +38,16 @@
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
             <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 md:bottom-22 md:right-20 z-20">
                 {#if creating}
-                <div out:fade={{delay:800}} class="bg-white/80 rounded-3xl flex gap-1">
-                    <p>追加中</p>
+                <div out:fade={{delay:800}} class="btn bg-white/80 rounded-3xl flex gap-1">
+                    <p class="font-bold text-base">追加中</p>
                     <span class="loading loading-dots loading-sm"></span>
                     <span class="loading loading-dots loading-sm"></span>
                     <span class="loading loading-dots loading-sm"></span>
                 </div>
                 {/if}
                 {#if deleting}
-                <div class="flex gap-1 bg-white/80 rounded-3xl" out:fade={{delay:500}}>
-                    <p>削除中</p>
+                <div class="btn flex gap-1 bg-white/80 rounded-3xl" out:fade={{delay:500}}>
+                    <p class="font-bold text-base">削除中</p>
                     <span class="loading loading-dots loading-sm"></span>
                     <span class="loading loading-dots loading-sm"></span>
                     <span class="loading loading-dots loading-sm"></span>
