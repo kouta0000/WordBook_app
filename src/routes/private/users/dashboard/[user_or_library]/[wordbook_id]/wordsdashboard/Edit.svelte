@@ -6,7 +6,7 @@
     let dialogs: Array<HTMLDialogElement> = $state([]);
     let isChecked: boolean = $state(false);
     let updatings: boolean[] = $state([]);
-    let updating: boolean =$state(false);
+    let updatings2: boolean[] =$state([]);
     let deleting:boolean =$state(false);
     let creating:boolean = $state(false);
     interface Word {
@@ -87,10 +87,10 @@
                 {#if updatings[id]}
                 <form method="POST" action="?/updateWord" use:enhance={() => {
                     updatings[id]=false;
-                    updating=true;
+                    updatings2[id]=true;
                     return async ({update}) => {
                         update();
-                        updating=false;
+                        updatings2[id]=false;
                   }
                 }} class={{"absolute inset-0 flex flex-col justifry-center items-start z-12":true}}>
                     <span  class="pl-2 pr-2 flex border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 bg-white">
@@ -104,13 +104,13 @@
                         </button>
                     </span>
                     <div class="px-2 flex w-full shadow-lg border-1 border-stone-300 rounded-3xl relative bg-white">
-                        <input type="text" id="meaning" name="meaning" value={word.meaning} class={{"rounded-3xl my-3 py-2 input mx-auto max-w-9/10 font-sans text-lg":true, "hidden":updating}}>
+                        <input type="text" id="meaning" name="meaning" value={word.meaning} class={{"rounded-3xl my-3 py-2 input mx-auto max-w-9/10 font-sans text-lg":true}}>
                     </div>
                     
                     <input type="hidden" id="id" name="id" value={word.id}>
                 </form>
                 {/if}
-                {#if updating}
+                {#if updatings2[id]}
                 <div class={{"absolute inset-0 flex flex-col justifry-center items-start z-12":true}}>
                 <span out:fade={{delay:1000}} class="pl-2 pr-2 flex border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 skeleton">
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl opacity-0">{word.term}</p>
@@ -121,24 +121,24 @@
                 </div>
                 {/if}
                 
-                <span  class="flex bg-white border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1">
+                <span  class="flex bg-white border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-11">
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl">{word.term}</p>
                 </span>
                 <div class="flex w-full shadow-lg border-1 border-stone-300 rounded-3xl bg-white relative">
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{word.meaning}</p>
                     {#if isChecked}
-                    <div transition:fade={{duration:150}} class="flex w-7/24 absolute right-0 rounded-3xl top-auto bottom-auto p-2 bg-white/80 0aspect-ratio-1/2">
+                    <div transition:fade={{duration:150}} class="flex items-center w-1/5 absolute right-0 rounded-3xl border-1 border-stone-300 -top-[40%] lg:-top-[60%]  bg-white/80 aspect-ratio-1/2 z-13">
                     <button  class="h-full aspect-ration-1/1" onclick={() => dialogs[id]?.showModal()}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" class="w-full h-full m-auto fill-none">
-                            <rect x="7" y="5" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
-                            <rect x="8" y="3" width="8" height="2" fill="none" stroke="gray" stroke-width="1"/>
-                            <line x1="9" y1="7" x2="9" y2="15" stroke="gray" stroke-width="1"/>
-                            <line x1="12" y1="7" x2="12" y2="15" stroke="gray" stroke-width="1"/>
-                            <line x1="15" y1="7" x2="15" y2="15" stroke="gray" stroke-width="1"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" class="w-full h-full m-auto fill-none rounded-3xl">
+                            <rect x="7" y="9" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
+                            <rect x="8" y="7" width="8" height="2" fill="none" stroke="gray" stroke-width="1"/>
+                            <line x1="9" y1="11" x2="9" y2="19" stroke="gray" stroke-width="1"/>
+                            <line x1="12" y1="11" x2="12" y2="19" stroke="gray" stroke-width="1"/>
+                            <line x1="15" y1="11" x2="15" y2="19" stroke="gray" stroke-width="1"/>
                         </svg>
                     </button>
                     <button class="h-full aspect-ratio-1/1" onclick={() => updatings[id]=true}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67 67" class="w-7/10 h-7/10 m-auto fill-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67 67" class="w-4/5 h-4/5 m-auto fill-none rounded-3xl">
                             <g transform="translate(32,32) scale(1.6) rotate(-45) translate(-32,-32)">
                               <!-- 鉛筆の先端（尖った部分） -->
                               <polygon points="18,28 12,32 18,36" fill="#808080" />
