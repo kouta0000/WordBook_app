@@ -100,8 +100,8 @@
                         updating=false;
                         updatings[id]=false;             
                   }
-                }} class="absolute inset-0 flex flex-col justifry-center items-start z-12">
-                    <span  class={{"pl-2 pr-2 flex bg-white border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1":true, "skeleton":updating}}>
+                }} class={{"absolute inset-0 flex flex-col justifry-center items-start z-12":true, "skeleton":updating}}>
+                    <span  class={{"pl-2 pr-2 flex bg-white border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1":true}}>
                         <input type="text" id="term" name="term" value={word.term} class="rounded-3xl my-1 input m-auto  font-semibold font-sans text-xl">
                         <button type="submit" class="btn btn-base rounded-full my-auto btn-xs">
                             保存
@@ -110,7 +110,7 @@
                             戻る
                         </button>
                     </span>
-                    <div class={{"px-2 flex w-full shadow-lg border-1 border-stone-300 rounded-3xl bg-white relative":true, "skeleton":updating}}>
+                    <div class={{"px-2 flex w-full shadow-lg border-1 border-stone-300 rounded-3xl bg-white relative":true}}>
                         <input type="text" id="meaning" name="meaning" value={word.meaning} class="rounded-3xl my-3 py-2 input mx-auto max-w-9/10 font-sans text-lg">
                     </div>
                     <input type="hidden" id="id" name="id" value={word.id}>
