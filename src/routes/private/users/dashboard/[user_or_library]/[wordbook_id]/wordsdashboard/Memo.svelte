@@ -47,7 +47,7 @@
     </div>
     
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center">
-        <div class="mt-20 lg:mt-20  w-full flex justify-center  items-center realtive h-20">
+        <div class="mt-23 mb-4 lg:mt-20  w-full flex justify-center  items-center realtive h-20">
             <h1 class="border-1 shadow-lg border-stone-300 rounded-3xl p-4 font-sans">{wb_name}</h1>
             
         </div> 

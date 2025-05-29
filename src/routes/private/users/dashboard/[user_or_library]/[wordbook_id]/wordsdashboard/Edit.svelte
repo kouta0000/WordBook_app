@@ -56,7 +56,7 @@
 {/if}
 </div>
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center ">
-        <div class="text mt-20 lg:mt-20 w-full flex justify-center items-center realtive h-20">
+        <div class="text mt-23 mb-4 lg:mt-20 w-full flex justify-center items-center realtive h-20">
             <h1 class="border-stone-300 shadow-lg p-4 border-1 rounded-3xl">{wb_name}</h1>
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
@@ -101,8 +101,9 @@
                         updatings[id]=false;             
                   }
                 }} class={{"absolute inset-0 flex flex-col justifry-center items-start z-12":true}}>
-                    <span  class={{"pl-2 pr-2 flex border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1":true, "bg-white":!updating, "skeleton":updating}}>
-                        {#if !updating}
+                    {#if !updating}
+                    <span  class="pl-2 pr-2 flex border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 bg-white">
+                        
                         <input type="text" id="term" name="term" value={word.term} class="rounded-3xl my-1 input m-auto  font-semibold font-sans text-xl">
                         <button type="submit" class="btn btn-base rounded-full my-auto btn-xs">
                             保存
@@ -110,11 +111,21 @@
                         <button type="button" onclick={()=>updatings[id] = false} class="btn btn-base rounded-full my-auto btn-xs">
                             戻る
                         </button>
-                        {/if}
                     </span>
-                    <div class={{"px-2 flex w-full shadow-lg border-1 border-stone-300 rounded-3xl relative":true, "bg-white":!updating, "skeleton":updating}}>
+                    {:else}
+                    <span  out:fade={{delay:500}} class="pl-2 pr-2 flex border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 skeleton">
+                        <p class="m-auto px-10 py-2 font-semibold font-sans text-xl opacity-0">{word.term}</p>
+                    </span>
+                    {/if}
+                    {#if !updating}
+                    <div class="px-2 flex w-full shadow-lg border-1 border-stone-300 rounded-3xl relative bg-white">
                         <input type="text" id="meaning" name="meaning" value={word.meaning} class={{"rounded-3xl my-3 py-2 input mx-auto max-w-9/10 font-sans text-lg":true, "hidden":updating}}>
                     </div>
+                    {:else}
+                    <div out:fade={{delay:500}} class="px-2 flex w-full shadow-lg border-1 border-stone-300 rounded-3xl relative skeleton">
+                        <p class="mx-auto my-4 max-w-9/10 font-sans text-lg opacity-0">Loading...</p>
+                    </div>
+                    {/if}
                     <input type="hidden" id="id" name="id" value={word.id}>
                 </form>
                 {/if}
