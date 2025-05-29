@@ -127,7 +127,7 @@
                 <div class="flex w-full shadow-lg border-1 border-stone-300 rounded-3xl bg-white relative">
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{word.meaning}</p>
                     {#if isChecked}
-                    <div transition:fade={{duration:150}} class="flex items-center w-1/5 absolute right-0 rounded-3xl border-1 border-stone-300 -top-[40%] lg:-top-[60%]  bg-white/80 aspect-ratio-1/2 z-13">
+                    <div transition:fade={{duration:150}} class="flex items-center w-1/5 absolute right-0 rounded-3xl top-1/2 -translate-y-1/2 bg-white/80 aspect-ratio-1/2 z-13">
                     <button  class="h-full aspect-ration-1/1" onclick={() => dialogs[id]?.showModal()}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" class="w-full h-full m-auto fill-none rounded-3xl">
                             <rect x="7" y="9" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
