@@ -99,7 +99,7 @@
                         <button type="submit" class="btn btn-base rounded-full my-auto btn-xs">
                             保存
                         </button>
-                        <button type="button" onclick={()=>{isChecked=!isChecked;updatings[id] = false} class="btn btn-base rounded-full my-auto btn-xs">
+                        <button type="button" onclick={()=>{isChecked=!isChecked;updatings[id] = false}} class="btn btn-base rounded-full my-auto btn-xs">
                             戻る
                         </button>
                     </span>
