@@ -104,7 +104,7 @@
                         </button>
                     </span>
                     {:else}
-                    <span  out:fade={{delay:1000}} class="pl-2 pr-2 flex border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 skeleton">
+                    <span  out:fade={{delay:1000}} onoutroend={()=>updatings[id]=false} class="pl-2 pr-2 flex border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 skeleton">
                         <p class="m-auto px-10 py-2 font-semibold font-sans text-xl opacity-0">{word.term}</p>
                     </span>
                     {/if}
