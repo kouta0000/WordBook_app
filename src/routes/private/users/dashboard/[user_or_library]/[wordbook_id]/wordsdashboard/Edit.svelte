@@ -122,9 +122,9 @@
                 <div class="flex w-full shadow-lg border-1 border-stone-300 rounded-3xl bg-white relative">
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{word.meaning}</p>
                     {#if isChecked}
-                    <div transition:fade={{duration:150}} class="flex w-7/24 absolute right-0 rounded-3xl top-auto bottom-auto p-2 aspect-ratio-1/2">
+                    <div transition:fade={{duration:150}} class="flex w-7/24 absolute right-0 rounded-3xl top-auto bottom-auto p-2 bg-white/80 0aspect-ratio-1/2">
                     <button  class="h-full aspect-ration-1/1" onclick={() => dialogs[id]?.showModal()}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" class="w-full h-full m-auto bg-white/80">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" class="w-full h-full m-auto fill-none">
                             <rect x="7" y="5" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
                             <rect x="8" y="3" width="8" height="2" fill="none" stroke="gray" stroke-width="1"/>
                             <line x1="9" y1="7" x2="9" y2="15" stroke="gray" stroke-width="1"/>
@@ -133,7 +133,7 @@
                         </svg>
                     </button>
                     <button class="h-full aspect-ratio-1/1" onclick={() => updatings[id]=true}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67 67" class="w-7/10 h-7/10 m-auto bg-white/80">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67 67" class="w-7/10 h-7/10 m-auto fill-none">
                             <g transform="translate(32,32) scale(1.6) rotate(-45) translate(-32,-32)">
                               <!-- 鉛筆の先端（尖った部分） -->
                               <polygon points="18,28 12,32 18,36" fill="#808080" />
