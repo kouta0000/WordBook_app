@@ -31,7 +31,7 @@
 </a>
 {/if}
 {#if creating}
-<div out:fade={{duration:800}} class="flex gap-1">
+<div out:fade={{delay:800}} class="flex gap-1">
     <p>追加中</p>
     <span class="loading loading-dots loading-xs"></span>
     <span class="loading loading-dots loading-xs"></span>
@@ -39,7 +39,7 @@
 </div>
 {/if}
 {#if deleting}
-<div class="flex gap-1" out:fade={{duration:800}}>
+<div class="flex gap-1" out:fade={{delay:800}}>
     <p>削除中</p>
     <span class="loading loading-dots loading-xs"></span>
     <span class="loading loading-dots loading-xs"></span>
@@ -47,7 +47,7 @@
 </div>
 {/if}
 {#if updating}
-<div class="flex gap-1" out:fade={{duration:800}}>
+<div class="flex gap-1" out:fade={{delay:800}}>
     <p>変更中</p>
     <span class="loading loading-dots loading-xs"></span>
     <span class="loading loading-dots loading-xs"></span>
@@ -96,12 +96,12 @@
                 <form method="POST" action="?/updateWord" use:enhance={() => {
                     updating=true;
                     return async ({update}) => {
-                        updatings[id]=false;
                         update();
                         updating=false;
-                    }
+                        updatings[id]=false;             
+                  }
                 }} class="absolute inset-0 flex flex-col justifry-center items-start z-12">
-                    <span  class="pl-2 pr-2 flex bg-white border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1">
+                    <span  class={{"pl-2 pr-2 flex bg-white border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1":true, "skelton":updating}}>
                         <input type="text" id="term" name="term" value={word.term} class="rounded-3xl my-1 input m-auto  font-semibold font-sans text-xl">
                         <button type="submit" class="btn btn-base rounded-full my-auto btn-xs">
                             保存
@@ -110,7 +110,7 @@
                             戻る
                         </button>
                     </span>
-                    <div class="px-2 flex w-full shadow-lg border-1 border-stone-300 rounded-3xl bg-white relative">
+                    <div class={{"px-2 flex w-full shadow-lg border-1 border-stone-300 rounded-3xl bg-white relative":true, "skelton":updating}}>
                         <input type="text" id="meaning" name="meaning" value={word.meaning} class="rounded-3xl my-3 py-2 input mx-auto max-w-9/10 font-sans text-lg">
                     </div>
                     <input type="hidden" id="id" name="id" value={word.id}>
