@@ -46,15 +46,6 @@
     <span class="loading loading-dots loading-xs"></span>
 </div>
 {/if}
-{#if updating}
-<div class="flex gap-1" out:fade={{delay:500}}>
-    <p>変更中</p>
-    <span class="loading loading-dots loading-xs"></span>
-    <span class="loading loading-dots loading-xs"></span>
-    <span class="loading loading-dots loading-xs"></span>
-</div>
-{/if}
-</div>
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center ">
         <div class="text mt-23 mb-4 lg:mt-20 w-full flex justify-center items-center realtive h-20">
             <h1 class="border-stone-300 shadow-lg p-4 border-1 rounded-3xl">{wb_name}</h1>
