@@ -31,7 +31,7 @@
 </a>
 {/if}
 {#if creating}
-<div out:fade={{delay:500}} class="flex gap-1">
+<div out:fade={{delay:800}} class="flex gap-1">
     <p>追加中</p>
     <span class="loading loading-dots loading-xs"></span>
     <span class="loading loading-dots loading-xs"></span>
@@ -113,7 +113,7 @@
                         </button>
                     </span>
                     {:else}
-                    <span  out:fade={{delay:500}} class="pl-2 pr-2 flex border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 skeleton">
+                    <span  out:fade={{delay:800}} class="pl-2 pr-2 flex border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 skeleton">
                         <p class="m-auto px-10 py-2 font-semibold font-sans text-xl opacity-0">{word.term}</p>
                     </span>
                     {/if}
@@ -122,7 +122,7 @@
                         <input type="text" id="meaning" name="meaning" value={word.meaning} class={{"rounded-3xl my-3 py-2 input mx-auto max-w-9/10 font-sans text-lg":true, "hidden":updating}}>
                     </div>
                     {:else}
-                    <div out:fade={{delay:500}} class="px-2 flex w-full shadow-lg border-1 border-stone-300 rounded-3xl relative skeleton">
+                    <div out:fade={{delay:800}} class="px-2 flex w-full shadow-lg border-1 border-stone-300 rounded-3xl relative skeleton">
                         <p class="mx-auto my-4 max-w-9/10 font-sans text-lg opacity-0">Loading...</p>
                     </div>
                     {/if}
