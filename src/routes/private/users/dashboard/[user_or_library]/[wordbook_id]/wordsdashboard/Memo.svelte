@@ -27,28 +27,28 @@
     
     <div style="background-color: rgba(250, 250, 249, 0.75);" class="px-2 flex justify-center md:justify-end items-center fixed absolute top-18 pt-4 lg:h-15 w-full flex flex-row flex-wrap gap-1 mb-10 z-11">
         {#if user_or_library == "user"}
-            <a href="../../../dashboard/user" class="shadow-sm btn bg-sky-50 rounded-full w-min basis-0">
+            <a href="../../../dashboard/user" class="active:scale-0.8 shadow-sm btn bg-sky-50 rounded-full w-min basis-0">
                <p class="whitespace-nowrap text-sky-400 font-bold">戻る</p>
             </a>
             {:else}
-            <a href="../../../dashboard/library" class="shadow-sm btn bg-sky-50 rounded-full w-min basis-0 text-black">
+            <a href="../../../dashboard/library" class="active:scale-0.8 shadow-sm btn bg-sky-50 rounded-full w-min basis-0 text-black">
                 <p class="whitespace-nowrap text-sky-400 font-extrabold">戻る</p>
             </a>
             {/if}
-        <button class="shadow-sm btn bg-sky-400 rounded-3xl  w-min basis-0" onclick={()=> {hide=!hide}}>
+        <button class="active:scale-0.8 shadow-sm btn bg-sky-400 rounded-3xl  w-min basis-0" onclick={()=> {hide=!hide}}>
             <p class="whitespace-nowrap text-white font-bold">{!hide? "隠す":"元に戻す"}</p>
         </button>
-        <button class="shadow-sm btn bg-sky-400 rounded-3xl w-min basis-0" onclick={() => shuffleWords(wordsc)}>
+        <button class="active:scale-0.8 shadow-sm btn bg-sky-400 rounded-3xl w-min basis-0" onclick={() => shuffleWords(wordsc)}>
             <p class="whitespace-nowrap text-white font-bold">シャッフル</p>
         </button>
-        <button class="shadow-sm btn bg-sky-400 rounded-3xl w-min basis-0" onclick={() => isFlipped = !isFlipped}>
+        <button class="active:scale-0.8 shadow-sm btn bg-sky-400 rounded-3xl w-min basis-0" onclick={() => isFlipped = !isFlipped}>
             <p class="whitespace-nowrap text-white font-bold">フリップ</p>
         </button>
     </div>
     
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center">
         <div class="mt-20 lg:mt-20  w-full flex justify-center  items-center realtive h-20">
-            <h1 class="border-1 border-sky-500 rounded-3xl p-4 font-sans">{wb_name}</h1>
+            <h1 class="border-1 shadow-lg border-stone-300 rounded-3xl p-4 font-sans">{wb_name}</h1>
             
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">

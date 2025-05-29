@@ -22,16 +22,16 @@
     
 <div style="background-color: rgba(250, 250, 249, 0.75);" class="px-4 flex justify-start md:justify-end items-center fixed absolute top-18 pt-4 lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-11">
 {#if user_or_library == "user"}
-<a href="../../../dashboard/user" class="btn bg-sky-50 rounded-3xl w-1/3 w-min basis-0 text-black">
+<a href="../../../dashboard/user" class="active:scale-0.8 btn bg-sky-50 rounded-3xl w-1/3 w-min basis-0 text-black">
    <p class="whitespace-nowrap text-sky-400 font-bold">戻る</p>
 </a>
 {:else}
-<a href="../../../dashboard/library" class="btn bg-sky-50 btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
+<a href="../../../dashboard/library" class="active:scale-0.8 btn bg-sky-50 btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
     <p class="whitespace-nowrap text-sky-400 font-bold">戻る</p>
 </a>
 {/if}
 {#if creating}
-<div out:fade={{duration:500}} class="flex gap-1">
+<div out:fade={{duration:800}} class="flex gap-1">
     <p>追加中</p>
     <span class="loading loading-dots loading-xs"></span>
     <span class="loading loading-dots loading-xs"></span>
@@ -39,7 +39,7 @@
 </div>
 {/if}
 {#if deleting}
-<div class="flex gap-1" out:fade={{duration:500}}>
+<div class="flex gap-1" out:fade={{duration:800}}>
     <p>削除中</p>
     <span class="loading loading-dots loading-xs"></span>
     <span class="loading loading-dots loading-xs"></span>
@@ -47,7 +47,7 @@
 </div>
 {/if}
 {#if updating}
-<div class="flex gap-1" out:fade={{duration:500}}>
+<div class="flex gap-1" out:fade={{duration:800}}>
     <p>変更中</p>
     <span class="loading loading-dots loading-xs"></span>
     <span class="loading loading-dots loading-xs"></span>
@@ -61,10 +61,10 @@
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
             <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 md:bottom-22 md:right-20 z-20">
-                <button type="button" onclick={() => {isChecked=!isChecked;updatings.fill(false)}} class={{"btn btn-lg btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-sky-500":!isChecked, "bg-indigo-500":isChecked}}>
+                <button type="button" onclick={() => {isChecked=!isChecked;updatings.fill(false)}} class={{"btn btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-sky-500":!isChecked, "bg-indigo-500":isChecked}}>
                     <p class="whitespace-nowrap text-white text-base font-bold">{ !isChecked? "選択": "元に戻す"}</p>
                 </button>
-                <svg onclick={()=> dialog?.showModal()} xmlns="http://www.w3.org/2000/svg" class="active:scale-80" viewBox="0 0 64 64" width="56" height="56">
+                <svg onclick={()=> dialog?.showModal()} xmlns="http://www.w3.org/2000/svg" class="active:scale-80" viewBox="0 0 64 64" width="50" height="50">
                     <!-- 楕円形の背景（空色） -->
                     <ellipse cx="32" cy="32" rx="30" ry="28" class="fill-sky-500" />
                     <!-- 中心の白い横線 -->
@@ -122,18 +122,18 @@
                 <div class="flex w-full shadow-lg border-1 border-stone-300 rounded-3xl bg-white relative">
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{word.meaning}</p>
                     {#if isChecked}
-                    <div class="flex absolute right-2 top-0 bottom-0 p-2">
-                    <button  class={{"h-full w-full flex":true}} onclick={() => dialogs[id]?.showModal()}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-full h-full m-auto bg-white">
-                            <rect x="7" y="6" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
-                            <rect x="8" y="4" width="8" height="2" fill="none" stroke="gray" stroke-width="1"/>
-                            <line x1="9" y1="8" x2="9" y2="16" stroke="gray" stroke-width="1"/>
-                            <line x1="12" y1="8" x2="12" y2="16" stroke="gray" stroke-width="1"/>
-                            <line x1="15" y1="8" x2="15" y2="16" stroke="gray" stroke-width="1"/>
+                    <div class="flex w-7/24 absolute right-0 rounded-3xl top-auto bottom-auto p-2 aspect-ratio-1/2">
+                    <button  class="h-full aspect-ration-1/1" onclick={() => dialogs[id]?.showModal()}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" class="w-full h-full m-auto bg-white/80">
+                            <rect x="7" y="5" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
+                            <rect x="8" y="3" width="8" height="2" fill="none" stroke="gray" stroke-width="1"/>
+                            <line x1="9" y1="7" x2="9" y2="15" stroke="gray" stroke-width="1"/>
+                            <line x1="12" y1="7" x2="12" y2="15" stroke="gray" stroke-width="1"/>
+                            <line x1="15" y1="7" x2="15" y2="15" stroke="gray" stroke-width="1"/>
                         </svg>
                     </button>
-                    <button onclick={() => updatings[id]=true}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-full h-full m-auto bg-white">
+                    <button class="h-full aspect-ratio-1/1" onclick={() => updatings[id]=true}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67 67" class="w-7/10 h-7/10 m-auto bg-white/80">
                             <g transform="translate(32,32) scale(1.6) rotate(-45) translate(-32,-32)">
                               <!-- 鉛筆の先端（尖った部分） -->
                               <polygon points="18,28 12,32 18,36" fill="#808080" />
@@ -143,8 +143,7 @@
                               <rect x="46" y="28" width="6" height="8" rx="1.5" ry="1.5" fill="#808080" />
                             </g>
                           </svg>
-                          
-                    </button>
+                        </button>
                     </div>
                      {/if}         
                 </div>

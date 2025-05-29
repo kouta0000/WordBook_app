@@ -36,7 +36,7 @@ interface Wordbook {
         <h1 class="text mb-10 mx-auto">あなたの単語帳</h1>
         <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 lg:bottom-22 lg:right-5 z-20">
             <button type="button" onclick={() => isChecked=!isChecked} class={{"btn btn-lg btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-sky-500":!isChecked, "bg-indigo-500":isChecked}}>
-                <p class="whitespace-nowrap text-white">{ !isChecked? "選択": "元に戻す"}</p>
+                <p class="whitespace-nowrap text-white font-bold text-base">{ !isChecked? "選択": "元に戻す"}</p>
             </button>
             <svg onclick={()=> dialog?.showModal()} xmlns="http://www.w3.org/2000/svg" class="active:scale-80" viewBox="0 0 64 64" width="56" height="56">
                 <!-- 楕円形の背景（空色） -->
@@ -58,7 +58,7 @@ interface Wordbook {
                 </div>
             </dialog>
            
-            <div in:fly={{duration:300, y:20}} out:fade class="shadow-lg active:bg-sky-100 transition-all duration-200 flex w-4/5 sm:grow rounded-3xl bg-white border-1 border-sky-300 relative">
+            <div in:fly={{duration:300, y:20}} out:fade class="shadow-lg active:bg-sky-100 transition-all duration-200 flex w-4/5 sm:grow rounded-3xl bg-white border-1 border-stone-300 relative">
                 <a href="./user/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
                 {#if isChecked}
                 <form use:enhance={ async (submitEvent) => {
@@ -90,9 +90,8 @@ interface Wordbook {
                     <input type="hidden" name="wordbook_id" value={wordbook.id}>
                 </form>
                 {/if}
-                <svg class={{"w-1/12 m-1":true}} viewBox="0 0 40 40">
-                    <circle cx="20" cy="20" r="20" class="fill-sky-500"/>
-                </svg>
+                <div class={{"w-1/12 aspect-ratio-1/1/ m-1 mask mask-hexagon bg-sky-500":true}}>
+                </div>
                 <p class="mx-auto pr-10 my-4">{wordbook.wb_name}</p>
             </div>
             {/each}
