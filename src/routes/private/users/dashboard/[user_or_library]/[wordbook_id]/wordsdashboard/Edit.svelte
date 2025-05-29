@@ -99,7 +99,7 @@
                         <button type="submit" class="btn btn-base rounded-full my-auto btn-xs">
                             保存
                         </button>
-                        <button type="button" onclick={()=>updatings[id] = false} class="btn btn-base rounded-full my-auto btn-xs">
+                        <button type="button" onclick={()=>{isChecked=!isChecked;updatings[id] = false} class="btn btn-base rounded-full my-auto btn-xs">
                             戻る
                         </button>
                     </span>
@@ -137,7 +137,7 @@
                             <line x1="15" y1="11" x2="15" y2="19" stroke="gray" stroke-width="1"/>
                         </svg>
                     </button>
-                    <button class="h-full aspect-ratio-1/1" onclick={() => updatings[id]=true}>
+                    <button class="h-full aspect-ratio-1/1" onclick={() => {updatings[id]=true;isChecked=!isChecked}}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67 67" class="w-4/5 h-4/5 m-auto fill-none rounded-3xl">
                             <g transform="translate(32,32) scale(1.6) rotate(-45) translate(-32,-32)">
                               <!-- 鉛筆の先端（尖った部分） -->
