@@ -30,22 +30,6 @@
     <p class="whitespace-nowrap text-sky-400 font-bold">戻る</p>
 </a>
 {/if}
-{#if creating}
-<div out:fade={{delay:800}} class="flex gap-1">
-    <p>追加中</p>
-    <span class="loading loading-dots loading-xs"></span>
-    <span class="loading loading-dots loading-xs"></span>
-    <span class="loading loading-dots loading-xs"></span>
-</div>
-{/if}
-{#if deleting}
-<div class="flex gap-1" out:fade={{delay:500}}>
-    <p>削除中</p>
-    <span class="loading loading-dots loading-xs"></span>
-    <span class="loading loading-dots loading-xs"></span>
-    <span class="loading loading-dots loading-xs"></span>
-</div>
-{/if}
 </div>
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center ">
         <div class="text mt-23 mb-4 lg:mt-20 w-full flex justify-center items-center realtive h-20">
@@ -53,6 +37,22 @@
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
             <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 md:bottom-22 md:right-20 z-20">
+                {#if creating}
+                <div out:fade={{delay:800}} class="flex gap-1">
+                    <p>追加中</p>
+                    <span class="loading loading-dots loading-xs"></span>
+                    <span class="loading loading-dots loading-xs"></span>
+                    <span class="loading loading-dots loading-xs"></span>
+                </div>
+                {/if}
+                {#if deleting}
+                <div class="flex gap-1" out:fade={{delay:500}}>
+                    <p>削除中</p>
+                    <span class="loading loading-dots loading-xs"></span>
+                    <span class="loading loading-dots loading-xs"></span>
+                    <span class="loading loading-dots loading-xs"></span>
+                </div>
+                {/if}
                 <button type="button" onclick={() => {isChecked=!isChecked;updatings.fill(false)}} class={{"btn btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-sky-500":!isChecked, "bg-indigo-500":isChecked}}>
                     <p class="whitespace-nowrap text-white text-base font-bold">{ !isChecked? "選択": "元に戻す"}</p>
                 </button>
