@@ -111,13 +111,13 @@
                 </form>
 
                 {#if updating}
+                <div class={{"absolute inset-0 flex flex-col justifry-center items-start z-12":true}}>
                 <span out:fade={{delay:1000}} class="pl-2 pr-2 flex border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 skeleton">
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl opacity-0">{word.term}</p>
                 </span>
-                {/if}
-                {#if updating}
                 <div out:fade={{delay:1000}} class="px-2 flex w-full shadow-lg border-1 border-stone-300 rounded-3xl relative skeleton">
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg opacity-0">Loading...</p>
+                </div>
                 </div>
                 {/if}
                 
