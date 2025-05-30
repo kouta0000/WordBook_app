@@ -50,7 +50,7 @@
         <div class="mt-23 mb-4 lg:mt-20  w-full flex justify-center  items-center realtive h-20">
             <h1 class="border-1 bg-white shadow-lg border-stone-300 rounded-3xl p-4 font-sans">{wb_name}</h1>
         </div> 
-        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
+        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-x-0 items-center place-items-center relative">
             <button onclick={() => isChecked = false} class={{"w-4/5 md:w-2/5 lg:w-1/5 lg:h-20 absolute fixed opacity-95 z-11 bottom-24 lg:bottom-25 lg:right-5 btn btn-info rounded-2xl grow opacity-80":true, "hidden":!isChecked, "block":isChecked}}>
                 <p class="text-white">削除</p>
             </button>
@@ -60,11 +60,11 @@
                 <span  class="flex bg-white shadow-sm border-stone-300 rounded-xl z-9 max-w-9/10 -translate-x-3 translate-y-1 z-1">
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl">{isFlipped ? word.meaning: word.term}</p>
                 </span>
-　　　　　　　　　 <hr class="w-48 h-1 bg-gray-200 border-0 rounded-sm md:my-10 dark:bg-gray-700">
                 <div class="flex w-full border-stone-300 shadow-sm rounded-xl bg-white relative">
                     <Overlay i={i} hide={hide}/> 
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{isFlipped? word.term: word.meaning}</p>
                 </div>
+                <hr class="w-48 h-1 mt-2 bg-gray-200 border-0 rounded-sm md:my-10 dark:bg-gray-700">
             </div>
             {/each}
             
