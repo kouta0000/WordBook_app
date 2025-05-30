@@ -149,9 +149,9 @@
                           </svg>
                         </button>
                     </div>
-                    <hr class="w-full scale-110 h-1 mt-3 bg-gray-200 border-0 rounded-sm md:my-10 dark:bg-gray-700">
-                     {/if}         
+                    {/if}         
                 </div>
+                <hr class="w-full scale-110 h-1 mt-3 bg-gray-200 border-0 rounded-sm md:my-10 dark:bg-gray-700">
             </div>
             
             {/each}
