@@ -105,8 +105,8 @@
                             保存
                         </button>
                     </span>
-                    <div class="px-2 flex w-full shadow-sm border-stone-300 rounded-xl relative bg-white">
-                        　<label class="input input-ghost rounded-3xl my-3 py-2 max-w-9/10 font-sans text-md mx-auto">
+                    <div class="px-2 flex w-full shadow-sm border-stone-300 rounded-xl relative">
+                        　<label class="input input-ghost rounded-3xl my-2 py-2 max-w-9/10 font-sans text-md mx-auto">
                           <p class="text-xs text-stone-300">変更</p>
 　　　　　　　　　　　　　　　 <input type="text" placeholder="変更" id="meaning" name="meaning" value={word.meaning}>
                           </label>
