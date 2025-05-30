@@ -57,7 +57,7 @@
             
             {#each wordsc as word,i (word.id)}
             <div out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-4/5 sm:grow flex flex-col justify-center items-start">
-                <span  class="flex bg-white  border-stone-300 rounded-xl z-9 max-w-9/10 -translate-x-3 translate-y-1 z-1">
+                <span  class="flex bg-white border-1 border-stone-300 rounded-xl z-9 max-w-9/10 -translate-x-3 translate-y-1 z-1">
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl">{isFlipped ? word.meaning: word.term}</p>
                 </span>
                 <div class="flex w-full border-stone-300 rounded-xl bg-white relative">
