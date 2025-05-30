@@ -35,7 +35,7 @@
         <div class="text mt-23 mb-4 lg:mt-20 w-full flex justify-center items-center realtive h-20">
             <h1 class="border-stone-300 shadow-lg p-4 border-1 rounded-3xl bg-white">{wb_name}</h1>
         </div> 
-        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
+        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-x-0 items-center place-items-center relative">
             <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 md:bottom-22 md:right-20 z-20">
                 {#if creating}
                 <div out:fade={{delay:800}} class="btn bg-indigo-500 rounded-3xl flex gap-1">
@@ -93,7 +93,7 @@
                         updatings2[id]=false;
                   }
                 }} class={{"absolute inset-0 flex flex-col justifry-center items-start z-12":true}}>
-                    <span  class="pl-2 pr-2 flex border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 bg-white">
+                    <span  class="pl-2 pr-2 py-1 flex border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 bg-white">
                         
                         <input type="text" id="term" name="term" value={word.term} class="rounded-3xl input input-ghost m-auto font-semibold font-sans text-xl">
                         <button type="button" onclick={()=>{isChecked=!isChecked;updatings[id] = false}} class="btn btn-base rounded-full my-auto btn-sm">
@@ -106,7 +106,6 @@
                     <div class="px-2 flex w-full shadow-sm border-stone-300 rounded-xl relative bg-white">
                         <input type="text" id="meaning" name="meaning" value={word.meaning} class={{"rounded-3xl my-3 py-2 input input-ghost mx-auto max-w-9/10 font-sans text-lg":true}}>
                     </div>
-                    
                     <input type="hidden" id="id" name="id" value={word.id}>
                 </form>
                 {/if}
@@ -150,6 +149,7 @@
                           </svg>
                         </button>
                     </div>
+                    <hr class="w-full scale-110 h-1 mt-3 bg-gray-200 border-0 rounded-sm md:my-10 dark:bg-gray-700">
                      {/if}         
                 </div>
             </div>
