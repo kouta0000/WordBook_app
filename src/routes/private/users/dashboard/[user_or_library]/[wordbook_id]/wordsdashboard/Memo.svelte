@@ -64,7 +64,7 @@
                     <Overlay i={i} hide={hide}/> 
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{isFlipped? word.term: word.meaning}</p>
                 </div>
-                <hr class="w-full scale-110 h-1 mt-3 bg-gray-200 border-0 rounded-sm md:my-10 dark:bg-gray-700">
+                <hr class="w-full scale-70 h-2 mt-4 bg-gray-300 border-0 rounded-sm md:my-10 dark:bg-gray-700">
             </div>
             {/each}
             
