@@ -103,7 +103,7 @@
                             保存
                         </button>
                     </span>
-                    <div class="px-2 flex w-full border-stone-300 rounded-xl relative bg-white">
+                    <div class="px-2 flex w-full shadow-sm border-stone-300 rounded-xl relative bg-white">
                         <input type="text" id="meaning" name="meaning" value={word.meaning} class={{"rounded-3xl my-3 py-2 input input-ghost mx-auto max-w-9/10 font-sans text-lg":true}}>
                     </div>
                     
@@ -121,10 +121,10 @@
                 </div>
                 {/if}
                 
-                <span  class="flex bg-white border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-11">
+                <span class="flex bg-white  border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-11">
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl">{word.term}</p>
                 </span>
-                <div class="flex w-full border-stone-300 rounded-xl bg-white relative">
+                <div class="flex w-full border-stone-300 shadow-sm rounded-xl bg-white relative">
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{word.meaning}</p>
                     {#if isChecked}
                     <div transition:fade={{duration:150}} class="flex items-center w-1/5 absolute right-0 rounded-3xl top-1/2 -translate-y-1/2 bg-white/80 aspect-ratio-1/2 z-13">
