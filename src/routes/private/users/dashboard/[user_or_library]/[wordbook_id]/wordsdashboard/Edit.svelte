@@ -22,11 +22,11 @@
     
 <div class="bg-stone-50/80 px-4 flex justify-start md:justify-end items-center fixed absolute top-18 pt-4 lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-16">
 {#if user_or_library == "user"}
-<a href="../../../dashboard/user" class="active:scale-0.8 btn bg-sky-50 rounded-3xl w-1/3 w-min basis-0 text-black">
+<a href="../../../dashboard/user" class="active:scale-80 btn bg-sky-50 rounded-3xl w-1/3 w-min basis-0 text-black">
    <p class="whitespace-nowrap text-sky-400 font-bold">戻る</p>
 </a>
 {:else}
-<a href="../../../dashboard/library" class="active:scale-0.8 btn bg-sky-50 btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
+<a href="../../../dashboard/library" class="active:scale-80 btn bg-sky-50 btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
     <p class="whitespace-nowrap text-sky-400 font-bold">戻る</p>
 </a>
 {/if}
@@ -156,7 +156,7 @@
                     </div>
                     {/if}         
                 </div>
-                <hr class="w-full scale-110 h-1 mt-3 bg-gray-200 border-0 rounded-sm md:my-10 dark:bg-gray-700">
+                <hr class="w-full scale-80 h-1 mt-4 bg-gray-200 border-0 rounded-sm md:my-10 dark:bg-gray-700">
             </div>
             
             {/each}
