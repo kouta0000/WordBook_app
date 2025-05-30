@@ -94,9 +94,9 @@
                   }
                 }} class={{"absolute inset-0 flex flex-col justifry-center items-start z-12":true}}>
                     <span  class="pl-2 pr-2 py-1 flex border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 bg-white">
-                        <label class="input rounded-3xl">
+                        <label class="input input-ghost rounded-3xl">
                         <p class="text-xs text-stone-300">変更</p>
-                        <input type="text" placeholder="変更" id="term" name="term" value={word.term} class="input-ghost m-auto font-semibold font-sans text-md">
+                        <input type="text" placeholder="変更" id="term" name="term" value={word.term} class="m-auto font-semibold font-sans text-md">
                         </label>
                         <button type="button" onclick={()=>{isChecked=!isChecked;updatings[id] = false}} class="btn btn-base rounded-full my-auto btn-sm">
                             戻る
@@ -106,9 +106,9 @@
                         </button>
                     </span>
                     <div class="px-2 flex w-full shadow-sm border-stone-300 rounded-xl relative bg-white">
-                        　<label class="input rounded-3xl my-２ py-2 max-w-9/10 font-sans text-md">
+                        　<label class="input input-ghost rounded-3xl my-3 py-2 max-w-9/10 font-sans text-md mx-auto">
                           <p class="text-xs text-stone-300">変更</p>
-　　　　　　　　　　　　　　　 <input type="text" placeholder="変更" id="meaning" name="meaning" value={word.meaning} class="input-ghost mx-auto">
+　　　　　　　　　　　　　　　 <input type="text" placeholder="変更" id="meaning" name="meaning" value={word.meaning}>
                           </label>
                     </div>
                     <input type="hidden" id="id" name="id" value={word.id}>
