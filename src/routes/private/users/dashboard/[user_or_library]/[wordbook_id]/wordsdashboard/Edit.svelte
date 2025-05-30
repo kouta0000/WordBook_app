@@ -93,9 +93,9 @@
                         updatings2[id]=false;
                   }
                 }} class={{"absolute inset-0 flex flex-col justifry-center items-start z-12":true}}>
-                    <span  class="pl-2 pr-2 flex border-1 border-stone-300  rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 bg-white">
+                    <span  class="pl-2 pr-2 flex border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 bg-white">
                         
-                        <input type="text" id="term" name="term" value={word.term} class="rounded-3xl my-1 input m-auto  font-semibold font-sans text-xl">
+                        <input type="text" id="term" name="term" value={word.term} class="rounded-3xl input input-ghost m-auto font-semibold font-sans text-xl">
                         <button type="button" onclick={()=>{isChecked=!isChecked;updatings[id] = false}} class="btn btn-base rounded-full my-auto btn-sm">
                             戻る
                         </button>
@@ -103,8 +103,8 @@
                             保存
                         </button>
                     </span>
-                    <div class="px-2 flex w-full border-1 border-stone-300 rounded-xl relative bg-white">
-                        <input type="text" id="meaning" name="meaning" value={word.meaning} class={{"rounded-3xl my-3 py-2 input mx-auto max-w-9/10 font-sans text-lg":true}}>
+                    <div class="px-2 flex w-full border-stone-300 rounded-xl relative bg-white">
+                        <input type="text" id="meaning" name="meaning" value={word.meaning} class={{"rounded-3xl my-3 py-2 input input-ghost mx-auto max-w-9/10 font-sans text-lg":true}}>
                     </div>
                     
                     <input type="hidden" id="id" name="id" value={word.id}>
@@ -121,10 +121,10 @@
                 </div>
                 {/if}
                 
-                <span  class="flex bg-white border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-11">
+                <span  class="flex bg-white border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-11">
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl">{word.term}</p>
                 </span>
-                <div class="flex w-full border-1 border-stone-300 rounded-xl bg-white relative">
+                <div class="flex w-full border-stone-300 rounded-xl bg-white relative">
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{word.meaning}</p>
                     {#if isChecked}
                     <div transition:fade={{duration:150}} class="flex items-center w-1/5 absolute right-0 rounded-3xl top-1/2 -translate-y-1/2 bg-white/80 aspect-ratio-1/2 z-13">
