@@ -147,7 +147,7 @@
 
 
 
-<div id="displays" class="w-full h-screen pt-30 lg:pt-35 pb-30 lg:pb-35 flex flex-col lg:flex-row gap-7 justify-center items-center overflow-clip z-19 bg-stone-50 relative">
+<div id="displays" class="w-full h-screen pt-30 lg:pt-35 pb-30 lg:pb-35 flex flex-col lg:flex-row gap-7 justify-center items-center overflow-clip z-19 bg-sky-50 relative">
     {#if showdisplays}
             
         <div class="absolute left-auto right-auto top-3 w-full gap-1 flex justify-center items-center p-2">
