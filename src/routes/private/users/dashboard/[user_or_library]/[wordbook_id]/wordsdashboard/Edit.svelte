@@ -96,11 +96,11 @@
                     <span  class="pl-2 pr-2 flex border-1 border-stone-300 shadow-lg rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 bg-white">
                         
                         <input type="text" id="term" name="term" value={word.term} class="rounded-3xl my-1 input m-auto  font-semibold font-sans text-xl">
-                        <button type="submit" class="btn btn-base rounded-full my-auto btn-sm">
-                            保存
-                        </button>
                         <button type="button" onclick={()=>{isChecked=!isChecked;updatings[id] = false}} class="btn btn-base rounded-full my-auto btn-sm">
                             戻る
+                        </button>
+                        <button type="submit" class="btn btn-base rounded-full my-auto btn-sm">
+                            保存
                         </button>
                     </span>
                     <div class="px-2 flex w-full shadow-lg border-1 border-stone-300 rounded-3xl relative bg-white">

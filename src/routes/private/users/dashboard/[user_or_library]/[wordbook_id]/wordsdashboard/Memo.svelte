@@ -49,7 +49,6 @@
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center">
         <div class="mt-23 mb-4 lg:mt-20  w-full flex justify-center  items-center realtive h-20">
             <h1 class="border-1 shadow-lg border-stone-300 rounded-3xl p-4 font-sans">{wb_name}</h1>
-            
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
             <button onclick={() => isChecked = false} class={{"w-4/5 md:w-2/5 lg:w-1/5 lg:h-20 absolute fixed opacity-95 z-11 bottom-24 lg:bottom-25 lg:right-5 btn btn-info rounded-2xl grow opacity-80":true, "hidden":!isChecked, "block":isChecked}}>
