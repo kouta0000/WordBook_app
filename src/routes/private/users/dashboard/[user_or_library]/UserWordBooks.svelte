@@ -22,7 +22,7 @@ interface Wordbook {
         <form method="post" use:enhance action="?/add" class="w-full flex flex-col items-center gap-8">
             <label for="wb_name" class="label-base">単語帳の名前を決めよう!</label>
             <input type="text" id="wb_name" name="wb_name" placeholder="wordbook_name" class="input shadow-lg rounded-3xl w-9/10" required>
-            <button class="btn bg-indigo-500 text-white font-bold w-9/10" type="submit" onclick={()=>dialog?.close()}>作成</button>
+            <button class="btn bg-indigo-500 rounded-3xl text-white font-bold w-9/10" type="submit" onclick={()=>dialog?.close()}>作成</button>
         </form>
         <div class="flex-grow"></div>
         <div class="modal-action">
