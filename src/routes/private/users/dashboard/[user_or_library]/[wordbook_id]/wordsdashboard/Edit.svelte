@@ -156,7 +156,7 @@
                     </div>
                     {/if}         
                 </div>
-                <hr class="w-full scale-90 h-2 mt-4 bg-gray-300 border-0 rounded-sm md:my-10 dark:bg-gray-700">
+                <hr class="w-full scale-70 h-2 mt-4 bg-gray-300 border-0 rounded-sm md:my-10 dark:bg-gray-700">
             </div>
             
             {/each}
