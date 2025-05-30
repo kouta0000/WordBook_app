@@ -185,7 +185,7 @@
                 </div>
                 {/each}
                 </div>
-                <button class="btn bg-indigo-500 text-white font-bold w-9/10 mt-5 shadow-lg" type="submit">追加</button>
+                <button class="btn bg-indigo-500 rounded-3xl text-white font-bold w-9/10 mt-5 shadow-lg" type="submit">追加</button>
             </form>
             <div class="flex-grow"></div>
             <div class="modal-action">
