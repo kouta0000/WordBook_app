@@ -20,7 +20,7 @@
 
 
     
-<div style="background-color: rgba(250, 250, 249, 0.75);" class="px-4 flex justify-start md:justify-end items-center fixed absolute top-18 pt-4 lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-16">
+<div class="bg-sky-50/80 px-4 flex justify-start md:justify-end items-center fixed absolute top-18 pt-4 lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-16">
 {#if user_or_library == "user"}
 <a href="../../../dashboard/user" class="active:scale-0.8 btn bg-sky-50 rounded-3xl w-1/3 w-min basis-0 text-black">
    <p class="whitespace-nowrap text-sky-400 font-bold">戻る</p>
