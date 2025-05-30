@@ -60,7 +60,7 @@
                 <span  class="flex bg-white shadow-sm border-stone-300 rounded-xl z-9 max-w-9/10 -translate-x-3 translate-y-1 z-1">
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl">{isFlipped ? word.meaning: word.term}</p>
                 </span>
-                <div class="flex w-full border-stone-300 rounded-xl bg-white relative">
+                <div class="flex w-full border-stone-300 shadow-sm rounded-xl bg-white relative">
                     <Overlay i={i} hide={hide}/> 
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{isFlipped? word.term: word.meaning}</p>
                 </div>
