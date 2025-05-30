@@ -31,7 +31,7 @@
                <p class="whitespace-nowrap text-sky-400 font-bold">戻る</p>
             </a>
             {:else}
-            <a href="../../../dashboard/library" class="active:scale-0.8 shadow-sm btn bg-sky-50 rounded-full w-min basis-0 text-black">
+            <a href="../../../dashboard/library" class="active:scale-80 shadow-sm btn bg-sky-50 rounded-full w-min basis-0 text-black">
                 <p class="whitespace-nowrap text-sky-400 font-extrabold">戻る</p>
             </a>
             {/if}
