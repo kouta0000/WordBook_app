@@ -27,21 +27,21 @@
     
     <div class="bg-stone-100/80 px-2 flex justify-center md:justify-end items-center fixed absolute top-18 pt-4 lg:h-15 w-full flex flex-row flex-wrap gap-1 mb-10 z-11">
         {#if user_or_library == "user"}
-            <a href="../../../dashboard/user" class="active:scale-80 shadow-sm btn bg-sky-50 rounded-full w-min basis-0">
-               <p class="whitespace-nowrap text-sky-400 font-bold">戻る</p>
+            <a href="../../../dashboard/user" class="active:scale-80 shadow-sm btn bg-indigo-100 rounded-full w-min basis-0">
+               <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
             </a>
             {:else}
-            <a href="../../../dashboard/library" class="active:scale-80 shadow-sm btn bg-sky-50 rounded-full w-min basis-0 text-black">
-                <p class="whitespace-nowrap text-sky-400 font-extrabold">戻る</p>
+            <a href="../../../dashboard/library" class="active:scale-80 shadow-sm btn bg-indigo-100 rounded-full w-min basis-0 text-black">
+                <p class="whitespace-nowrap text-indigo-400 font-extrabold">戻る</p>
             </a>
             {/if}
-        <button class="active:scale-0.8 shadow-sm btn bg-sky-400 rounded-3xl  w-min basis-0" onclick={()=> {hide=!hide}}>
+        <button class="active:scale-0.8 shadow-sm btn bg-indigo-500 rounded-3xl  w-min basis-0" onclick={()=> {hide=!hide}}>
             <p class="whitespace-nowrap text-white font-bold">{!hide? "隠す":"元に戻す"}</p>
         </button>
-        <button class="active:scale-0.8 shadow-sm btn bg-sky-400 rounded-3xl w-min basis-0" onclick={() => shuffleWords(wordsc)}>
+        <button class="active:scale-0.8 shadow-sm btn bg-indigo-500 rounded-3xl w-min basis-0" onclick={() => shuffleWords(wordsc)}>
             <p class="whitespace-nowrap text-white font-bold">シャッフル</p>
         </button>
-        <button class="active:scale-0.8 shadow-sm btn bg-sky-400 rounded-3xl w-min basis-0" onclick={() => isFlipped = !isFlipped}>
+        <button class="active:scale-0.8 shadow-sm btn bg-indigo-500 rounded-3xl w-min basis-0" onclick={() => isFlipped = !isFlipped}>
             <p class="whitespace-nowrap text-white font-bold">フリップ</p>
         </button>
     </div>
@@ -64,7 +64,7 @@
                     <Overlay i={i} hide={hide}/> 
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{isFlipped? word.term: word.meaning}</p>
                 </div>
-                <hr class="w-full scale-70 h-2 mt-4 bg-stone-300 border-0 rounded-sm md:my-10 dark:bg-gray-700">
+                <hr class="w-full scale-70 h-2 mt-4 bg-indigo-200 border-0 rounded-sm md:mb-1 dark:bg-gray-700">
             </div>
             {/each}
             

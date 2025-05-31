@@ -1,7 +1,7 @@
 
 <script lang="ts">
 import {fly, scale} from "svelte/transition";
-import {elasticOut} from "svelte/easing";
+import Gabyo2 from "./Gabyo2.svelte";
 interface Props {
 	wordbooks: Wordbook[];
 }
@@ -18,11 +18,13 @@ let { wordbooks }: Props = $props();
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-13 sm:gap-x-0 items-center place-items-center">
           
             {#each wordbooks as wordbook (wordbook.id)}
-            <a href="./library/{wordbook.id}/wordsdashboard" out:fly={{duration:500, y:300}}  class="transition-all duration-200 active:bg-emerald-100 shadow-lg flex  w-4/5 sm:grow rounded-3xl bg-white border-1 border-stone-300">
-                <div class="w-1/12 m-1 mb-2 mask mask-pentagon bg-sky-500 aspect-ratio-1/1">
+            <div in:fly={{duration:300, y:20}} out:fade class="shadow-sm active:bg-indigo-100 transition-all duration-200 flex w-4/5 sm:grow rounded-xl bg-white relative">
+                <a href="./library/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
+                <div class="w-1/8 absolute left-0 top-0 aspect-ratio-1/1">
+                    <Gabyo2 />                                   
                 </div>
-                <p class="mx-auto pr-10 my-4">{wordbook.wb_name}</p>
-            </a>
+                <p class="mx-auto my-8">{wordbook.wb_name}</p>
+            </div>
             {/each}
         </div>
         <div class="w-full h-50"></div>

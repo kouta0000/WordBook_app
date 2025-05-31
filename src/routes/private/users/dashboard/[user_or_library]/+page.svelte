@@ -17,7 +17,7 @@
 {:else if currentView == "library"}
 <LibraryWordBooks wordbooks={library_wordbooks ?? []} />
 {/if}
-<div id="wb_foot_buttons" class="w-full h-15 md:h-20 fixed absolute bottom-0 flex flex-row gap-3 justify-center bg-white">
+<div id="wb_foot_buttons" class="w-full h-15 md:h-20 fixed absolute bottom-0 flex flex-row gap-3 justify-center bg-white z-3">
 
 <button onclick={() => currentView = "user"} class="btn btn-ghost md:hover:bg-base-400 active:bg-base-400 h-15 md:h-20 flex-grow basis-0 md:scale-105" >
     {#if currentView == "user"}
@@ -63,16 +63,16 @@
     </svg>
     {:else if currentView == "library"}
     <svg class="h-full" viewBox="0 0 40 40" fill="none">
-        <path d="M 15 15 H 24 A 1,1 0 0 1 24,18 H 15 A 3,3 0 0 0 15 15" stroke-linecap="round" class="stroke-emerald-500" />
-        <line x1="17" y1="16" x2="23" y2="16" class="stroke-emerald-500" stroke-width="0.25" />
-        <line x1="17" y1="17" x2="21" y2="17" class="stroke-emerald-500" stroke-width="0.25" />
-        <path d="M 15 18 H 24 A 1,1 0 0 1 24,21 H 15 A 3,3 0 0 0 15,18" stroke-linecap="round" class="stroke-emerald-500" />
-        <line x1="17" y1="19" x2="23" y2="19" class="stroke-emerald-500" stroke-width="0.3" />
-        <line x1="17" y1="20" x2="21" y2="20" class="stroke-emerald-500" stroke-width="0.25" />
-        <path d="M 15 21 H 24 A 1,1 0 0 1 24,24 H 15 A 3,3 0 0 0 15,21" stroke-linecap="round" class="stroke-emerald-500" />
-        <line x1="17" y1="22" x2="23" y2="22" class="stroke-emerald-500" stroke-width="0.25" />
-        <line x1="17" y1="23" x2="21" y2="23" class="stroke-emerald-500" stroke-width="0.25" />
-        <text x="6" y="35" class="fill-emerald-500 font-bold" font-size="6">ライブラリー</text>
+        <path d="M 15 15 H 24 A 1,1 0 0 1 24,18 H 15 A 3,3 0 0 0 15 15" stroke-linecap="round" class="stroke-sky-300" />
+        <line x1="17" y1="16" x2="23" y2="16" class="stroke-sky-300" stroke-width="0.25" />
+        <line x1="17" y1="17" x2="21" y2="17" class="stroke-sky-300" stroke-width="0.25" />
+        <path d="M 15 18 H 24 A 1,1 0 0 1 24,21 H 15 A 3,3 0 0 0 15,18" stroke-linecap="round" class="stroke-sky-300" />
+        <line x1="17" y1="19" x2="23" y2="19" class="stroke-sky-300" stroke-width="0.3" />
+        <line x1="17" y1="20" x2="21" y2="20" class="stroke-sky-300" stroke-width="0.25" />
+        <path d="M 15 21 H 24 A 1,1 0 0 1 24,24 H 15 A 3,3 0 0 0 15,21" stroke-linecap="round" class="stroke-sky-300" />
+        <line x1="17" y1="22" x2="23" y2="22" class="stroke-sky-300" stroke-width="0.25" />
+        <line x1="17" y1="23" x2="21" y2="23" class="stroke-sky-300" stroke-width="0.25" />
+        <text x="4" y="35" class="fill-sky-300 font-bold" font-size="6">ライブラリー</text>
     </svg>
     {/if}
 </button>

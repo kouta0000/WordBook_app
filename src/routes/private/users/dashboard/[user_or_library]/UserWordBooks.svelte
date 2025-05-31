@@ -1,7 +1,8 @@
 <script lang="ts">
 import {fly, fade} from "svelte/transition";
 import {enhance} from "$app/forms";
-import {elasticOut} from "svelte/easing";
+import Gabyo from "./Gabyo.svelte";
+
 interface Props {
     wordbooks: Wordbook[];
 }
@@ -33,14 +34,14 @@ interface Wordbook {
     </div>
 </dialog>
     <div class="w-full min-h-screen pt-30 flex flex-col items-center">
-        <h1 class="text mb-10 mx-auto">あなたの単語帳</h1>
+        <h1 class="text mb-10 mx-auto">自分だけの単語帳</h1>
         <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 lg:bottom-22 lg:right-5 z-20">
-            <button type="button" onclick={() => isChecked=!isChecked} class={{"btn btn-lg btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-sky-500":!isChecked, "bg-indigo-500":isChecked}}>
+            <button type="button" onclick={() => isChecked=!isChecked} class={{"btn btn-lg btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-indigo-500":!isChecked, "bg-yellow-600":isChecked}}>
                 <p class="whitespace-nowrap text-white font-bold text-base">{ !isChecked? "選択": "元に戻す"}</p>
             </button>
             <svg onclick={()=> dialog?.showModal()} xmlns="http://www.w3.org/2000/svg" class="active:scale-80" viewBox="0 0 64 64" width="56" height="56">
                 <!-- 楕円形の背景（空色） -->
-                <ellipse cx="32" cy="32" rx="30" ry="28" class="fill-sky-500" />
+                <ellipse cx="32" cy="32" rx="30" ry="28" class="fill-indigo-500" />
                 <!-- 中心の白い横線 -->
                 <rect x="22" y="30" width="20" height="4" rx="2" fill="#FFFFFF" />
                 <!-- 中心の白い縦線 -->
@@ -58,7 +59,7 @@ interface Wordbook {
                 </div>
             </dialog>
            
-            <div in:fly={{duration:300, y:20}} out:fade class="shadow-lg active:bg-sky-100 transition-all duration-200 flex w-4/5 sm:grow rounded-3xl bg-white border-1 border-stone-300 relative">
+            <div in:fly={{duration:300, y:20}} out:fade class="shadow-sm active:bg-indigo-100 transition-all duration-200 flex w-4/5 sm:grow rounded-xl bg-white relative">
                 <a href="./user/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
                 {#if isChecked}
                 <form use:enhance={ async (submitEvent) => {
@@ -90,9 +91,10 @@ interface Wordbook {
                     <input type="hidden" name="wordbook_id" value={wordbook.id}>
                 </form>
                 {/if}
-                <div class={{"w-1/12 aspect-ratio-1/1/ m-1 mask mask-hexagon bg-sky-500":true}}>
+                <div class="w-1/8 absolute left-0 top-0 aspect-ratio-1/1">
+                    <Gabyo />                                   
                 </div>
-                <p class="mx-auto pr-10 my-4">{wordbook.wb_name}</p>
+                <p class="mx-auto my-8">{wordbook.wb_name}</p>
             </div>
             {/each}
         </div>

@@ -20,14 +20,14 @@
 
 
     
-<div class="bg-stone-100/80 px-4 flex justify-start md:justify-end items-center fixed absolute top-18 pt-4 lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-16">
+<div class="bg-stone-100/80 px-4 flex justify-end items-center fixed absolute top-18 pt-4 lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-16">
 {#if user_or_library == "user"}
-<a href="../../../dashboard/user" class="active:scale-80 btn bg-sky-50 rounded-3xl w-1/3 w-min basis-0 text-black">
-   <p class="whitespace-nowrap text-sky-400 font-bold">戻る</p>
+<a href="../../../dashboard/user" class="active:scale-80 btn bg-indigo-100 rounded-3xl w-1/3 w-min basis-0 text-black">
+   <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
 </a>
 {:else}
-<a href="../../../dashboard/library" class="active:scale-80 btn bg-sky-50 btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
-    <p class="whitespace-nowrap text-sky-400 font-bold">戻る</p>
+<a href="../../../dashboard/library" class="active:scale-80 btn bg-indigo-100 btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
+    <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
 </a>
 {/if}
 </div>
@@ -53,12 +53,12 @@
                     <span class="loading loading-dots loading-sm text-white"></span>
                 </div>
                 {/if}
-                <button type="button" onclick={() => {isChecked=!isChecked;updatings.fill(false)}} class={{"btn btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-sky-500":!isChecked, "bg-indigo-500":isChecked}}>
+                <button type="button" onclick={() => {isChecked=!isChecked;updatings.fill(false)}} class={{"btn btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-indigo-500":!isChecked, "bg-yellow-600":isChecked}}>
                     <p class="whitespace-nowrap text-white text-base font-bold">{ !isChecked? "選択": "元に戻す"}</p>
                 </button>
                 <svg onclick={()=> dialog?.showModal()} xmlns="http://www.w3.org/2000/svg" class="active:scale-80" viewBox="0 0 64 64" width="50" height="50">
                     <!-- 楕円形の背景（空色） -->
-                    <ellipse cx="32" cy="32" rx="30" ry="28" class="fill-sky-500" />
+                    <ellipse cx="32" cy="32" rx="30" ry="28" class="fill-indigo-500" />
                     <!-- 中心の白い横線 -->
                     <rect x="22" y="30" width="20" height="4" rx="2" fill="#FFFFFF" />
                     <!-- 中心の白い縦線 -->
@@ -156,7 +156,7 @@
                     </div>
                     {/if}         
                 </div>
-                <hr class="w-full scale-70 h-2 mt-4 bg-stone-300 border-0 rounded-sm md:my-10 dark:bg-gray-700">
+                <hr class="w-full scale-70 h-2 mt-4 bg-indigo-200 border-0 rounded-sm md:mb-1 dark:bg-gray-700">
             </div>
             
             {/each}
@@ -164,7 +164,7 @@
         <div class="w-full h-50"></div>
     </div>
     <dialog bind:this={dialog} id="my_modal2" class="modal modal-bottom md:modal-middle">
-        <div class="modal-box flex flex-col items-center bg-stone-50 w-full md:w-1/2  max-w-none max-h-4/5 overflow-auto">
+        <div class="modal-box flex flex-col items-center bg-stone-50 w-full md:w-1/2  max-w-none max-h-4/5 overflow-auto relative">
             <form method="post" use:enhance={()=>{
                 dialog.close();
                 creating=true;
@@ -174,8 +174,7 @@
                 }
             }} action="?/createWord" class="w-full flex flex-col items-center gap-4">
                 <h1>単語を追加しよう!</h1>
-                <button type="button" class="w-9/10 btn shadow-lg" onclick={() => wordidstoadd.push(index++)}>ふやす</button>
-                <button type="button" class="w-9/10 btn shadow-lg" onclick={() => wordidstoadd.pop()}>へらす</button>
+                
                 <div class="w-9/10 flex lg:grid grid-cols-2 flex-col items-center gap-2">
                 {#each wordidstoadd as wids,i (wids)}
                 <div in:fly={{duration:200, y:20}} out:fly={{duration:200, y:-20}} class="bg-white rounded-xl w-full gap-2 p-2 border-1 border-stone-200 shadow-lg flex flex-col justify-center items-center">
@@ -189,9 +188,29 @@
             </form>
             <div class="flex-grow"></div>
             <div class="modal-action">
-            <form method="dialog" class="mb-3">
-                <button class="btn">Close</button>
-            </form>
+                <div class="flex items-center w-full gap-2">
+                    <form method="dialog" class="basis-1 w-1/4 grow mr-4">
+                        <button class="btn">Close</button>
+                    </form>
+                    <button type="button" class="w-10 aspect-ratio-1/1" onclick={() => wordidstoadd.pop()}>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="active:scale-80 " viewBox="0 0 64 64">
+                            <!-- 楕円形の背景（空色） -->
+                            <ellipse cx="32" cy="32" rx="30" ry="28" class="fill-indigo-500" />
+                            <!-- 中心の白い横線 -->
+                            <rect x="22" y="30" width="20" height="4" rx="2" fill="#FFFFFF" />
+                        </svg>  
+                    </button>
+                <button type="button" class="w-10 aspect-ratio-1/1" onclick={() => wordidstoadd.push(index++)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="active:scale-80" viewBox="0 0 64 64">
+                        <!-- 楕円形の背景（空色） -->
+                        <ellipse cx="32" cy="32" rx="30" ry="28" class="fill-indigo-500" />
+                        <!-- 中心の白い横線 -->
+                        <rect x="22" y="30" width="20" height="4" rx="2" fill="#FFFFFF" />
+                        <!-- 中心の白い縦線 -->
+                        <rect x="30" y="22" width="4" height="20" ry="2" fill="#FFFFFF" />
+                    </svg>  
+                </button>
+                </div>
             </div>
         </div>
     </dialog>
