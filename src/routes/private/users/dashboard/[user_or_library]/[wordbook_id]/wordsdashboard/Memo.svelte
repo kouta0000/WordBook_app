@@ -2,9 +2,7 @@
     import {fly, slide, fade} from "svelte/transition";
     import {enhance} from"$app/forms";
     import Overlay from "./Overlay.svelte";
-    import Overlay2 from "./Overlay2.svelte";
     let { words, wb_name, user_or_library} = $props();
-    let overlays = $state([])
     let wordsc = $state(words);
     let hide:boolean = $state(false)
     let isChecked: boolean = $state(false);
@@ -21,20 +19,11 @@
             [words[i], words[random]] = [words[random], words[i]];
         }
     }
-    let length = $derived(words.length)
     
     </script>
     
     <div class="bg-stone-100/80 px-2 flex justify-center md:justify-end items-center fixed absolute top-18 pt-4 lg:h-15 w-full flex flex-row flex-wrap gap-1 mb-10 z-11">
-        {#if user_or_library == "user"}
-            <a href="../../../dashboard/user" class="active:scale-80 shadow-sm btn bg-indigo-100 rounded-full w-min basis-0">
-               <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
-            </a>
-            {:else}
-            <a href="../../../dashboard/library" class="active:scale-80 shadow-sm btn bg-indigo-100 rounded-full w-min basis-0 text-black">
-                <p class="whitespace-nowrap text-indigo-400 font-extrabold">戻る</p>
-            </a>
-            {/if}
+        
         <button class="active:scale-0.8 shadow-sm btn bg-indigo-500 rounded-3xl  w-min basis-0" onclick={()=> {hide=!hide}}>
             <p class="whitespace-nowrap text-white font-bold">{!hide? "隠す":"元に戻す"}</p>
         </button>
@@ -44,6 +33,15 @@
         <button class="active:scale-0.8 shadow-sm btn bg-indigo-500 rounded-3xl w-min basis-0" onclick={() => isFlipped = !isFlipped}>
             <p class="whitespace-nowrap text-white font-bold">フリップ</p>
         </button>
+        {#if user_or_library == "user"}
+            <a href="../../../dashboard/user" class="active:scale-80 shadow-sm btn bg-indigo-100 rounded-full w-min basis-0">
+               <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
+            </a>
+        {:else}
+            <a href="../../../dashboard/library" class="active:scale-80 shadow-sm btn bg-indigo-100 rounded-full w-min basis-0 text-black">
+                <p class="whitespace-nowrap text-indigo-400 font-extrabold">戻る</p>
+            </a>
+        {/if}
     </div>
     
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center">
