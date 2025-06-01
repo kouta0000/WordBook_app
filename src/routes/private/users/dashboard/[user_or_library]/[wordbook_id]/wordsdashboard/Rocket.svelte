@@ -1,4 +1,4 @@
-<div class="w-1/5 aspect-ratio-1/1 absolute top-0 left-0 rotate-45">
+<div class="w-1/5 lg:w-1/8 aspect-ratio-1/1 absolute top-0 left-0 rotate-45">
 <svg class="size-full" viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <!-- グラデーション定義 -->

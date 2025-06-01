@@ -2,6 +2,7 @@
 import {fly, fade} from "svelte/transition";
 import {enhance} from "$app/forms";
 import Gabyo from "./Gabyo.svelte";
+import LanguageRadioGroup from "./LanguageRadioGroup.svelte"
 
 interface Props {
     wordbooks: Wordbook[];
@@ -9,6 +10,7 @@ interface Props {
 interface Wordbook {
     wb_name: any;
     id: any;
+    language: any;
 }
     let { wordbooks }: Props = $props();
     let isChecked: boolean = $state(false);
@@ -19,11 +21,24 @@ interface Wordbook {
 </script>
    
 <dialog bind:this={dialog} id="my_modal" class="modal">
-    <div class="modal-box flex flex-col items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
+    <div class="modal-box flex flex-col bg-stone-100 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
         <form method="post" use:enhance action="?/add" class="w-full flex flex-col items-center gap-8">
-            <label for="wb_name" class="label-base">単語帳の名前を決めよう!</label>
-            <input type="text" id="wb_name" name="wb_name" placeholder="wordbook_name" class="input shadow-lg rounded-3xl w-9/10" required>
-            <button class="btn bg-indigo-500 rounded-3xl text-white font-bold w-9/10" type="submit" onclick={()=>dialog?.close()}>作成</button>
+            <div class="carousel w-full">
+                <div id="item1" class="carousel-item w-full">
+                    <LanguageRadioGroup />
+                </div>
+                <div id="item2" class="carousel-item w-full flex bg-white rounded-lg flex-col justify-center items-center gap-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                            名前を決めよう！
+                        </h2>
+                        <input type="text" id="wb_name" name="wb_name" placeholder="名前" class="input shadow-lg border-indigo-500 rounded-xl w-9/10" required>
+                        <button class="btn bg-indigo-500 rounded-xl text-white font-bold w-9/10" type="submit" onclick={()=>dialog?.close()}>作成</button>          
+                </div>
+              </div>
+              <div class="flex w-full justify-center gap-2 py-2">
+                <a href="#item1" class="btn btn-sm bg-indigo-500 text-white font-bold">戻る</a>
+                <a href="#item2" class="btn btn-sm bg-indigo-500 text-white font-bold">次へ</a>
+              </div>     
         </form>
         <div class="flex-grow"></div>
         <div class="modal-action">
@@ -33,8 +48,9 @@ interface Wordbook {
         </div>
     </div>
 </dialog>
+
     <div class="w-full min-h-screen pt-30 flex flex-col items-center">
-        <h1 class="text mb-10 mx-auto">自分だけの単語帳</h1>
+        <h1 class="text-3xl mb-10 font-bold bg-gradient-to-r from-sky-500 to-indigo-500 inline-block text-transparent bg-clip-text">単語帳</h1>
         <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 lg:bottom-22 lg:right-5 z-20">
             <button type="button" onclick={() => isChecked=!isChecked} class={{"btn btn-lg btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-indigo-500":!isChecked, "bg-yellow-600":isChecked}}>
                 <p class="whitespace-nowrap text-white font-bold text-base">{ !isChecked? "選択": "元に戻す"}</p>
@@ -59,7 +75,7 @@ interface Wordbook {
                 </div>
             </dialog>
            
-            <div in:fly={{duration:300, y:20}} out:fade class="shadow-sm active:bg-indigo-100 transition-all duration-200 flex w-4/5 sm:grow rounded-xl bg-white relative">
+            <div in:fly={{duration:300, y:20}} out:fade class="shadow-sm active:bg-indigo-100 transition-all duration-200 w-4/5 sm:grow p-7 flex flex-col gap-2 rounded-xl bg-white relative">
                 <a href="./user/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
                 {#if isChecked}
                 <form use:enhance={ async (submitEvent) => {
@@ -80,7 +96,7 @@ interface Wordbook {
                     };
                 }} transition:fade={{duration:150}}  method="POST" action="?/delete" class={{"absolute z-2 top-0 right-0 bottom-0 aspect-square rounded-3xl":true}}>
                     <button type="submit" class={{"h-full w-full flex":true}}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-2/3 h-2/3 m-auto bg-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-1/3 aspect-ratio-1/1 my-auto ml-auto mr-2 bg-white/80">
                             <rect x="7" y="6" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
                             <rect x="8" y="4" width="8" height="2" fill="none" stroke="gray" stroke-width="1"/>
                             <line x1="9" y1="8" x2="9" y2="16" stroke="gray" stroke-width="1"/>
@@ -91,10 +107,12 @@ interface Wordbook {
                     <input type="hidden" name="wordbook_id" value={wordbook.id}>
                 </form>
                 {/if}
-                <div class="w-1/8 absolute left-0 top-0 aspect-ratio-1/1">
+                <div class="w-1/8 absolute right-0 top-0 aspect-ratio-1/1">
                     <Gabyo />                                   
                 </div>
-                <p class="mx-auto my-8">{wordbook.wb_name}</p>
+                <h1 class="text-2xl mb-2">{wordbook.wb_name}</h1>
+                <p class="text-stone-400">言語：{wordbook.language?? "none"} ; 語数： ; 最終更新：</p>
+                <hr class="h-2 w-full bg-indigo-300 rounded-3xl">
             </div>
             {/each}
         </div>

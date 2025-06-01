@@ -28,7 +28,7 @@
     })
 
 </script>
-<div class="size-full bg-indigo-700 absolute top-0 left-0 z-17">
+<div class="size-full bg-linear-to-br/shorter from-black to-indigo-950 absolute top-0 left-0 z-17">
     <Rocket />
     {#each stars as star (star.id)}
     <div class="absolute bg-white mask mask-star"

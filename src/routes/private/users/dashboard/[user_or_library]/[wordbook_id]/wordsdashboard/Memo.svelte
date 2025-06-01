@@ -3,7 +3,7 @@
     import {enhance} from"$app/forms";
     import Overlay from "./Overlay.svelte";
     import Overlay2 from "./Overlay2.svelte";
-    let { words, wb_name, user_or_library } = $props();
+    let { words, wb_name, user_or_library} = $props();
     let overlays = $state([])
     let wordsc = $state(words);
     let hide:boolean = $state(false)

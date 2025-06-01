@@ -12,9 +12,7 @@
      
      const wb_name = data.loaddata.wb_name.data?.[0].wb_name;
      let currentView: string = $state(user_or_library=="user"? "edit": "memo");
-     const wordbook_id = data.loaddata.wordbook_id;
-     
-     
+     const wordbook_id = data.loaddata.wordbook_id; 
      
 </script>
 

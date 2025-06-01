@@ -1,7 +1,7 @@
 <script lang="ts">
     import {fly, slide, fade} from "svelte/transition";
     import {enhance} from"$app/forms";
-    let { words, wb_name, wordbook_id, user_or_library } = $props();
+    let { words, wb_name, wordbook_id, user_or_library} = $props();
     let dialog: HTMLDialogElement | undefined = $state();
     let dialogs: Array<HTMLDialogElement> = $state([]);
     let isChecked: boolean = $state(false);

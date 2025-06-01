@@ -13,7 +13,7 @@
     let currentView: string = $state(user_or_library);
 </script>
 {#if currentView == "user"}
-<UserWordBooks wordbooks={data.loaddata.user_wordbooks.data ?? []} />
+<UserWordBooks wordbooks={data.loaddata.user_wordbooks.data ?? []}  />
 {:else if currentView == "library"}
 <LibraryWordBooks wordbooks={library_wordbooks ?? []} />
 {/if}
