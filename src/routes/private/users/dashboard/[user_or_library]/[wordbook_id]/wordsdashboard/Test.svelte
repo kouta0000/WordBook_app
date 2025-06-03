@@ -1,12 +1,12 @@
 <script lang="ts">
     import { fly, fade, scale } from 'svelte/transition';
     import TestBackground1 from './TestBackground1.svelte';
+    import TestBackground2 from './TestBackground2.svelte';
     import type { Action } from 'svelte/action';
 
     //変数宣言
     let { wordslist, user_or_library } = $props();
-
-
+    
     let progress:number = $state(0);
     let main_display: Word | string = $state("Loading...");
     let subdisplays: Array<Word> = $state([]);
@@ -20,6 +20,10 @@
     let isCorrect: boolean = $state(false);
     let isWrong: boolean = $state(false);
     let showContinue: boolean = $state(false);
+    let toContinue:boolean = $state(false);
+    const corrects= [10,20,30,40,50];
+    let showAnswers = $state(false)
+    let isDisabled = $state(false);
   
     interface Word {
         "term": string;
@@ -119,9 +123,12 @@
         if (t_start_x-t_end_x >= swipeLength) {
             showarrow = false;
             showdisplays = false;
+            toContinue=false;
+            if (isCorrect) progress++;
+            showAnswers=false;
+            isDisabled=false;
             isCorrect = false;
             isWrong = false;
-            progress++;
         };
 
         
@@ -134,7 +141,7 @@
 {#if showcurtain}
     <div id="start_curtain" out:scale={{duration:500, opacity:0, start:2}} onoutroend={displayNewWords} class="w-full h-screen fixed absolute pt-18 pb-15 md:pb-20 flex flex-col justify-center items-center gap-5 bg-stone-100 z-20">
         <button class="mt-10 btn bg-indigo-500 rounded-3xl w-9/10 md:w-1/2 lg:w-1/5 h-1/5" onclick={eraseCurtain}>
-            <p class="text-white font-bold text-xl">４沢問題</p>
+            <p class="text-white font-bold text-xl">４択問題</p>
         </button>
         <button class="btn bg-indigo-500 rounded-3xl w-9/10 md:w-1/2 lg:w-1/5 h-1/5 relative">
             <div class="size-full absolute inset-0 bg-stone-400/80 text-white rounded-3xl text-4xl flex justify-center  items-center">Coming soon!</div>
@@ -142,19 +149,28 @@
         </button>
     </div>
 {/if}
-{#if progress==50}
-<div out:fade={{delay:400}} in:scale={{duration:1000, opacity:0, start:0.1}} id="displays" class="w-full h-screen flex flex-col lg:flex-row gap-7 justify-center items-center  z-20 bg-stone-100 relative">
-<h1 class="text-4xl whitespace-nowrapt">５０問達成🎉</h1>
-<p class="text-2xl">テストを続けますか</p>
-<button class="btn btn-base rounded-3xl shadow-lg" onclick={() => {progress=0}}><p class="text-xl">続ける</p></button>
-<button class="btn btn-base rounded-3xl shadow-lg" onclick={() => {testend=true; showdisplays=false; isCorrect=false; isWrong=false;showarrow=false;progress=0}}><p class="text-xl">終わる</p></button>
-</div>
-{/if}
 
+{#each corrects as i (i)}
+    {#if progress==i && i<50 && !toContinue}
+    <div out:fade={{delay:600}} in:scale={{duration:1000, opacity:0, start:0.1}} id="displays" class="w-full h-screen flex flex-col lg:flex-row gap-7 justify-center items-center  z-20 bg-stone-100 relative">
+        <h1 class="text-4xl whitespace-nowrapt">{i}問正解🎉</h1>
+        <p class="text-2xl">テストを続けますか</p>
+        <button class="btn btn-base rounded-3xl shadow-lg" onclick={() => {toContinue=true}}><p class="text-xl">続ける</p></button>
+        <button class="btn btn-base rounded-3xl shadow-lg" onclick={() => {testend=true; showdisplays=false; isCorrect=false; isWrong=false;showarrow=false;progress=0}}><p class="text-xl">終わる</p></button>
+    </div>
+    {:else if progress==i && i==50}
+    <div out:fade={{delay:600}} in:scale={{duration:1000, opacity:0, start:0.1}} id="displays" class="w-full h-screen flex flex-col lg:flex-row gap-7 justify-center items-center  z-20 bg-stone-100 relative">
+        <h1 class="text-4xl whitespace-nowrapt">{i}問正解🎉</h1>
+        <p class="text-2xl">テストを続けますか</p>
+        <button class="btn btn-base rounded-3xl shadow-lg" onclick={() => {progress=0}}><p class="text-xl">続ける</p></button>
+        <button class="btn btn-base rounded-3xl shadow-lg" onclick={() => {testend=true; showdisplays=false; isCorrect=false; showAnswers=false;toContinue=false;isDisabled=false;isWrong=false;showarrow=false;progress=0}}><p class="text-xl">終わる</p></button>
+    </div>
+    {/if}
+{/each}
 
 
 <div id="displays" class="w-full h-screen pt-30 lg:pt-35 pb-30 lg:pb-35 flex flex-col lg:flex-row gap-7 justify-center items-center overflow-clip z-19 relative">
-    <TestBackground1 />
+    <TestBackground2 />
     {#if showdisplays}
     
         <div class="absolute left-auto right-auto top-3 w-full gap-1 flex justify-center items-center p-2 z-18">
@@ -177,36 +193,115 @@
         
         <div class="w-4/5 md:w-3/5 lg:w-2/5 flex flex-col grow justify-center items-center gap-5 z-18">
             <div class={{
-                "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
-                "border-stone-300 shadow-lg": true}} in:fly={{duration:300, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[0].meaning)}}>
-                <h1 class="m-auto p-3 lg-py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[0].meaning }</h1>
+                "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5 relative": true, 
+                "border-stone-300 shadow-lg": true,
+                "pointer-events-none":isDisabled}} in:fly={{duration:300, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {isDisabled=true;showArrow();showAnswers=true;checkAnswer(subdisplays[0].meaning)}}>
+                <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[0].meaning }</h1>
+                
+                {#if subdisplays[0].meaning==(typeof main_display == "string" ? main_display : main_display.meaning)}
+                {#if showAnswers}
+                <div in:fade class="absolute aspect-square top-1 bottom-1 left-1">
+                    <svg preserveAspectRatio="xMidYMidmeet" viewBox="0 0 110 110" class="size-full fill-none">
+                        <circle cx="55" cy="55" r="50" stroke-linecap="round" class="overflow-visible stroke-red-400" stroke-width="10">
+                    </svg>
+                </div>
+                {/if}
+                {:else}
+                {#if showAnswers}
+                <div in:fade class="absolute aspect-square top-3 bottom-3 left-3">
+                    <svg preserveAspectRatio="xMidYMidmeet" viewBox="0 0 110 110" class="size-full fill-none">
+                        <line x1="105" y1="5" x2="5" y2="105" stroke-linecap="round" class="stroke-sky-600" stroke-width="10"/>
+                        <line x1="5" y1="5" x2="105" y2="105" stroke-linecap="round" class="stroke-sky-600" stroke-width="10" />
+                    </svg>
+                </div>
+                {/if}
+                {/if}
             </div>
             <div class={{
                 "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
-                "border-stone-300 shadow-lg": true}} in:fly={{duration:350, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[1].meaning)}}>
+                "border-stone-300 shadow-lg relative": true,
+                "pointer-events-none":isDisabled}} in:fly={{duration:350, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {isDisabled=true;showArrow();showAnswers=true;checkAnswer(subdisplays[1].meaning)}}>
                 <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[1].meaning }</h1>
+                
+                {#if subdisplays[1].meaning==(typeof main_display == "string" ? main_display : main_display.meaning)}
+                {#if showAnswers}
+                <div in:fade class="absolute aspect-square top-1 bottom-1 left-1">
+                    <svg preserveAspectRatio="xMidYMidmeet" viewBox="0 0 110 110" class="size-full fill-none">
+                        <circle cx="55" cy="55" r="50" stroke-linecap="round" class="overflow-visible stroke-red-400" stroke-width="10">
+                    </svg>
+                </div>
+                {/if}
+                {:else}
+                {#if showAnswers}
+                <div in:fade class="absolute aspect-square top-3 bottom-3 left-3">
+                    <svg preserveAspectRatio="xMidYMidmeet" viewBox="0 0 110 110" class="size-full fill-none">
+                        <line x1="105" y1="5" x2="5" y2="105" stroke-linecap="round" class="stroke-sky-600" stroke-width="10"/>
+                        <line x1="5" y1="5" x2="105" y2="105" stroke-linecap="round" class="stroke-sky-600" stroke-width="10" />
+                    </svg>
+                </div>
+                {/if}
+                {/if}
             </div>
             <div class={{
                 "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
-                "border-stone-300 shadow-lg":true}} in:fly={{duration:400, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[2].meaning)}}>
+                "border-stone-300 shadow-lg relative":true,
+                "pointer-events-none":isDisabled}} in:fly={{duration:400, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {isDisabled=true;showArrow();showAnswers=true;checkAnswer(subdisplays[2].meaning)}}>
                 <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[2].meaning }</h1>
+               
+                {#if subdisplays[2].meaning==(typeof main_display == "string" ? main_display : main_display.meaning)}
+                {#if showAnswers}
+                <div in:fade class="absolute aspect-square top-1 bottom-1 left-1">
+                    <svg preserveAspectRatio="xMidYMidmeet" viewBox="0 0 110 110" class="size-full fill-none">
+                        <circle cx="55" cy="55" r="50" stroke-linecap="round" class="overflow-visible stroke-red-400" stroke-width="10">
+                    </svg>
+                </div>
+                {/if}
+                {:else}
+                {#if showAnswers}
+                <div in:fade class="absolute aspect-square top-3 bottom-3 left-3">
+                    <svg preserveAspectRatio="xMidYMidmeet" viewBox="0 0 110 110" class="size-full fill-none">
+                        <line x1="105" y1="5" x2="5" y2="105" stroke-linecap="round" class="stroke-sky-600" stroke-width="10"/>
+                        <line x1="5" y1="5" x2="105" y2="105" stroke-linecap="round" class="stroke-sky-600" stroke-width="10" />
+                    </svg>
+                </div>
+                {/if}
+                {/if}
             </div>
             <div onoutroend={() => testend? showCurtain(): displayNewWords()} class={{
                 "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
-                "border-stone-300 shadow-lg": true}} in:fly={{duration:450, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {showArrow();checkAnswer(subdisplays[3].meaning)}}>
+                "border-stone-300 shadow-lg relative": true,
+                "pointer-events-none":isDisabled}} in:fly={{duration:450, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {isDisabled=true;showArrow();showAnswers=true;checkAnswer(subdisplays[3].meaning)}}>
                 <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[3].meaning }</h1>
+              
+                {#if subdisplays[3].meaning==(typeof main_display == "string" ? main_display : main_display.meaning)}
+                {#if showAnswers}
+                <div in:fade class="absolute aspect-square top-1 bottom-1 left-1">
+                    <svg preserveAspectRatio="xMidYMidmeet" viewBox="0 0 110 110" class="size-full fill-none">
+                        <circle cx="55" cy="55" r="50" stroke-linecap="round" class="overflow-visible stroke-red-400" stroke-width="10">
+                    </svg>
+                </div>
+                {/if}
+                {:else}
+                {#if showAnswers}
+                <div in:fade class="absolute aspect-square top-3 bottom-3 left-3">
+                    <svg preserveAspectRatio="xMidYMidmeet" viewBox="0 0 110 110" class="size-full fill-none">
+                        <line x1="105" y1="5" x2="5" y2="105" stroke-linecap="round" class="stroke-sky-600" stroke-width="10"/>
+                        <line x1="5" y1="5" x2="105" y2="105" stroke-linecap="round" class="stroke-sky-600" stroke-width="10" />
+                    </svg>
+                </div>
+                {/if}
+                {/if}
             </div>
             <div class="w-full hidden lg:block h-3"></div>
 
             <div id="test_buttons" class="w-full flex flex-row gap-3 items-center mt-4 lg:mt-3 lg:mr-5 ">
                 <button class={{
-                    "btn btn-outline border-1 border-white text-white font-bold rounded-2xl lg:grow": true,
-                    "btn-info": true
-                    }} onclick={() => {testend=true; showdisplays=false; isCorrect=false; isWrong=false;showarrow=false;progress=0}}>テスト終了</button>
+                    "btn btn-outline border-1 border-indigo-500 text-indigo-500 font-bold rounded-2xl lg:grow btn-info": true
+                    }} onclick={() => {testend=true; showdisplays=false;toContinue=false;showAnswers=false;isDisabled=false; isCorrect=false; isWrong=false;showarrow=false;progress=0}}>テスト終了</button>
                 <button class={{
                     "hidden lg:block btn btn-outline rounded-2xl grow": true, 
                     "btn-info": true
-                    }} onclick={() => {showdisplays = false;isCorrect=false;isWrong=false;progress++}}>次の問題</button>
+                    }} onclick={() => {showdisplays = false;if(isCorrect)progress++;showAnswers=false;isDisabled=false;toContinue=false;isCorrect=false;isWrong=false}}>次の問題</button>
             </div>
         </div>
     {/if}

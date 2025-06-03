@@ -1,6 +1,7 @@
 <script lang="ts">
     import Memo from "./Memo.svelte";
     import Test from "./Test.svelte";
+    import Test2 from "./Test2.svelte";
     import type { PageProps } from "./$types";
     import {enhance} from "$app/forms";
     import {fly} from "svelte/transition";
@@ -22,6 +23,8 @@
 <Edit words={data.loaddata.words.data} wb_name={wb_name} wordbook_id={wordbook_id} user_or_library={user_or_library}/>
 {:else if currentView == "test"}
 <Test wordslist={words} user_or_library={user_or_library} />
+{:else if currentView=="test2"}
+<Test2 wordslist={words} user_or_library={user_or_library} />
 {/if}
 
 <div class="w-full h-15 md:h-20 bg-white fixed absolute bottom-0 flex flex-row justify-center gap-2 z-20">
@@ -42,12 +45,25 @@
         <svg class="h-full" viewBox="0 0 40 40" fill="none">
             <rect x="15" y="15" width="10" height="10" class={{
                 "fill-sky-500":currentView=="test",
-                "fill-gray-500": currentView=="memo" || currentView == "edit"
+                "fill-gray-500": currentView=="memo" || currentView == "edit" || currentView=="test2"
                 }} />
             <line x1="17" y1="20" x2="19" y2="23" class="stroke-1 rounded-2xl stroke-white" stroke-linecap="round"/>
             <line x1="19" y1="23" x2="23" y2="17" class="stroke-1 rounded-2xl stroke-white" stroke-linecap="round"/>
             <text x="12" y="35" class="fill-gray-500" font-size="6">テスト</text>
         </svg>
     </button>
+    <!--
+    <button onclick={() => currentView = "test2"} class="btn btn-ghost h-15 md:h-20 grow-1 basis-0">
+        <svg class="h-full" viewBox="0 0 40 40" fill="none">
+            <rect x="15" y="15" width="10" height="10" class={{
+                "fill-sky-500":currentView=="test2",
+                "fill-gray-500": currentView=="memo" || currentView == "edit" || currentView=="test"
+                }} />
+            <line x1="17" y1="20" x2="19" y2="23" class="stroke-1 rounded-2xl stroke-white" stroke-linecap="round"/>
+            <line x1="19" y1="23" x2="23" y2="17" class="stroke-1 rounded-2xl stroke-white" stroke-linecap="round"/>
+            <text x="12" y="35" class="fill-gray-500" font-size="6">つづり</text>
+        </svg>
+    </button>
+    !-->
 </div>
 

@@ -1,21 +1,21 @@
 <script lang="ts">
-    import LibraryWordBooks from "./LibraryWordBooks.svelte";
+
     import UserWordBooks from "./UserWordBooks.svelte";
     import type { PageProps } from "./$types";
     import {fly} from "svelte/transition";
+    import LibraryWordBooks from "./LibraryWordBooks.svelte";
     interface Wordbook {
     wb_name: any;
     id: any;
 }
     let { data }: PageProps = $props();
     let user_or_library = data.user_or_library;
-    let library_wordbooks: Array<Wordbook> | null = $state(data.loaddata.library_wordbooks.data);
     let currentView: string = $state(user_or_library);
 </script>
 {#if currentView == "user"}
-<UserWordBooks wordbooks={data.loaddata.user_wordbooks.data ?? []}  />
+<UserWordBooks wordbooks={data.loaddata.user_wordbooks.data ?? []}/>
 {:else if currentView == "library"}
-<LibraryWordBooks wordbooks={library_wordbooks ?? []} />
+<LibraryWordBooks wordbooks={data.loaddata.library_wordbooks.data?? []}/>
 {/if}
 <div id="wb_foot_buttons" class="w-full h-15 md:h-20 fixed absolute bottom-0 flex flex-row gap-3 justify-center bg-white z-3">
 

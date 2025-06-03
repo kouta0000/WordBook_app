@@ -9,7 +9,7 @@
 </div>
 {:else}
 <div transition:fade={{duration:150}} class={{
-    "inset-0 rounded-xl absolute z-8 flex transition-all duration-300 bg-stone-300":true, "opacity-0":isClicked}}  onclick={() => {isClicked = !isClicked; setTimeout(()=>isClicked = !isClicked, 2500)}}>
+    "inset-0 rounded-xl absolute z-8 flex transition-all duration-300 bg-stone-400":true, "opacity-0":isClicked}}  onclick={() => {isClicked = !isClicked; setTimeout(()=>isClicked = !isClicked, 2500)}}>
 <p class="m-auto text-white font-bold">show</p>
 </div>
 {/if}

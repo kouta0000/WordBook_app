@@ -2,6 +2,7 @@
 import {fly, fade} from "svelte/transition";
 import {enhance} from "$app/forms";
 import Gabyo from "./Gabyo.svelte";
+import Gabyo2 from "./Gabyo2.svelte";
 import LanguageRadioGroup from "./LanguageRadioGroup.svelte"
 
 interface Props {
@@ -21,7 +22,7 @@ interface Wordbook {
 </script>
    
 <dialog bind:this={dialog} id="my_modal" class="modal">
-    <div class="modal-box flex flex-col bg-stone-100 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
+    <div class="modal-box flex flex-col bg-stone-100 items-center w-full sm:w-3/5 md:w-2/5 max-w-none">
         <form method="post" use:enhance action="?/add" class="w-full flex flex-col items-center gap-8">
             <div class="carousel w-full">
                 <div id="item1" class="carousel-item w-full">
@@ -31,8 +32,8 @@ interface Wordbook {
                         <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
                             名前を決めよう！
                         </h2>
-                        <input type="text" id="wb_name" name="wb_name" placeholder="名前" class="input shadow-lg border-indigo-500 rounded-xl w-9/10" required>
-                        <button class="btn bg-indigo-500 rounded-xl text-white font-bold w-9/10" type="submit" onclick={()=>dialog?.close()}>作成</button>          
+                        <input type="text" id="wb_name" name="wb_name" placeholder="名前" class="input shadow-lg border-indigo-500 rounded-xl w-3/5" required>
+                        <button class="btn bg-indigo-500 rounded-xl text-white font-bold w-3/5" type="submit" onclick={()=>dialog?.close()}>作成</button>          
                 </div>
               </div>
               <div class="flex w-full justify-center gap-2 py-2">
@@ -64,7 +65,6 @@ interface Wordbook {
                 <rect x="30" y="22" width="4" height="20" ry="2" fill="#FFFFFF" />
             </svg>  
         </div>
-        
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-13 sm:gap-x-0 items-center place-items-center">
             {#each wordbooks as wordbook, id (wordbook.id)}
             <dialog bind:this={dialogs[id]} class="modal">
@@ -108,10 +108,10 @@ interface Wordbook {
                 </form>
                 {/if}
                 <div class="w-1/8 absolute right-0 top-0 aspect-ratio-1/1">
-                    <Gabyo />                                   
+                    <Gabyo />                           
                 </div>
-                <h1 class="text-2xl mb-2">{wordbook.wb_name}</h1>
-                <p class="text-stone-400">言語：{wordbook.language?? "none"} ; 語数： ; 最終更新：</p>
+                <h1 class="text-xl mb-2">{wordbook.wb_name}</h1>
+                <p class="text-sm text-stone-400">言語：{wordbook.language?? "none"} ; 語数： ; 最終更新：</p>
                 <hr class="h-2 w-full bg-indigo-300 rounded-3xl">
             </div>
             {/each}
