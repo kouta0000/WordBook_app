@@ -143,10 +143,6 @@
         <button class="mt-10 btn bg-indigo-500 rounded-3xl w-9/10 md:w-1/2 lg:w-1/5 h-1/5" onclick={eraseCurtain}>
             <p class="text-white font-bold text-xl">４択問題</p>
         </button>
-        <button class="btn bg-indigo-500 rounded-3xl w-9/10 md:w-1/2 lg:w-1/5 h-1/5 relative">
-            <div class="size-full absolute inset-0 bg-stone-400/80 text-white rounded-3xl text-4xl flex justify-center  items-center">Coming soon!</div>
-            <p class="text-white font-bold text-xl">綴り問題</p>
-        </button>
     </div>
 {/if}
 
