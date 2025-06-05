@@ -92,7 +92,7 @@
                         update();
                         updatings2[id]=false;
                   }
-                }} class={{"absolute inset-0 flex flex-col justifry-center items-start z-12":true}}>
+                }} class={{"absolute inset-0 flex flex-col justifry-center items-start z-2":true}}>
                     <span  class="pl-2 pr-2 py-1 flex border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 bg-white">
                         <label class="input input-ghost rounded-xl">
                         <p class="text-xs text-stone-300">変更</p>
@@ -115,7 +115,7 @@
                 </form>
                 {/if}
                 {#if updatings2[id]}
-                <div class={{"absolute inset-0 flex flex-col justifry-center items-start z-12":true}}>
+                <div class={{"absolute inset-0 flex flex-col justifry-center items-start z-1":true}}>
                 <span out:fade={{delay:1000}} class="pl-2 pr-2 flex border-1 border-stone-300 rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 skeleton">
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl opacity-0">{word.term}</p>
                 </span>
@@ -125,13 +125,13 @@
                 </div>
                 {/if}
                 
-                <span class="flex bg-white  border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-11">
+                <span class="flex bg-white  border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1">
                     <p class="m-auto px-10 py-2 font-semibold font-sans text-xl">{word.term}</p>
                 </span>
                 <div class="flex w-full border-stone-300 shadow-sm rounded-xl bg-white relative">
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{word.meaning}</p>
                     {#if isChecked}
-                    <div transition:fade={{duration:150}} class="flex items-center w-1/5 absolute right-0 rounded-3xl top-1/2 -translate-y-1/2 bg-white/80 aspect-ratio-1/2 z-13">
+                    <div transition:fade={{duration:150}} class="flex items-center w-1/5 absolute right-0 rounded-3xl top-1/2 -translate-y-1/2 bg-white/80 aspect-ratio-1/2 z-2">
                     <button  class="h-full aspect-ration-1/1" onclick={() => dialogs[id]?.showModal()}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" class="w-full h-full m-auto fill-none rounded-3xl">
                             <rect x="7" y="9" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
