@@ -211,7 +211,7 @@
                 <h1 class="text-shadow-sm text-emerald-100 text-shadow-emerald-100/50 m-auto p-1  lg:p-4 text-2xl md:text-4xl overflow-auto ">{inputedWord.join("")}<span class="blink text-bold text-shadow-sm text-emerald-100 text-shadow-emerald-100/50 text-3xl md:text-4xl font-semibold">|</span></h1>
                 <button onclick={()=>{handleOnclickBack();checkAnswer(inputedWord)}} class="text-emerald-200 text-shadow-emerald-200 text-shadow-sm text-xl absolute top-0 bottom-0 rounded-3xl right-0 border-1 border-emerald-300 aspect-square">◀</button>
             </div>
-        <div transition:fade class="w-9/10 aspect-square grid grid-cols-5">
+        <div transition:fade class="w-4/5 aspect-square grid grid-cols-5">
         {#each blocks as block, i (i)}
         <div class="aspect-square bg-linear-to-r from-gray-950 via-emerald-950 to-gray-950 border-1 border-emerald-300 shadow-2xl inset-shadow-2xl shadow-emerald-500 bg-black relative">
         {#if !(block=="")}
