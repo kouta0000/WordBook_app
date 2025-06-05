@@ -33,7 +33,7 @@ export const actions: Actions = {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "twitter",
       options: {
-        redirectTo: `${url.origin}/auth/callback?next=/private/users/dashboard/user`,
+        redirectTo: `https://neon-lily-7cce33.netlify.app/auth/callback?next=/private/users/dashboard/user`,
       },
     });
     if(error) {
