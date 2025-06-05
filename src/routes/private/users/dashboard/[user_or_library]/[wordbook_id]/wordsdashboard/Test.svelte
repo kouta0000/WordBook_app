@@ -152,7 +152,7 @@
 <div id="displays" class="w-full h-screen pt-30 lg:pt-35 pb-30 lg:pb-35 flex flex-col lg:flex-row gap-7 justify-center items-center overflow-clip z-19 relative">
     
     {#each corrects as i (i)}
-    {#if progress==i-8 && i<50 && !toContinue}
+    {#if progress==i && i<50 && !toContinue}
     <div out:fade={{delay:600}} in:scale={{duration:1000, opacity:0, start:0.1}} id="displays" class="w-full h-full flex absolute justify-center items-center  z-22 bg-stone-100/40">
         <div class="w-full md:w-3/5 flex flex-col  gap-7 justify-center items-center p-5 bg-slate-100 rounded-xl">
         <h1 class="text-4xl whitespace-nowrapt">{i}問正解🎉</h1>
