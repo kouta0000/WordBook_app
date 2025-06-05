@@ -29,4 +29,19 @@ export const actions: Actions = {
       redirect(303, `/private/users/dashboard/user`)
     }
   },
+  loginWithX: async ({url, request, locals: { supabase }}) => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "twitter",
+      options: {
+        redirectTo: `${url.origin}/auth/callback?next=/private/users/dashboard/user`,
+      },
+    });
+    if(error) {
+      console.error(error)
+      redirect(303, "/auth/error")
+    };
+    if (data.url) {
+      throw redirect(303, data.url);
+    }
+  }
 }
