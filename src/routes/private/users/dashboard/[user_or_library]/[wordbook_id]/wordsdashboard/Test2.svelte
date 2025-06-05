@@ -216,7 +216,7 @@
         <div class="aspect-square bg-linear-to-r from-gray-950 via-emerald-950 to-gray-950 border-1 border-emerald-300 shadow-2xl inset-shadow-2xl shadow-emerald-500 bg-black relative">
         {#if !(block=="")}
         <div out:fly={{duration:500, y:-200}} onclick={() => {handleOnBlockClick(block, i);checkAnswer(inputedWord)}} class="absolute inset-0 flex justify-center items-center bg-linear-to-r from-gray-950 via-emerald-950 to-gray-950 aspect-square border-1 border-emerald-300 shadow-2xl inset-shadow-2xl shadow-emerald-500 bg-black">
-           <p  class="text-shdow-lg text-shadow-emerald-300/80 text-emerald-200 text-3xl lg:text-5xl">{block === "\u0020"? "sp": block}</p>
+           <p  class="text-shdow-lg text-shadow-emerald-300/80 text-emerald-200 text-3xl lg:text-5xl">{block === "\u0020"? "▶": block}</p>
         </div>
         {:else}
         <div class="absolute inset-0 flex justify-center items-center aspect-square">
