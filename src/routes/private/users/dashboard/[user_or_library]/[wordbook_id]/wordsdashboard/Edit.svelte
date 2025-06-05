@@ -68,7 +68,7 @@
 
             {#each words as word, id (word.id)}
             <dialog bind:this={dialogs[id]} class="modal w-full">
-                <div class="modal-box flex flex-col gap-4 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
+                <div class="modal-box bg-slate-100 flex flex-col gap-4 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
                     <p>本当に削除しますか？</p>
                     <form use:enhance={()=>{
                         deleting=true;
@@ -96,7 +96,7 @@
                     <span  class="pl-2 pr-2 py-1 flex border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 bg-white">
                         <label class="input input-ghost rounded-xl">
                         <p class="text-xs text-stone-300">変更</p>
-                        <input type="text" placeholder="変更" id="term" name="term" value={word.term} class="m-auto font-semibold font-sans text-md">
+                        <input type="text" placeholder="変更" id="term" name="term" value={word.term} class="m-auto font-semibold font-sans text-xl">
                         </label>
                         <button type="button" onclick={()=>{isChecked=!isChecked;updatings[id] = false}} class="btn btn-base rounded-full my-auto btn-sm">
                             戻る
@@ -106,7 +106,7 @@
                         </button>
                     </span>
                     <div class="px-2 flex w-full shadow-sm border-stone-300 rounded-xl relative bg-white">
-                        <label class="input input-ghost rounded-xl my-2 py-2 max-w-9/10 font-sans text-md mx-auto">
+                        <label class="input input-ghost rounded-xl my-2 py-2 max-w-9/10 font-sans text-lg mx-auto">
                         <p class="text-xs text-stone-300">変更</p>
                         <input type="text" id="meaning" name="meaning" value={word.meaning}>
                         </label>
@@ -164,7 +164,7 @@
         <div class="w-full h-50"></div>
     </div>
     <dialog bind:this={dialog} id="my_modal2" class="modal modal-bottom md:modal-middle">
-        <div class="modal-box flex flex-col items-center bg-stone-50 w-full md:w-1/2  max-w-none max-h-4/5 overflow-auto relative">
+        <div class="modal-box flex flex-col items-center bg-slate-100 w-full md:w-1/2  max-w-none max-h-4/5 overflow-auto relative">
             <form method="post" use:enhance={()=>{
                 dialog.close();
                 creating=true;

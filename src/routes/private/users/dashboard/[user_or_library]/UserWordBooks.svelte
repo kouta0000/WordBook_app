@@ -22,7 +22,7 @@ interface Wordbook {
 </script>
    
 <dialog bind:this={dialog} id="my_modal" class="modal">
-    <div class="modal-box flex flex-col bg-stone-100 items-center w-full sm:w-3/5 md:w-2/5 max-w-none">
+    <div class="modal-box flex flex-col bg-slate-100 items-center w-full sm:w-3/5 md:w-2/5 max-w-none">
         <form method="post" use:enhance action="?/add" class="w-full flex flex-col items-center gap-8">
             <div class="carousel w-full">
                 <div id="item1" class="carousel-item w-full">
@@ -68,7 +68,7 @@ interface Wordbook {
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-13 sm:gap-x-0 items-center place-items-center">
             {#each wordbooks as wordbook, id (wordbook.id)}
             <dialog bind:this={dialogs[id]} class="modal">
-                <div class="modal-box flex flex-col gap-4 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
+                <div class="modal-box flex bg-slate-100 flex-col gap-4 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
                     <p>本当に削除しますか？</p>
                     <button class="btn btn-base" onclick={() => {deleting=true;dialogs[id]?.close()}}>はい</button>
                     <button class="btn btn-base" onclick={() => {deleting=false;dialogs[id]?.close()}}>いいえ</button>

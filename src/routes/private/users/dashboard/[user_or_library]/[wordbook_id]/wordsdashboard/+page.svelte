@@ -49,7 +49,7 @@
                 }} />
             <line x1="17" y1="20" x2="19" y2="23" class="stroke-1 rounded-2xl stroke-white" stroke-linecap="round"/>
             <line x1="19" y1="23" x2="23" y2="17" class="stroke-1 rounded-2xl stroke-white" stroke-linecap="round"/>
-            <text x="17" y="35" class="fill-gray-500" font-size="6">4択</text>
+            <text x="15" y="35" class="fill-gray-500" font-size="6">4択</text>
         </svg>
     </button>
 
@@ -61,7 +61,7 @@
                 }} />
             <line x1="17" y1="20" x2="19" y2="23" class="stroke-1 rounded-2xl stroke-white" stroke-linecap="round"/>
             <line x1="19" y1="23" x2="23" y2="17" class="stroke-1 rounded-2xl stroke-white" stroke-linecap="round"/>
-            <text x="12" y="35" class="fill-gray-500" font-size="6">つづり</text>
+            <text x="11" y="35" class="fill-gray-500" font-size="6">つづり</text>
         </svg>
     </button>
 </div>

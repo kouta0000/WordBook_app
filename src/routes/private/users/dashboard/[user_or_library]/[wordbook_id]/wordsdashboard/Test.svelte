@@ -139,33 +139,39 @@
 
 
 {#if showcurtain}
-    <div id="start_curtain" out:scale={{duration:500, opacity:0, start:2}} onoutroend={displayNewWords} class="w-full h-screen fixed absolute pt-18 pb-15 md:pb-20 flex flex-col justify-center items-center gap-5 bg-stone-100 z-20">
+    <div id="start_curtain" out:scale={{duration:500, opacity:0, start:2}} onoutroend={displayNewWords} class="w-full h-screen fixed absolute pt-18 pb-15 md:pb-20 flex flex-col justify-center items-center gap-5 bg-slate-100 z-20">
         <button class="mt-10 btn bg-indigo-500 rounded-3xl w-9/10 md:w-1/2 lg:w-1/5 h-1/5" onclick={eraseCurtain}>
             <p class="text-white font-bold text-xl">４択問題</p>
         </button>
     </div>
 {/if}
 
-{#each corrects as i (i)}
-    {#if progress==i && i<50 && !toContinue}
-    <div out:fade={{delay:600}} in:scale={{duration:1000, opacity:0, start:0.1}} id="displays" class="w-full h-screen flex flex-col lg:flex-row gap-7 justify-center items-center  z-20 bg-stone-100 relative">
+
+
+
+<div id="displays" class="w-full h-screen pt-30 lg:pt-35 pb-30 lg:pb-35 flex flex-col lg:flex-row gap-7 justify-center items-center overflow-clip z-19 relative">
+    
+    {#each corrects as i (i)}
+    {#if progress==i-8 && i<50 && !toContinue}
+    <div out:fade={{delay:600}} in:scale={{duration:1000, opacity:0, start:0.1}} id="displays" class="w-full h-full flex absolute justify-center items-center  z-22 bg-stone-100/40">
+        <div class="w-full md:w-3/5 flex flex-col  gap-7 justify-center items-center p-5 bg-slate-100 rounded-xl">
         <h1 class="text-4xl whitespace-nowrapt">{i}問正解🎉</h1>
         <p class="text-2xl">テストを続けますか</p>
         <button class="btn btn-base rounded-3xl shadow-lg" onclick={() => {toContinue=true}}><p class="text-xl">続ける</p></button>
         <button class="btn btn-base rounded-3xl shadow-lg" onclick={() => {testend=true; showdisplays=false; isCorrect=false; isWrong=false;showarrow=false;progress=0}}><p class="text-xl">終わる</p></button>
+        </div>
     </div>
     {:else if progress==i && i==50}
-    <div out:fade={{delay:600}} in:scale={{duration:1000, opacity:0, start:0.1}} id="displays" class="w-full h-screen flex flex-col lg:flex-row gap-7 justify-center items-center  z-20 bg-stone-100 relative">
+    <div out:fade={{delay:600}} in:scale={{duration:1000, opacity:0, start:0.1}} id="displays" class="w-full h-full absolute flex justify-center items-center  z-22 bg-stone-100/40">
+        <div class="w-full md:w-3/5 flex flex-col  gap-7 justify-center items-center p-5 bg-slate-100 rounded-xl">
         <h1 class="text-4xl whitespace-nowrapt">{i}問正解🎉</h1>
         <p class="text-2xl">テストを続けますか</p>
         <button class="btn btn-base rounded-3xl shadow-lg" onclick={() => {progress=0}}><p class="text-xl">続ける</p></button>
         <button class="btn btn-base rounded-3xl shadow-lg" onclick={() => {testend=true; showdisplays=false; isCorrect=false; showAnswers=false;toContinue=false;isDisabled=false;isWrong=false;showarrow=false;progress=0}}><p class="text-xl">終わる</p></button>
+        </div>
     </div>
     {/if}
-{/each}
-
-
-<div id="displays" class="w-full h-screen pt-30 lg:pt-35 pb-30 lg:pb-35 flex flex-col lg:flex-row gap-7 justify-center items-center overflow-clip z-19 relative">
+    {/each}
     <TestBackground2 />
     {#if showdisplays}
     
