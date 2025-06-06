@@ -22,6 +22,9 @@
     };
   });
 </script>
+<svelte:head>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</svelte:head>
 <div class="h-screen w-full  flex flex-col justify-center items-center">
 <form method="POST" action="?/login" class="w-4/5 md:w-1/2 lg:w-3/10 p-5">
     <fieldset class=" shadow-xl fieldset bg-white border-base-300 rounded-box w-full border mt-5">
