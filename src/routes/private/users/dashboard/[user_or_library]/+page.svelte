@@ -47,7 +47,7 @@
     {/if}
 </button>
 
-<button onclick={() => currentView = "library"} class="btn btn-ghost md:hover:bg-base-400 active:bg-base-400 h-15 md:h-20 flex-grow basis-0 md:scale-105">
+<button onclick={() => currentView = "library"} class="btn btn-ghost md:hover:bg-base-400 active:bg-base-400 h-12 md:h-15 flex-grow basis-0 md:scale-105">
     {#if currentView == "user"}
     <svg class="h-full" viewBox="0 0 40 40" fill="none">
         <path d="M 15 15 H 24 A 1,1 0 0 1 24,18 H 15 A 3,3 0 0 0 15 15" stroke-linecap="round" class="stroke-gray-500" />
