@@ -27,7 +27,7 @@
 <Test2 wordslist={words} user_or_library={user_or_library} />
 {/if}
 
-<div class="w-full h-15 md:h-20 bg-white fixed absolute bottom-0 flex flex-row justify-center gap-2 z-20">
+<div class="w-full h-12 md:h-15 bg-white fixed absolute bottom-0 flex flex-row justify-center gap-2 z-20">
     {#if user_or_library == "user"}
     <button onclick={()=> currentView = "edit"} class={{
         "btn btn-ghost font-bold h-15 md:h-20 grow-1 basis-0":true,
