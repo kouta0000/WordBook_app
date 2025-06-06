@@ -17,7 +17,7 @@
 {:else if currentView == "library"}
 <LibraryWordBooks wordbooks={data.loaddata.library_wordbooks.data?? []}/>
 {/if}
-<div id="wb_foot_buttons" class="w-full h-15 md:h-20 fixed absolute bottom-0 flex flex-row gap-3 justify-center bg-white z-3">
+<div id="wb_foot_buttons" class="w-full h-12 md:h-15 fixed absolute bottom-0 flex flex-row gap-3 justify-center bg-white z-3">
 
 <button onclick={() => currentView = "user"} class="btn btn-ghost md:hover:bg-base-400 active:bg-base-400 h-15 md:h-20 flex-grow basis-0 md:scale-105" >
     {#if currentView == "user"}
