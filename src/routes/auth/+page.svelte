@@ -49,9 +49,12 @@
      data-context="signin"
      data-ux_mode="popup"
      data-callback="handleSignInWithGoogle"
-     data-itp_support="true">
+     data-nonce="" 
+     data-auto_select="true" 
+     data-itp_support="true"
+     data-use_fedcm_for_prompt="true">
 </div>
-<div class="w-full g_id_signin"
+<div class="g_id_signin"
      data-type="standard"
      data-shape="rectangular"
      data-theme="outline"
