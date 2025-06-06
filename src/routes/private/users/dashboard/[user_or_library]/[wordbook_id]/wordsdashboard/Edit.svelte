@@ -20,7 +20,7 @@
 
 
     
-<div class="bg-stone-100/80 px-4 flex justify-end items-center fixed absolute top-18 pt-4 lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-16">
+<div class="bg-slate-100/80 px-4 flex justify-end items-center fixed absolute top-12 pt-4 lg:top-15 lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-16">
 {#if user_or_library == "user"}
 <a href="../../../dashboard/user" class="active:scale-80 btn bg-indigo-100 rounded-3xl w-1/3 w-min basis-0 text-black">
    <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
