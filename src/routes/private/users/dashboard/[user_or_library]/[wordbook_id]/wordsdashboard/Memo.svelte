@@ -22,7 +22,7 @@
     
     </script>
     
-    <div class="bg-stone-100/80 px-2 flex justify-center md:justify-end items-center fixed absolute top-18 pt-4 lg:h-15 w-full flex flex-row flex-wrap gap-1 mb-10 z-11">
+    <div class="bg-slate-100/80 px-2 flex justify-center md:justify-end items-center fixed absolute top-15 pt-4 lg:h-15 w-full flex flex-row flex-wrap gap-1 mb-10 z-11">
         
         <button class="active:scale-0.8 shadow-sm btn bg-indigo-500 rounded-3xl  w-min basis-0" onclick={()=> {hide=!hide}}>
             <p class="whitespace-nowrap text-white font-bold">{!hide? "隠す":"元に戻す"}</p>
