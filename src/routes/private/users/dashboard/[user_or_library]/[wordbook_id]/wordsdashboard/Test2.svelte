@@ -220,7 +220,7 @@
         </div>
         {:else}
         <div class="absolute inset-0 flex justify-center items-center aspect-square">
-            <p class="text-shdow-lg text-shadow-emerald-300/80 text-emerald-200 text-3xl md:text-4xl>{block}</p>
+            <p class="text-shdow-lg text-shadow-emerald-300/80 text-emerald-200 text-3xl md:text-4xl">{block}</p>
          </div>
         {/if}
         </div>
