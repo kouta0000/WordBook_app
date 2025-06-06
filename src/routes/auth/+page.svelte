@@ -51,7 +51,7 @@
      data-callback="handleSignInWithGoogle"
      data-itp_support="true">
 </div>
-<div class="g_id_signin"
+<div class="w-full g_id_signin"
      data-type="standard"
      data-shape="rectangular"
      data-theme="outline"
