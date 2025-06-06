@@ -1,4 +1,27 @@
 
+<script lang="ts">
+  import {onMount} from "svelte";
+  import {supabase} from "$lib/config/supabaseClient";
+  import {goto} from "$app/navigation";
+  onMount(()=>{
+    (window as any).handleSignInWithGoogle = async (response:{credential?:string}) => {
+      if(response.credential) {
+        const {data, error} = await supabase.auth.signInWithIdToken({
+          provider:"google",
+          token:response.credential,
+        });
+        if(error) {
+          console.error("グーグル認証エラー", error.message);
+        } else {
+          console.log("ログイン完了", data.user);
+          goto("/private/users/dashboard/user");
+        } 
+      } else {
+          console.error("トークンエラー");
+      }
+    };
+  });
+</script>
 <div class="h-screen w-full  flex flex-col justify-center items-center">
 <form method="POST" action="?/login" class="w-4/5 md:w-1/2 lg:w-3/10 p-5">
     <fieldset class=" shadow-xl fieldset bg-white border-base-300 rounded-box w-full border mt-5">
@@ -21,4 +44,20 @@
     Login with X
   </button>
   </form>
+  <div id="g_id_onload"
+     data-client_id="1096950464221-hi47u5r38tejjgclo91i84o9sbaa6u6m.apps.googleusercontent.com"
+     data-context="signin"
+     data-ux_mode="popup"
+     data-callback="handleSignInWithGoogle"
+     data-itp_support="true">
+</div>
+<div class="g_id_signin"
+     data-type="standard"
+     data-shape="rectangular"
+     data-theme="outline"
+     data-text="signin_with"
+     data-size="large"
+     data-locale="en-US"
+     data-logo_alignment="left">
+</div>
 </div>
