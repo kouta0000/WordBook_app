@@ -1,5 +1,6 @@
 <script lang="ts">
     import {fly, slide, fade} from "svelte/transition";
+    import {fit, parent_style} from "@leveluptuts/svelte-fit";
     import {enhance} from"$app/forms";
     let { words, wb_name, wordbook_id, user_or_library} = $props();
     let dialog: HTMLDialogElement | undefined = $state();
@@ -124,10 +125,11 @@
                 </div>
                 </div>
                 {/if}
-                
-                <span class="flex bg-white  border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1">
-                    <p class="m-auto px-10 py-2 font-semibold font-sans text-xl">{word.term}</p>
-                </span>
+                <div class="flex bg-white  border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1">
+                    <div style={parent_style} >
+                    <p use:fit={{min_size:10, max_size:20}} class="px-7 py-3 font-semibold font-sans text-xl">{word.term}</p>
+                    </div>
+                </div>
                 <div class="flex w-full border-stone-300 shadow-sm rounded-xl bg-white relative">
                     <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{word.meaning}</p>
                     {#if isChecked}
