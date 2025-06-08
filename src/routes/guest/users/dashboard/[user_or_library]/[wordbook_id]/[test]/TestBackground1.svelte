@@ -28,7 +28,7 @@
     })
 
 </script>
-<div class="size-full bg-linear-to-br/shorter from-black to-indigo-950 absolute top-0 left-0 z-17">
+<div class="size-full screen bg-linear-to-br/shorter from-black to-indigo-950 absolute top-0 left-0 z-17">
     <Rocket />
     {#each stars as star (star.id)}
     <div class="absolute bg-white mask mask-star"
@@ -50,4 +50,20 @@
             opacity:0;
         }
     }
+    .screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 255, 0, 0.1) 3px,
+                rgba(0, 255, 0, 0.1) 5px
+            );
+            pointer-events: none;
+        }
 </style>

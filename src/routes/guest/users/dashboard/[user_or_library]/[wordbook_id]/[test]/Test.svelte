@@ -3,7 +3,11 @@
     import TestBackground1 from './TestBackground1.svelte';
     import TestBackground2 from './TestBackground2.svelte';
     import type { Action } from 'svelte/action';
-
+    import {onMount} from "svelte";
+    onMount(()=>{
+        displayNewWords();
+        showdisplays=true;
+    })
     //変数宣言
     let { wordslist, user_or_library } = $props();
     
@@ -24,7 +28,6 @@
     const corrects= [10,20,30,40,50];
     let showAnswers = $state(false)
     let isDisabled = $state(false);
-  
     interface Word {
         "term": string;
         "meaning": string;
@@ -32,31 +35,6 @@
     };
     //関数宣言
     //テスト開始画面
-    const eraseCurtain = () => {
-        testend = false;
-        showcurtain=false;
-    };
-    const showCurtain = () => {
-        showcurtain = true;
-        showdisplays = false;
-    };
-    const startTest: Action = (node) => {
-        node.addEventListener("click", () => eraseCurtain());
-            return {
-                destroy() {
-                    displayNewWords();
-                }
-            };
-        };
-    const toNext: Action = (node) => {
-        const b: HTMLElement | null = document.getElementById("tonext");
-        b?.addEventListener("click", () => showdisplays = false )
-            return {
-                destroy() {
-                    displayNewWords();
-                }
-            };
-        };
     
     //単語のランダム選択ロジック。
     const getRandom4Words = (words: Array<Word>) => {
@@ -136,20 +114,7 @@
     };
 </script>
 
-
-
-{#if showcurtain}
-    <div id="start_curtain" out:scale={{duration:500, opacity:0, start:2}} onoutroend={displayNewWords} class="w-full h-screen fixed absolute pt-18 pb-15 md:pb-20 flex flex-col justify-center items-center gap-5 bg-slate-100 z-20">
-        <button class="mt-10 btn bg-indigo-500 rounded-3xl w-9/10 md:w-1/2 lg:w-1/5 h-1/5" onclick={eraseCurtain}>
-            <p class="text-white font-bold text-xl">４択問題</p>
-        </button>
-    </div>
-{/if}
-
-
-
-
-<div id="displays" class="w-full h-screen pt-30 lg:pt-35 pb-30 lg:pb-35 flex flex-col lg:flex-row gap-7 justify-center items-center overflow-clip z-19 relative">
+<div id="displays" class="w-full h-screen pt-30 lg:pt-35 pb-10 flex flex-col lg:flex-row gap-7 justify-center items-center overflow-clip z-19 relative">
     
     {#each corrects as i (i)}
     {#if progress==i && i<50 && !toContinue}
@@ -175,13 +140,9 @@
     <TestBackground2 />
     {#if showdisplays}
     
-        <div class="absolute left-auto right-auto top-3 w-full gap-1 flex justify-center items-center p-2 z-18">
-            <div class="radial-progress bg-white text-indigo-500 border-indigo-400 border-1" style="--value:{(progress%10)*10};--size:3rem;" role="progressbar">
-                {progress}
-            </div>
-        </div> 
+    <progress class="progress bg-slate-600 h-4 w-3/5 z-18 absolute top-10 mx-auto" value={(progress%10)*10} max="100"></progress>
         <div id="main_display" class={{
-            "flex w-4/5 md:w-3/5 lg:w-2/5 lg:ml-5 rounded-3xl bg-white border-1 grow-2 mb-10 lg:mb-6 relative z-18":true,
+            "flex w-4/5 md:w-3/5 lg:w-2/5 lg:ml-5 rounded-xl bg-purple-100 shadow-lg shadow-purple-200 grow-2 mb-10 lg:mb-6 relative z-18":true,
             "border-stone-300 shadow-lg": true}} in:fly={{duration:300, x:300}} out:fly={{duration:400, x:-500}}>
             <h1 class="m-auto text-2xl sm:text-3xl md:text-6xl p-4 lg:p-15 font-bold ">{ typeof main_display == "string" ? main_display : main_display.term }</h1>
             <svg preserveAspectRatio="xMidYMidmeet" height="110" width="110" class={{"absolute -right-8 lg:right-10 -top-15 fill-none rotate-140":true, "opacity-0":!isCorrect}}>
@@ -195,10 +156,10 @@
         
         <div class="w-4/5 md:w-3/5 lg:w-2/5 flex flex-col grow justify-center items-center gap-5 z-18">
             <div class={{
-                "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5 relative": true, 
+                "flex w-full  bg-purple-100 shadow-md shadow-purple-200 rounded-xl  grow-1 lg:mr-5 relative": true, 
                 "border-stone-300 shadow-lg": true,
                 "pointer-events-none":isDisabled}} in:fly={{duration:300, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {isDisabled=true;showArrow();showAnswers=true;checkAnswer(subdisplays[0].meaning)}}>
-                <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[0].meaning }</h1>
+                <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[0]?.meaning }</h1>
                 
                 {#if subdisplays[0].meaning==(typeof main_display == "string" ? main_display : main_display.meaning)}
                 {#if showAnswers}
@@ -220,7 +181,7 @@
                 {/if}
             </div>
             <div class={{
-                "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
+                "flex w-full bg-purple-100 shadow-md shadow-purple-200 rounded-xl  border-1 grow-1 lg:mr-5": true, 
                 "border-stone-300 shadow-lg relative": true,
                 "pointer-events-none":isDisabled}} in:fly={{duration:350, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {isDisabled=true;showArrow();showAnswers=true;checkAnswer(subdisplays[1].meaning)}}>
                 <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[1].meaning }</h1>
@@ -245,7 +206,7 @@
                 {/if}
             </div>
             <div class={{
-                "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
+                "flex w-full bg-purple-100 shadow-md shadow-purple-200 rounded-xl  border-1 grow-1 lg:mr-5": true, 
                 "border-stone-300 shadow-lg relative":true,
                 "pointer-events-none":isDisabled}} in:fly={{duration:400, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {isDisabled=true;showArrow();showAnswers=true;checkAnswer(subdisplays[2].meaning)}}>
                 <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[2].meaning }</h1>
@@ -269,8 +230,8 @@
                 {/if}
                 {/if}
             </div>
-            <div onoutroend={() => testend? showCurtain(): displayNewWords()} class={{
-                "flex w-full rounded-3xl bg-white border-1 grow-1 lg:mr-5": true, 
+            <div onoutroend={() => displayNewWords()} class={{
+                "flex w-full bg-purple-100 shadow-md shadow-purple-200 rounded-xl  border-1 grow-1 lg:mr-5": true, 
                 "border-stone-300 shadow-lg relative": true,
                 "pointer-events-none":isDisabled}} in:fly={{duration:450, x:150}} out:fly={{duration:400, x:-500}} onclick={() => {isDisabled=true;showArrow();showAnswers=true;checkAnswer(subdisplays[3].meaning)}}>
                 <h1 class="m-auto p-3 lg:py-4 text-sm sm:text-md md:text-xl lg:text-xl">{ subdisplays[3].meaning }</h1>
@@ -297,12 +258,11 @@
             <div class="w-full hidden lg:block h-3"></div>
 
             <div id="test_buttons" class="w-full flex flex-row gap-3 items-center mt-4 lg:mt-3 lg:mr-5 ">
+                <a href="./wordsdashboard" class={{
+                    "btn border-indigo-600 bg-indigo-600 text-white font-bold rounded-2xl lg:grow": true
+                    }}>テスト終了</a>
                 <button class={{
-                    "btn btn-outline border-1 border-indigo-500 text-indigo-500 font-bold rounded-2xl lg:grow btn-info": true
-                    }} onclick={() => {testend=true; showdisplays=false;toContinue=false;showAnswers=false;isDisabled=false; isCorrect=false; isWrong=false;showarrow=false;progress=0}}>テスト終了</button>
-                <button class={{
-                    "hidden lg:block btn btn-outline rounded-2xl grow": true, 
-                    "btn-info": true
+                    "btn border-indigo-600 hidden lg:block bg-indigo-600 font-bold text-white  rounded-2xl lg:grow": true, 
                     }} onclick={() => {showdisplays = false;if(isCorrect)progress++;showAnswers=false;isDisabled=false;toContinue=false;isCorrect=false;isWrong=false}}>次の問題</button>
             </div>
         </div>

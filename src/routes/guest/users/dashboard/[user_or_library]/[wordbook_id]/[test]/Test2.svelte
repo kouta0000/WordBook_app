@@ -3,6 +3,11 @@
     import TestBackground1 from './TestBackground1.svelte';
     import TestBackground2 from './TestBackground2.svelte';
     import type { Action } from 'svelte/action';
+    import {onMount} from "svelte";
+    onMount(()=>{
+        displayNewWords();
+        showdisplays=true;
+    })
 
     //変数宣言
     let { wordslist, user_or_library } = $props();
@@ -36,31 +41,7 @@
     };
     //関数宣言
     //テスト開始画面
-    const eraseCurtain = () => {
-        testend = false;
-        showcurtain=false;
-    };
-    const showCurtain = () => {
-        showcurtain = true;
-        showdisplays = false;
-    };
-    const startTest: Action = (node) => {
-        node.addEventListener("click", () => eraseCurtain());
-            return {
-                destroy() {
-                    displayNewWords();
-                }
-            };
-        };
-    const toNext: Action = (node) => {
-        const b: HTMLElement | null = document.getElementById("tonext");
-        b?.addEventListener("click", () => showdisplays = false )
-            return {
-                destroy() {
-                    displayNewWords();
-                }
-            };
-        };
+   
     
     //単語のランダム選択ロジック。
     const getBlocks = (word:string):Array<string> => {
@@ -81,9 +62,6 @@
         return blocks
     };
 
-    const showArrow = () => {
-        showarrow = true;
-    }
     //選択した単語をdisplay変数に代入
     const displayNewWords = () => {
         const length = wordslist.length
@@ -157,19 +135,7 @@
 </script>
 
 
-
-{#if showcurtain}
-    <div id="start_curtain" out:scale={{duration:500, opacity:0, start:2}} onoutroend={displayNewWords} class="w-full h-screen fixed absolute pt-18 pb-15 md:pb-20 flex flex-col justify-center items-center gap-5 bg-slate-100 z-20">
-        <button class="mt-10 btn bg-indigo-500 rounded-3xl w-9/10 md:w-1/2 lg:w-1/5 h-1/5" onclick={eraseCurtain}>
-            <p class="text-white font-bold text-xl">つづり問題</p>
-        </button>
-    </div>
-{/if}
-
-
-
-
-<div id="displays" class="w-full h-screen pt-30 lg:pt-35 pb-30 lg:pb-35 flex flex-col lg:flex-row  justify-center lg:justify-center items-center overflow-clip z-19 relative">
+<div id="displays" class="w-full h-screen pt-30 lg:pt-35 pb-10 flex flex-col lg:flex-row  justify-center  items-center overflow-clip z-19 relative">
     {#each corrects as i (i)}
     {#if progress==i && i<20 && !toContinue}
     <div out:fade in:scale={{duration:1000, opacity:0, start:0.1}} id="displays" class="w-full h-full flex absolute justify-center items-center  z-22 bg-gray-900/50">
@@ -195,8 +161,8 @@
     {#if showdisplays}
     
         <div class="flex w-4/5 md:w-3/5 lg:w-1/2 lg:mr-10 flex-col gap-8">
-        <div  id="main_display" class="aspect-3/2 lg:aspect-4/1 bg-linear-to-br from-gray-950 via-emerald-950 to-gray-950 shadow-2xl shadow-emerald-500 inset-shadow-2xl flex w-full  lg:ml-5 rounded-3xl border-1 border-emerald-300 text-emerald-500 mb-10 lg:mb-6 relative z-18" >
-            <h1 onoutroend={() => testend? showCurtain(): displayNewWords()} transition:fade class="text-shadow-sm text-emerald-100 text-shadow-emerald-100/50 m-auto text-2xl md:text-5xl p-2 lg:p-5">{ main_display }</h1>
+        <div  id="main_display" class="screen screen2 aspect-3/2 lg:aspect-4/1 bg-linear-to-br from-gray-950 via-emerald-950 to-gray-950 shadow-2xl shadow-emerald-500 inset-shadow-2xl flex w-full  lg:ml-5 rounded-3xl border-1 border-emerald-300 text-emerald-500 mb-10 lg:mb-6 relative z-18" >
+            <h1 onoutroend={() => displayNewWords()} transition:fade class="text-shadow-sm text-emerald-100 text-shadow-emerald-100/50 m-auto text-2xl md:text-5xl p-2 lg:p-5">{ main_display }</h1>
             <svg preserveAspectRatio="xMidYMidmeet" height="110" width="110" class={{"absolute -right-8 lg:right-10 -top-15 fill-none rotate-140":true, "opacity-0":!isCorrect}}>
                 <circle cx="55" cy="55" r="50" stroke-linecap="round" class="overflow-visible stroke-red-400 transition-all duration-500 ease-out" stroke-width="10" stroke-dasharray="314 315" style="stroke-dashoffset:{isCorrect? 0: 315};" />
             </svg>
@@ -207,13 +173,13 @@
         </div>
         </div>
         <div class="flex items-center flex-col mt-8 lg:mt-3 w-4/5 md:w-3/5 lg:w-3/10 z-18 gap-2">
-            <div id="main_input" class="bg-linear-to-br from-gray-950 via-emerald-950 to-gray-950  shadow-emerald-500 inset-shadow-xl flex  w-full lg:ml-5 rounded-3xl border-1 border-emerald-300 text-emerald-500 mb-3 lg:mb-6 relative z-18" >
+            <div id="main_input" class="screen screen2  bg-linear-to-br from-gray-950 via-emerald-950 to-gray-950  shadow-emerald-500 inset-shadow-xl flex  w-full lg:ml-5 rounded-3xl border-1 border-emerald-300 text-emerald-500 mb-3 lg:mb-6 relative z-18" >
                 <h1 class="text-shadow-sm text-emerald-100 text-shadow-emerald-100/50 m-auto p-1  lg:p-4 text-2xl md:text-4xl overflow-auto ">{inputedWord.join("")}<span class="blink text-bold text-shadow-sm text-emerald-100 text-shadow-emerald-100/50 text-3xl md:text-4xl font-semibold">|</span></h1>
                 <button onclick={()=>{handleOnclickBack();checkAnswer(inputedWord)}} class="text-emerald-200 text-shadow-emerald-200 text-shadow-sm text-xl absolute top-0 bottom-0 rounded-3xl right-0 border-1 border-emerald-300 aspect-square">◀</button>
             </div>
         <div transition:fade class="w-4/5 md:w-3/5 aspect-square grid grid-cols-5">
         {#each blocks as block, i (i)}
-        <div class="aspect-square bg-linear-to-r from-gray-950 via-emerald-950 to-gray-950 border-1 border-emerald-300 shadow-2xl inset-shadow-2xl shadow-emerald-500 bg-black relative">
+        <div class="screen screen2 aspect-square bg-linear-to-r from-gray-950 via-emerald-950 to-gray-950 border-1 border-emerald-300 shadow-2xl inset-shadow-2xl shadow-emerald-500 bg-black relative">
         {#if !(block=="")}
         <div out:fly={{duration:500, y:-200}} onclick={() => {handleOnBlockClick(block, i);checkAnswer(inputedWord)}} class="cursor-pointer absolute inset-0 flex justify-center items-center bg-linear-to-r from-gray-950 via-emerald-950 to-gray-950 aspect-square border-1 border-emerald-300 shadow-2xl inset-shadow-2xl shadow-emerald-500 bg-black">
            <p  class="text-shdow-lg text-shadow-emerald-300/80 text-emerald-200 text-3xl md:text-4xl">{block === "\u0020"? "▶": block}</p>
@@ -227,9 +193,9 @@
         {/each}
         </div>
         <div id="test_buttons" class="w-full flex flex-row gap-3 items-center mt-6 lg:mt-3 lg:mr-5">
-            <button class={{
+            <a href="./wordsdashboard" class={{
                 "btn btn-outline border-1 border-emerald-300 text-emerald-300 font-bold rounded-2xl lg:grow btn-info": true
-                }} onclick={() => {testend=true; showdisplays=false;toContinue=false;isCorrect=false; isWrong=false;showarrow=false;inputedWord=[];progress=0}}>テスト終了</button>
+                }} >テスト終了</a>
             <button class={{
                 "hidden lg:block btn btn-outline rounded-2xl border-1 border-emerald-300 text-emerald-300 grow": true, 
                 }} onclick={() => {showdisplays = false;if(isCorrect)progress++;toContinue=false;isCorrect=false;isWrong=false;inputedWord=[]}}>次の問題</button>
@@ -265,4 +231,36 @@
 .blink {
   animation: blink 1s steps(2, start) infinite;
 }
+.screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 4px,
+                rgba(0, 255, 0, 0.1) 4px,
+                rgba(0, 255, 0, 0.1) 6px
+            );
+            pointer-events: none;
+        }
+.screen2::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 4px,
+                rgba(0, 255, 0, 0.1) 4px,
+                rgba(0, 255, 0, 0.1) 6px
+            );
+            pointer-events: none;
+        }
 </style>

@@ -12,16 +12,11 @@
     let user_or_library = data.user_or_library;
     let currentView: string = $state(user_or_library);
 </script>
-{#if currentView == "user"}
-<UserWordBooks wordbooks={data.loaddata.user_wordbooks.data ?? []}/>
-{:else if currentView == "library"}
+
 <LibraryWordBooks wordbooks={data.loaddata.library_wordbooks.data?? []}/>
-{/if}
+
 
 <div class="dock">
-    <button onclick={() => currentView = "user"} class={{"dock-active text-gray-900":currentView=="user","text-gray-500":currentView=="library"}} >
-        <span class="dock-label">単語帳</span>
-    </button>
     <button onclick={() => currentView = "library"} class={{"dock-active text-gray-900":currentView=="library","text-gray-500":currentView=="user"}}>
         <span class="dock-label">ライブラリー</span>
     </button>

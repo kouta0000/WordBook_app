@@ -57,7 +57,7 @@
      data-itp_support="true"
      data-use_fedcm_for_prompt="true">
 </div>
-<div class="g_id_signin"
+<div class="g_id_signin w-4/5 md:w-1/2 lg:w-3/10"
      data-type="standard"
      data-shape="rectangular"
      data-theme="outline"

@@ -33,13 +33,13 @@ for (const wordbook of wordbooks) {
     <div class="w-full min-h-screen pt-30 flex flex-col items-center">
         <h1 class="text-3xl mb-10 font-bold bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">ライブラリー</h1>
         <div class="flex overflow-auto mb-10 py-2">
-            <button onclick={() => currentLang="フランス語"} class="btn rounded-3xl bg-indigo-200">フランス語</button>
+            <button onclick={() => currentLang="フランス語"} class="btn rounded-3xl bg-indigo-100">フランス語</button>
             <button onclick={()=>currentLang="英語"} class="btn rounded-3xl bg-indigo-100">英語</button>
-            <button onclick={()=>currentLang="ドイツ語"} class="btn rounded-3xl bg-indigo-200">ドイツ語</button>
-            <button onclick={()=>currentLang="ロシア語"} class="btn rounded-3xl bg-indigo-200">ロシア語</button>
-            <button onclick={()=>currentLang="中国語"} class="btn rounded-3xl bg-indigo-200">中国語</button>
-            <button onclick={()=>currentLang="韓国語"} class="btn rounded-3xl bg-indigo-200">韓国語</button>
-            <button onclick={()=>currentLang="古文"} class="btn rounded-3xl bg-indigo-200">古文</button>
+            <button onclick={()=>currentLang="ドイツ語"} class="btn rounded-3xl bg-indigo-100">ドイツ語</button>
+            <button onclick={()=>currentLang="ロシア語"} class="btn rounded-3xl bg-indigo-100">ロシア語</button>
+            <button onclick={()=>currentLang="中国語"} class="btn rounded-3xl bg-indigo-100">中国語</button>
+            <button onclick={()=>currentLang="韓国語"} class="btn rounded-3xl bg-indigo-100">韓国語</button>
+            <button onclick={()=>currentLang="古文"} class="btn rounded-3xl bg-indigo-100">古文</button>
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-13 sm:gap-x-0 items-center place-items-center">
             {#if currentLang=="英語"}

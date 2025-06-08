@@ -23,11 +23,11 @@
     
 <div class="bg-slate-200/80 px-4 flex justify-end items-center fixed absolute top-15 py-2  lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-11">
 {#if user_or_library == "user"}
-<a href="../../../dashboard/user" class="active:scale-80 btn bg-indigo-200 rounded-3xl w-1/3 w-min basis-0 text-black">
+<a href="../../../dashboard/user" class="active:scale-80 btn bg-indigo-100 rounded-3xl w-1/3 w-min basis-0 text-black">
    <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
 </a>
 {:else}
-<a href="../../../dashboard/library" class="active:scale-80 btn bg-indigo-200 btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
+<a href="../../../dashboard/library" class="active:scale-80 btn bg-indigo-100 btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
     <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
 </a>
 {/if}

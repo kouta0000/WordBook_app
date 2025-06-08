@@ -35,11 +35,11 @@
             <p class="whitespace-nowrap text-white font-bold">フリップ</p>
         </button>
         {#if user_or_library == "user"}
-            <a href="../../../dashboard/user" class="active:scale-80 shadow-sm btn bg-indigo-200 rounded-full w-min basis-0">
+            <a href="../../../dashboard/user" class="active:scale-80 shadow-sm btn bg-indigo-100 rounded-full w-min basis-0">
                <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
             </a>
         {:else}
-            <a href="../../../dashboard/library" class="active:scale-80 shadow-sm btn bg-indigo-200 rounded-full w-min basis-0 text-black">
+            <a href="../../../dashboard/library" class="active:scale-80 shadow-sm btn bg-indigo-100 rounded-full w-min basis-0 text-black">
                 <p class="whitespace-nowrap text-indigo-400 font-extrabold">戻る</p>
             </a>
         {/if}
