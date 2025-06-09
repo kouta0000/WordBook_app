@@ -6,7 +6,7 @@ export const load:PageServerLoad = async ({cookies, params, locals}) => {
     const library_user_id = "f25a8dbd-2c43-4134-8a76-f4dda58a5245";
     const user_or_library = params.user_or_library;
     const user_id = locals.user?.id //hooksでゲットしlocalsにユーザー情報が格納してある
-    const library_wordbooks = await supabase.from("WordBooks").select("wb_name, id, language").eq("user_id", library_user_id);
+    const library_wordbooks = await supabase.from("WordBooks").select("wb_name, id, language, word_number").eq("user_id", library_user_id);
     const user_wordbooks = await supabase.from("WordBooks").select("wb_name, id, language").eq("user_id", user_id);
     return {
         loaddata : {

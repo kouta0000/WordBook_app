@@ -8,6 +8,7 @@ interface Wordbook {
     wb_name: any;
     id: any;
     language: any;
+    word_number: any;
 }
 let { wordbooks}: Props = $props();
 let currentLang=$state("フランス語")  
@@ -34,7 +35,7 @@ for (const wordbook of wordbooks) {
         <h1 class="text-3xl mb-10 font-bold bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">ライブラリー</h1>
         <div class="flex overflow-auto mb-10 py-2">
             <button onclick={() => currentLang="フランス語"} class="btn rounded-3xl bg-indigo-200">フランス語</button>
-            <button onclick={()=>currentLang="英語"} class="btn rounded-3xl bg-indigo-100">英語</button>
+            <button onclick={()=>currentLang="英語"} class="btn rounded-3xl bg-indigo-200">英語</button>
             <button onclick={()=>currentLang="ドイツ語"} class="btn rounded-3xl bg-indigo-200">ドイツ語</button>
             <button onclick={()=>currentLang="ロシア語"} class="btn rounded-3xl bg-indigo-200">ロシア語</button>
             <button onclick={()=>currentLang="中国語"} class="btn rounded-3xl bg-indigo-200">中国語</button>
@@ -60,7 +61,8 @@ for (const wordbook of wordbooks) {
                 <div class="w-1/8 absolute right-0 top-0 aspect-ratio-1/1">
                     <Gabyo2 />                                   
                 </div>
-                <h1 class="text-xl mb-2">{wordbook.wb_name}</h1>
+                <h1 class="text-xl">{wordbook.wb_name}</h1>
+                <p class="text-right text-indigo-400 text-lg">{wordbook.word_number}語</p>
                 <hr class="h-2 w-full bg-indigo-300 rounded-3xl">
             </div>
             {/each}

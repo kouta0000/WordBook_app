@@ -24,7 +24,7 @@
 <TestSelect/>
 {/if}
 
-<div class="dock dock-lg lg:dock-md z-20">
+<div class="dock z-20">
     {#if user_or_library == "user"}
     <button onclick={()=> currentView = "edit"} class={{
         "btn btn-ghost font-bold h-full w-1/3 grow-1 basis-0":true,
