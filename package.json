@@ -26,11 +26,13 @@
 	},
 	"dependencies": {
 		"@google-cloud/speech": "^7.1.0",
+		"@google-cloud/text-to-speech": "^6.1.0",
 		"@leveluptuts/svelte-fit": "^1.0.3",
 		"@supabase/ssr": "^0.6.1",
 		"@supabase/supabase-js": "^2.49.5",
 		"@tailwindcss/vite": "^4.1.5",
 		"daisyui": "^5.0.35",
+		"google-auth-library": "^10.0.0-rc.3",
 		"tailwindcss": "^4.1.5"
 	}
 }

@@ -3,7 +3,8 @@
     import {fit, parent_style} from "@leveluptuts/svelte-fit";
     import {enhance} from"$app/forms";
     import Overlay from "./Overlay.svelte";
-    let { words, wb_name, user_or_library} = $props();
+    import AudioButton from "./AudioButton.svelte";
+    let { words, wb_name, user_or_library, language} = $props();
     let wordsc = $state(words);
     let hide:boolean = $state(false)
     let isChecked: boolean = $state(false);
@@ -59,7 +60,8 @@
                 <div class="flex bg-white shadow-sm border-stone-300 rounded-xl z-9 -translate-x-3 translate-y-1 z-1">
                     <div style={parent_style}>
                     <p use:fit={{min_size:10, max_size:20}} class="px-7 py-3 font-semibold font-sans text-xl">{isFlipped ? word.meaning: word.term}</p>
-                    </div>                
+                    </div>
+                    <AudioButton word={word} language={language}/>                
                 </div>
                 <div class="flex w-full border-stone-300 shadow-sm rounded-xl bg-white relative">
                     <Overlay i={i} hide={hide}/> 
