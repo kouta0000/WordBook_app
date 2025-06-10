@@ -21,8 +21,8 @@
       </p>
     </div>
     <div class="flex flex-col items-center w-3/5 md:w-2/5 lg:w-1/5 gap-7 mt-5">
-      <a out:scale={{start:3.0, duration:800}} href="/auth" class="bg-linear-to-r text-white from-indigo-500 to-sky-300 w-full p-5 rounded-3xl font-bold text-center">ログインして始める</a>
-      <a out:scale={{start:3.0, duration:800}} href="/guest/users/dashboard/library" class="bg-linear-to-r text-white from-indigo-500 to-sky-300 w-full p-5 rounded-3xl font-bold text-center">ゲストとして使う</a>
+      <a out:fade={{duration:800}} href="/auth" class="bg-linear-to-r text-white from-indigo-500 to-sky-300 w-full p-5 rounded-3xl font-bold text-center">ログインして始める</a>
+      <a out:fade={{duration:800}} href="/guest/users/dashboard/library" class="bg-linear-to-r text-white from-indigo-500 to-sky-300 w-full p-5 rounded-3xl font-bold text-center">ゲストとして使う</a>
     </div>
   </div>
 </div>
@@ -43,7 +43,7 @@
 <style>
    .floating-word {
             position: absolute;
-            color: rgba(52, 152, 219, 0.9);
+            color: rgba(52, 152, 219, 0.6);
             font-size: 1.2rem;
             font-weight: 500;
             animation: wordFloat 5s ease-in-out infinite;
@@ -52,12 +52,12 @@
 
         .floating-word.large {
             font-size: 2rem;
-            color: rgba(52, 152, 219, 0.8);
+            color: rgba(52, 152, 219, 0.5);
         }
 
         .floating-word.small {
             font-size: 0.9rem;
-            color: rgba(52, 152, 219, 0.7);
+            color: rgba(52, 152, 219, 0.4);
         }
         @keyframes wordFloat {
             0%, 100% { 
