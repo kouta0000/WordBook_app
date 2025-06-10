@@ -51,6 +51,7 @@ for (const wordbook of wordbooks) {
                     <Gabyo2 />                                   
                 </div>
                 <h1 class="text-xl mb-2">{wordbook.wb_name}</h1>
+                <p class="text-right text-indigo-400 text-lg">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p>
                 <hr class="h-2 w-full bg-indigo-300 rounded-3xl">
             </div>
             {/each}
@@ -62,7 +63,7 @@ for (const wordbook of wordbooks) {
                     <Gabyo2 />                                   
                 </div>
                 <h1 class="text-xl">{wordbook.wb_name}</h1>
-                <p class="text-right text-indigo-400 text-lg">{wordbook.word_number}語</p>
+                <p class="text-right text-indigo-400 text-lg">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p>
                 <hr class="h-2 w-full bg-indigo-300 rounded-3xl">
             </div>
             {/each}
@@ -74,6 +75,7 @@ for (const wordbook of wordbooks) {
                     <Gabyo2 />                                   
                 </div>
                 <h1 class="text-xl mb-2">{wordbook.wb_name}</h1>
+                <p class="text-right text-indigo-400 text-lg">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p>
                 <hr class="h-2 w-full bg-indigo-300 rounded-3xl">
             </div>
             {/each}
@@ -85,6 +87,7 @@ for (const wordbook of wordbooks) {
                     <Gabyo2 />                                   
                 </div>
                 <h1 class="text-xl mb-2">{wordbook.wb_name}</h1>
+                <p class="text-right text-indigo-400 text-lg">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p>
                 <hr class="h-2 w-full bg-indigo-300 rounded-3xl">
             </div>
             {/each}
@@ -96,6 +99,7 @@ for (const wordbook of wordbooks) {
                     <Gabyo2 />                                   
                 </div>
                 <h1 class="text-xl mb-2">{wordbook.wb_name}</h1>
+                <p class="text-right text-indigo-400 text-lg">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p>
                 <hr class="h-2 w-full bg-indigo-300 rounded-3xl">
             </div>
             {/each}
@@ -107,6 +111,7 @@ for (const wordbook of wordbooks) {
                     <Gabyo2 />                                   
                 </div>
                 <h1 class="text-xl mb-2">{wordbook.wb_name}</h1>
+                <p class="text-right text-indigo-400 text-lg">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p>
                 <hr class="h-2 w-full bg-indigo-300 rounded-3xl">
             </div>
             {/each}
@@ -118,6 +123,7 @@ for (const wordbook of wordbooks) {
                     <Gabyo2 />                                   
                 </div>
                 <h1 class="text-xl mb-2">{wordbook.wb_name}</h1>
+                <p class="text-right text-indigo-400 text-lg">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p>
                 <hr class="h-2 w-full bg-indigo-300 rounded-3xl">
             </div>
             {/each}
