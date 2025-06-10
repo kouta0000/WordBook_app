@@ -31,7 +31,7 @@
   <div class="floating-word large" style="top: 25%; right: 12%; animation-delay: 2s;">Bonjour</div>
   <div class="floating-word small" style="top: 35%; left: 20%; animation-delay: 1s;">こんにちは</div>
   <div class="floating-word" style="top: 45%; right: 25%; animation-delay: 3s;">Hola</div>
-  <div class="floating-word large" style="top: 55%; left: 15%; animation-delay: 4s;">Guten Tag</div>
+  <div class="floating-word large" style="top: 80%; left: 15%; animation-delay: 4s;">Guten Tag</div>
   <div class="floating-word small" style="bottom: 35%; right: 15%; animation-delay: 5s;">안녕하세요</div>
   <div class="floating-word" style="bottom: 25%; left: 25%; animation-delay: 1.5s;">Ciao</div>
   <div class="floating-word large" style="bottom: 15%; right: 20%; animation-delay: 2.5s;">Olá</div>

@@ -9,6 +9,7 @@
     let hide:boolean = $state(false)
     let isChecked: boolean = $state(false);
     let isFlipped: boolean = $state(false);
+    let soundmode: boolean = $state(false);
     interface Word {
             term: string;
             meaning: string;
@@ -26,21 +27,24 @@
     
     <div class="bg-slate-200/80 px-2 flex justify-center md:justify-end items-center fixed absolute top-15 py-2 lg:h-15 w-full flex flex-row flex-wrap gap-1 mb-10 z-11">
         
-        <button class="active:scale-0.8 shadow-sm btn bg-indigo-500 rounded-3xl  w-min basis-0" onclick={()=> {hide=!hide}}>
-            <p class="whitespace-nowrap text-white font-bold">{!hide? "隠す":"元に戻す"}</p>
+        <button class="active:scale-0.8 shadow-sm btn btn-sm bg-indigo-500 rounded-3xl  w-min basis-0" onclick={()=> {hide=!hide}}>
+            <p class="whitespace-nowrap text-white font-bold">{!hide? "隠す":"見せる"}</p>
         </button>
-        <button class="active:scale-0.8 shadow-sm btn bg-indigo-500 rounded-3xl w-min basis-0" onclick={() => shuffleWords(wordsc)}>
-            <p class="whitespace-nowrap text-white font-bold">シャッフル</p>
+        <button class="active:scale-0.8 shadow-sm btn btn-sm bg-indigo-500 rounded-3xl w-min basis-0" onclick={() => shuffleWords(wordsc)}>
+            <p class="whitespace-nowrap text-white font-bold">混ぜる</p>
         </button>
-        <button class="active:scale-0.8 shadow-sm btn bg-indigo-500 rounded-3xl w-min basis-0" onclick={() => isFlipped = !isFlipped}>
-            <p class="whitespace-nowrap text-white font-bold">フリップ</p>
+        <button class="active:scale-0.8 shadow-sm btn btn-sm bg-indigo-500 rounded-3xl w-min basis-0" onclick={() => isFlipped = !isFlipped}>
+            <p class="whitespace-nowrap text-white font-bold">反転</p>
+        </button>
+        <button class="active:scale-0.8 shadow-sm btn btn-sm bg-indigo-500 rounded-3xl w-min basis-0" onclick={() => soundmode = !soundmode}>
+            <p class="whitespace-nowrap text-white font-bold">{!soundmode? "音": "視覚"}</p>
         </button>
         {#if user_or_library == "user"}
-            <a href="../../../dashboard/user" class="active:scale-80 shadow-sm btn bg-indigo-200 rounded-full w-min basis-0">
+            <a href="../../../dashboard/user" class="active:scale-80 shadow-sm btn btn-sm bg-indigo-200 rounded-full w-min basis-0">
                <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
             </a>
         {:else}
-            <a href="../../../dashboard/library" class="active:scale-80 shadow-sm btn bg-indigo-200 rounded-full w-min basis-0 text-black">
+            <a href="../../../dashboard/library" class="active:scale-80 shadow-sm btn btn-sm bg-indigo-200 rounded-full w-min basis-0 text-black">
                 <p class="whitespace-nowrap text-indigo-400 font-extrabold">戻る</p>
             </a>
         {/if}
@@ -58,9 +62,11 @@
             {#each wordsc as word,i (word.id)}
             <div out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-4/5 sm:grow flex flex-col justify-center items-start">
                 <div class="flex bg-white shadow-sm border-stone-300 rounded-xl z-9 -translate-x-3 translate-y-1 z-1">
+                    {#if !soundmode}
                     <div style={parent_style}>
                     <p use:fit={{min_size:10, max_size:20}} class="px-7 py-3 font-semibold font-sans text-xl">{isFlipped ? word.meaning: word.term}</p>
                     </div>
+                    {/if}
                     <AudioButton word={word} language={language}/>                
                 </div>
                 <div class="flex w-full border-stone-300 shadow-sm rounded-xl bg-white relative">
