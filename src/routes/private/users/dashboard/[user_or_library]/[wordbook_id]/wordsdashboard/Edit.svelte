@@ -34,9 +34,9 @@
 </div>
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center ">
         <div class="text mt-23 mb-4 lg:mt-20 w-full flex justify-center items-center realtive h-20">
-            <h1 class="border-stone-300 shadow-lg p-4 border-1 rounded-3xl bg-white">{wb_name}</h1>
+            <h1 class=" shadow-lg p-6 mb-6 text-white text-2xl rounded-3xl bg-linear-to-br from-indigo-800 to-sky-500">{wb_name}</h1>
         </div> 
-        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-x-0 items-center place-items-center relative">
+        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-x-0 items-center place-items-center relative">
             <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 md:bottom-22 md:right-20 z-20">
                 {#if creating}
                 <div out:fade={{delay:800}} class="btn bg-indigo-500 rounded-3xl flex gap-1">
@@ -54,9 +54,6 @@
                     <span class="loading loading-dots loading-sm text-white"></span>
                 </div>
                 {/if}
-                <button type="button" onclick={() => {isChecked=!isChecked;updatings.fill(false)}} class={{"btn btn-lg btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-indigo-500":!isChecked, "bg-linear-to-br from-indigo-500 to-sky-500":isChecked}}>
-                    <p class="whitespace-nowrap text-white text-base font-bold">{ !isChecked? "選択": "元に戻す"}</p>
-                </button>
                 <svg onclick={()=> dialog?.showModal()} xmlns="http://www.w3.org/2000/svg" class="active:scale-80" viewBox="0 0 64 64" width="56" height="56">
                     <!-- 楕円形の背景（空色） -->
                     <ellipse cx="32" cy="32" rx="30" ry="28" class="fill-indigo-500" />
@@ -84,83 +81,78 @@
                     </form>
                 </div>
             </dialog>
+
             <div out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-4/5 sm:grow flex flex-col justify-center items-start relative">
-                {#if updatings[id]}
-                <form method="POST" action="?/updateWord" use:enhance={() => {
-                    updatings[id]=false;
-                    updatings2[id]=true;
-                    return async ({update}) => {
-                        update();
-                        updatings2[id]=false;
-                  }
-                }} class={{"absolute inset-0 flex flex-col justifry-center items-start z-2":true}}>
-                    <span  class="pl-2 pr-2 py-1 flex border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 bg-white">
-                        <label class="input input-ghost rounded-xl">
-                        <p class="text-xs text-stone-300">変更</p>
-                        <input type="text" placeholder="変更" id="term" name="term" value={word.term} class="m-auto font-semibold font-sans text-xl">
-                        </label>
-                        <button type="button" onclick={()=>{isChecked=!isChecked;updatings[id] = false}} class="btn btn-base rounded-full my-auto btn-sm">
-                            戻る
+                <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-xl relative">
+                    <div class="grow flex flex-col max-w-7/8 relative">
+                        {#if updatings[id]}
+                        <form method="POST" action="?/updateWord" use:enhance={() => {
+                            updatings[id]=false;
+                            updatings2[id]=true;
+                            return async ({update}) => {
+                                update();
+                                updatings2[id]=false;
+                        }
+                        }} class={{"absolute inset-0 w-full bg-white rounded-xl flex flex-col items-center gap-1 justify-center p-1  z-2":true}}>
+                        
+                            <div  class="w-full flex">
+                                <label class="input input-ghost input-sm rounded-xl">
+                                <p class="text-2xl text-stone-400">{">"}</p>
+                                <input type="text" placeholder="変更" id="term" name="term" value={word.term} class="m-auto font-semibold font-sans text-xl">
+                                </label>
+                            </div>
+                            <div class="px-2 flex w-full relative bg-white">
+                                <label class="input input-ghost input-sm rounded-xl max-w-9/10 font-sans text-sm  mx-auto">
+                                <p class="text-stone-400">{">"}</p>
+                                <input type="text" id="meaning" name="meaning" value={word.meaning}>
+                                </label>
+                                <button type="button" onclick={()=>{isChecked=!isChecked;updatings[id] = false}} class="btn btn-base rounded-full my-auto btn-xs">
+                                    戻る
+                                </button>
+                                <button type="submit" class="btn btn-base rounded-full my-auto btn-xs">
+                                    保存
+                                </button>
+                                <input type="hidden" id="id" name="id" value={word.id}>
+                        </div>
+                        </form>
+                        {/if}
+
+                        {#if updatings2[id]}
+                        <div out:fade={{delay:1000}} class={{"absolute inset-0 skeleton z-5":true}}>
+                        </div>
+                        {/if}
+
+                        <!--実際のコンテンツ-->
+                        <div style={parent_style} class="w-full">
+                            <p use:fit={{min_size:10, max_size:22}} class="font-sans font-semibold pl-5 pt-4 pb-1 text-2xl">{word.term}</p>
+                        </div>
+                        <p class="text-gray-500 text-right font-sans p-1 pr-2">{word.meaning}</p>
+                    </div>  
+                    <div class="flex flex-col border-l-1 border-indigo-300 justify-center items-center w-1/8 z-2">
+                        <button  class="h-full aspect-ration-1/1" onclick={() => dialogs[id]?.showModal()}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" class="w-full m-auto fill-none rounded-3xl">
+                                <rect x="7" y="9" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
+                                <rect x="8" y="7" width="8" height="2" fill="none" stroke="gray" stroke-width="1"/>
+                                <line x1="9" y1="11" x2="9" y2="19" stroke="gray" stroke-width="1"/>
+                                <line x1="12" y1="11" x2="12" y2="19" stroke="gray" stroke-width="1"/>
+                                <line x1="15" y1="11" x2="15" y2="19" stroke="gray" stroke-width="1"/>
+                            </svg>
                         </button>
-                        <button type="submit" class="btn btn-base rounded-full my-auto btn-sm">
-                            保存
+                        <button class="h-full aspect-ratio-1/1" onclick={() => {updatings[id]=true;isChecked=!isChecked}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67 67" class="w-full m-auto fill-none rounded-3xl">
+                                <g transform="translate(32,32) scale(1.2) rotate(-45) translate(-32,-32)">
+                                  <!-- 鉛筆の先端（尖った部分） -->
+                                  <polygon points="18,28 12,32 18,36" fill="#808080" />
+                                  <!-- 鉛筆の本体（太めで角を丸く） -->
+                                  <rect x="18" y="28" width="28" height="8" rx="3" ry="3" fill="#808080" />
+                                  <!-- 消しゴム部分（可愛らしい丸みをプラス） -->
+                                  <rect x="46" y="28" width="6" height="8" rx="1.5" ry="1.5" fill="#808080" />
+                                </g>
+                            </svg>
                         </button>
-                    </span>
-                    <div class="px-2 flex w-full shadow-sm border-stone-300 rounded-xl relative bg-white">
-                        <label class="input input-ghost rounded-xl my-2 py-2 max-w-9/10 font-sans text-lg mx-auto">
-                        <p class="text-xs text-stone-300">変更</p>
-                        <input type="text" id="meaning" name="meaning" value={word.meaning}>
-                        </label>
-                    </div>
-                    <input type="hidden" id="id" name="id" value={word.id}>
-                </form>
-                {/if}
-                {#if updatings2[id]}
-                <div class={{"absolute inset-0 flex flex-col justifry-center items-start z-5":true}}>
-                <span out:fade={{delay:1000}} class="pl-2 pr-2 flex border-1 border-stone-300 rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 skeleton">
-                    <p class="m-auto px-10 py-2 font-semibold font-sans text-xl opacity-0">{word.term}</p>
-                </span>
-                <div out:fade={{delay:1000}} class="px-2 flex w-full border-1 border-stone-300 rounded-xl relative skeleton">
-                    <p class="mx-auto my-4 max-w-9/10 font-sans text-lg opacity-0">Loading...</p>
+                    </div>      
                 </div>
-                </div>
-                {/if}
-                <div class="flex bg-white  border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1">
-                    <div style={parent_style} >
-                    <p use:fit={{min_size:10, max_size:20}} class="px-7 py-3 font-semibold font-sans text-xl">{word.term}</p>
-                    </div>
-                </div>
-                <div class="flex w-full border-stone-300 shadow-sm rounded-xl bg-white relative">
-                    <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{word.meaning}</p>
-                    {#if isChecked}
-                    <div transition:fade={{duration:150}} class="flex items-center w-1/5 absolute right-0 rounded-3xl top-1/2 -translate-y-1/2 bg-white/80 aspect-ratio-1/2 z-2">
-                    <button  class="h-full aspect-ration-1/1" onclick={() => dialogs[id]?.showModal()}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" class="w-full h-full m-auto fill-none rounded-3xl">
-                            <rect x="7" y="9" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
-                            <rect x="8" y="7" width="8" height="2" fill="none" stroke="gray" stroke-width="1"/>
-                            <line x1="9" y1="11" x2="9" y2="19" stroke="gray" stroke-width="1"/>
-                            <line x1="12" y1="11" x2="12" y2="19" stroke="gray" stroke-width="1"/>
-                            <line x1="15" y1="11" x2="15" y2="19" stroke="gray" stroke-width="1"/>
-                        </svg>
-                    </button>
-                    <button class="h-full aspect-ratio-1/1" onclick={() => {updatings[id]=true;isChecked=!isChecked}}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67 67" class="w-4/5 h-4/5 m-auto fill-none rounded-3xl">
-                            <g transform="translate(32,32) scale(1.6) rotate(-45) translate(-32,-32)">
-                              <!-- 鉛筆の先端（尖った部分） -->
-                              <polygon points="18,28 12,32 18,36" fill="#808080" />
-                              <!-- 鉛筆の本体（太めで角を丸く） -->
-                              <rect x="18" y="28" width="28" height="8" rx="3" ry="3" fill="#808080" />
-                              <!-- 消しゴム部分（可愛らしい丸みをプラス） -->
-                              <rect x="46" y="28" width="6" height="8" rx="1.5" ry="1.5" fill="#808080" />
-                            </g>
-                          </svg>
-                        </button>
-                    </div>
-                    {/if}         
-                </div>
-                <hr class="w-full scale-70 h-2 mt-4 bg-indigo-200 border-0 rounded-sm md:mb-1 dark:bg-gray-700">
             </div>
-            
             {/each}
         </div>
         <div class="w-full h-50"></div>

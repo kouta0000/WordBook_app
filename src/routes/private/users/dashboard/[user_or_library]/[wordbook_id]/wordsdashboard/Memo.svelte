@@ -3,10 +3,13 @@
     import {fit, parent_style} from "@leveluptuts/svelte-fit";
     import {enhance} from"$app/forms";
     import Overlay from "./Overlay.svelte";
+    import IntersectionObserver from "svelte-intersection-observer";
     import AudioButton from "./AudioButton.svelte";
     let { words, wb_name, user_or_library, language} = $props();
     let wordsc = $state(words);
     let hide:boolean = $state(false)
+    let shows: boolean[] = $state(Array(words.length).fill(false));
+    let cards:HTMLDivElement[] = $state([]);
     let isChecked: boolean = $state(false);
     let isFlipped: boolean = $state(false);
     let soundmode: boolean = $state(false);
@@ -26,10 +29,6 @@
     </script>
     
     <div class="bg-slate-200/80 px-2 flex justify-center md:justify-end items-center fixed absolute top-15 py-2 lg:h-15 w-full flex flex-row flex-wrap gap-1 mb-10 z-11">
-        
-        <button class="active:scale-0.8 shadow-sm btn btn-sm bg-indigo-500 rounded-3xl  w-min basis-0" onclick={()=> {hide=!hide}}>
-            <p class="whitespace-nowrap text-white font-bold">{!hide? "隠す":"見せる"}</p>
-        </button>
         <button class="active:scale-0.8 shadow-sm btn btn-sm bg-indigo-500 rounded-3xl w-min basis-0" onclick={() => shuffleWords(wordsc)}>
             <p class="whitespace-nowrap text-white font-bold">混ぜる</p>
         </button>
@@ -52,7 +51,7 @@
     
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center">
         <div class="mt-23 mb-4 lg:mt-20  w-full flex justify-center  items-center realtive h-20">
-            <h1 class="border-1 bg-white shadow-lg border-stone-300 rounded-3xl p-4 font-sans">{wb_name}</h1>
+            <h1 class="shadow-lg p-6 mb-6 text-white text-2xl rounded-3xl bg-linear-to-br from-indigo-800 to-sky-500">{wb_name}</h1>
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-x-0 items-center place-items-center relative">
             <button onclick={() => isChecked = false} class={{"w-4/5 md:w-2/5 lg:w-1/5 lg:h-20 absolute fixed opacity-95 z-11 bottom-24 lg:bottom-25 lg:right-5 btn btn-info rounded-2xl grow opacity-80":true, "hidden":!isChecked, "block":isChecked}}>
@@ -60,21 +59,30 @@
             </button>
             
             {#each wordsc as word,i (word.id)}
-            <div out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-4/5 sm:grow flex flex-col justify-center items-start">
-                <div class="flex bg-white shadow-sm border-stone-300 rounded-xl z-9 -translate-x-3 translate-y-1 z-1">
-                    {#if !soundmode}
-                    <div style={parent_style}>
-                    <p use:fit={{min_size:10, max_size:20}} class="px-7 py-3 font-semibold font-sans text-xl">{isFlipped ? word.meaning: word.term}</p>
-                    </div>
-                    {/if}
-                    <AudioButton word={word} language={language}/>                
+            <IntersectionObserver element={cards[i]} on:observe={(e) => {shows[i] = false;}}>
+            <div bind:this={cards[i]} out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-4/5 sm:grow flex flex-col justify-center items-start relative">
+                <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-xl relative">
+                    <div class="grow flex flex-col max-w-7/8 relative">
+                        <div style={parent_style} class="w-full">
+                            <p use:fit={{min_size:10, max_size:22}} class="font-sans font-semibold pl-5 pr-1 pt-5 pb-1 text-2xl">{!soundmode? (isFlipped? word.meaning: word.term) : "📢"}</p>
+                        </div>
+                        <div class="w-full min-h-8">
+                        {#if shows[i]}
+                        <p transition:fade={{duration:300}} class="text-gray-500 text-right font-sans p-1 pr-2">
+                        {isFlipped? word.term: word.meaning}
+                        </p>
+                        {/if}
+                        </div>
+                    </div>  
+                    <div class="flex flex-col border-l-1 border-indigo-300 justify-center items-center w-1/8 z-2">
+                        <AudioButton word={word} language={language} />
+                        <button class="w-full aspect-square bg-indigo-400 text-sm text-white text-bold" onclick={() => {shows[i] = !shows[i]}}>
+                        {"意味"}
+                        </button>
+                    </div>      
                 </div>
-                <div class="flex w-full border-stone-300 shadow-sm rounded-xl bg-white relative">
-                    <Overlay i={i} hide={hide}/> 
-                    <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{isFlipped? word.term: word.meaning}</p>
-                </div>
-                <hr class="w-full scale-70 h-2 mt-4 bg-indigo-200 border-0 rounded-sm md:mb-1 dark:bg-gray-700">
             </div>
+            </IntersectionObserver>
             {/each}
             
         </div>

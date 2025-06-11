@@ -21,7 +21,7 @@
 
     }
 </script>
-<div class="size-7 my-auto">
+<div class="w-full aspect-square my-auto p-2">
     <label class="swap">
         <!-- this hidden checkbox controls the state -->
         <input bind:checked={isChecked} disabled={isChecked} onchange={fetchAudio} type="checkbox" />
