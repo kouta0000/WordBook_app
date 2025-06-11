@@ -37,7 +37,7 @@
             <h1 class=" shadow-lg p-6 mb-6 text-white text-2xl rounded-3xl bg-linear-to-br from-indigo-800 to-sky-500">{wb_name}</h1>
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-x-0 items-center place-items-center relative">
-            <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 md:bottom-22 md:right-20 z-20">
+            <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-4 justify-end items-center absolute fixed bottom-17 md:bottom-22 md:right-20 z-20">
                 {#if creating}
                 <div out:fade={{delay:800}} class="btn bg-indigo-500 rounded-3xl flex gap-1">
                     <p class="font-bold text-base text-white">追加中</p>
