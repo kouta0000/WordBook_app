@@ -67,6 +67,7 @@
         showResult = false;
         answer = "";
         currentWord={meaning:"", term:""};
+        questions = [];
     }
     const checkAnswer = async () => {
         if (answer == currentWord.term) {
