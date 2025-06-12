@@ -19,7 +19,7 @@ const russian:Array<Wordbook> = [];
 const chinese:Array<Wordbook> = [];
 const korean:Array<Wordbook> = [];
 const oldjap:Array<Wordbook> = [];
-const dinosors = ["/images/trex.png", "/images/ptella.png", "/images/raptor.png", "/images/tri.png","/images/presio.png", "/images/black.png"]
+const dinosors = ["/images/tlex.png", "/images/ptella.png", "/images/raptor.png", "/images/tri.png","/images/presio.png", "/images/black.png"]
 for (const wordbook of wordbooks) {
     if (wordbook.language=="英語") english.push(wordbook)
     else if (wordbook.language=="フランス語") french.push(wordbook)
