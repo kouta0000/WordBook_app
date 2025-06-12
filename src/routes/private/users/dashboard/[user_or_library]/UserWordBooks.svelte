@@ -19,6 +19,7 @@ interface Wordbook {
     let forms:Array<HTMLFormElement> = $state([]);
     let deleting: boolean = $state(false);
     let dialog: HTMLDialogElement | undefined = $state();
+    const dinosors = ["/images/trex.png", "/images/ptella.png", "/images/raptor.png", "/imgaes/tri.png","/images/presio", "/images/presio", "images/black.png"]
 </script>
    
 <dialog bind:this={dialog} id="my_modal" class="modal">
@@ -66,6 +67,7 @@ interface Wordbook {
             </svg>  
         </div>
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-13 sm:gap-x-0 items-center place-items-center">
+            
             {#each wordbooks as wordbook, id (wordbook.id)}
             <dialog bind:this={dialogs[id]} class="modal">
                 <div class="modal-box flex bg-slate-100 flex-col gap-4 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
@@ -107,12 +109,18 @@ interface Wordbook {
                     <input type="hidden" name="wordbook_id" value={wordbook.id}>
                 </form>
                 {/if}
-                <div class="w-1/8 absolute right-0 top-0 aspect-ratio-1/1">
-                    <Gabyo />                           
+                <div class="flex ">
+                    <div class="avatar w-1/5 aspect-square">
+                        <div class="mask mask-squircle p-1 self-center relative">
+                            <div class="absolute inset-0 bg-radial from-indigo-400/20 to-indigo-100/20"></div>
+                          <img src={dinosors[id%dinosors.length]} />
+                        </div>
+                    </div>
+                    <div class="w-4/5 flex flex-col justify-center p-3">
+                    <h1 class="text-xl text-center mb-3">{wordbook.wb_name}</h1>
+                    <p class="text-sm text-stone-400 text-right">言語：{wordbook.language?? "none"}</p>
+                    </div>
                 </div>
-                <h1 class="text-xl mb-2">{wordbook.wb_name}</h1>
-                <p class="text-sm text-stone-400">言語：{wordbook.language?? "none"}</p>
-                <hr class="h-2 w-full bg-indigo-300 rounded-3xl">
             </div>
             {/each}
         </div>

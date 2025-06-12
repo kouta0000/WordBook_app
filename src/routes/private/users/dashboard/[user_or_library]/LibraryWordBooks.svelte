@@ -19,6 +19,7 @@ const russian:Array<Wordbook> = [];
 const chinese:Array<Wordbook> = [];
 const korean:Array<Wordbook> = [];
 const oldjap:Array<Wordbook> = [];
+const dinosors = ["/images/trex.png", "/images/ptella.png", "/images/raptor.png", "/images/tri.png","/images/presio.png", "/images/black.png"]
 for (const wordbook of wordbooks) {
     if (wordbook.language=="英語") english.push(wordbook)
     else if (wordbook.language=="フランス語") french.push(wordbook)
@@ -52,15 +53,22 @@ const languages = [
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-13 sm:gap-x-0 items-center place-items-center">
             {#each languages as language}
             {#if currentLang==language.name}
-            {#each language.data as wordbook (wordbook.id)}
+            {#each language.data as wordbook, id (wordbook.id)}
             <div  class="shadow-sm active:bg-indigo-100 transition-all duration-200 flex flex-col gap-2 p-7 w-4/5 sm:grow rounded-xl bg-white relative">
                 <a href="./library/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
-                <div class="w-1/8 absolute right-0 top-0 aspect-ratio-1/1">
-                    <Gabyo2 />                                   
+                <div class="flex w-full justify-center items-center">
+                    <div class="avatar w-1/5 aspect-square self-center">
+                        <div class="mask mask-squircle size-full p-1 relative">
+                            <div class="absolute inset-0 bg-radial from-indigo-400/20 to-indigo-100/20"></div>
+                          <img class="" src={dinosors[id%dinosors.length]} />
+                        </div>
+                    </div>
+                    <div class="w-4/5 flex flex-col justify-center p-3">
+                    <h1 class="text-xl text-center mb-3">{wordbook.wb_name}</h1>
+                    <p class="text-right text-indigo-400 text-lg">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p> 
+                    </div>
                 </div>
-                <h1 class="text-xl mb-2">{wordbook.wb_name}</h1>
-                <p class="text-right text-indigo-400 text-lg">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p>
-                <hr class="h-2 w-full bg-indigo-300 rounded-3xl">
+                
             </div>
             {/each}
             {/if}
