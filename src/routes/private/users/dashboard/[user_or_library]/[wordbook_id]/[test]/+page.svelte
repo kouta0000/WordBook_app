@@ -11,6 +11,6 @@
 </script>
 {#if test == "4taku"}
 <Test wordslist={words} wb_name={wb_name} user_or_library={user_or_library} />
-{:else if test =="tsuzuri"}
-<Test2 wordslist={words} user_or_library={user_or_library} />
+{:else if test =="input"}
+<Test2 wordslist={words} wb_name={wb_name} user_or_library={user_or_library} />
 {/if}

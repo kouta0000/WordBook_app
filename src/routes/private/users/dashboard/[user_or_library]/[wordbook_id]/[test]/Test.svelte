@@ -22,6 +22,7 @@
     let answer = $state("");
     let isQuizComplete = $state(false);
     let showResult:boolean = $state(false);
+    let showsubdisplays = $state(false)
     interface Word {
         "term": string;
         "meaning": string;
@@ -81,7 +82,11 @@
         createQuestions(wordslist);
         showQuestion();
     }
-    const postAnswer = (a:string):void => {
+    const nextQuestion = () => {
+        clearInfo();
+        showQuestion();
+    }
+    const postAnswer = (a:string):Promise<void> => {
         answerInfo.forEach((item,i) => {
             if (subdisplays[i].meaning==main_display.meaning) {
                 answerInfo[i]=true;
@@ -90,33 +95,46 @@
         if (a==main_display.meaning) score++;
         answer=a;
         showResult = true;
+        
+        return new Promise((resolve) => {
+            setTimeout(()=>{
+                resolve();
+            }, 2000);
+            
+        });
     }
     const clearInfo = () => {
+        showResult = false;
         answerInfo = Array(4).fill(false);
         answer = "";
-        showResult = false;
     }
 </script>
-<div id="displays" class="w-full  bg-linear-to-br from-white to-slate-100 h-screen p-4 flex gap-4 overflow-auto absolute z-20 relative">
+<div id="displays" class="w-full bg-linear-to-br from-white to-slate-100 h-screen p-4 flex gap-4 overflow-auto absolute z-20 relative">
     {#if lengthdeciding}
-    <div class="absolute inset-0 bg-gray-900/20 flex justify-center items-center z-21">
-    <div class="flex flex-col bg-white w-/9/10 p-8">
-        <h1 class="text-center text-2xl font-bold mb-5">問題数を決めてね！</h1>
-        <label class="label">
-        <input type="number" min="1" max="50" bind:value={inputlength} class="input text-center mx-auto text-lg text-gray-900 rounded-2xl bg-slate-100">
+    <div class="absolute inset-0 bg-slate-100 flex justify-center items-center z-21">
+    <div class="flex flex-col  gap-3 justify-between bg-white w-9/10 md:w-3/5 lg:w-3/10  p-8 rounded-2xl shadow-lg">
+        <div class="mb-3">
+            <h1 class="text-4xl text-center font-bold text-gray-800 mb-1">4択テスト</h1>
+        </div>
+        <h1 class="text-center text-xl text-gray-700  mb-5">問題数を決めてね！</h1>
+        <label class="input validator w-2/3 mx-auto mx-auto text-lg text-gray-900 rounded-2xl bg-slate-100">
+        <input type="number" min="1" max="50" bind:value={inputlength} class="text-center">
         問
         </label>
-        <p class="text-right font-xs text-red-800 text-right">{message}</p>
-        <p class="text-right font-xs text-gray-800 text-right">問題数は1~50問の間です
+        <p class="text-right font-xs text-red-800">{message}</p>
+        <p class="text-right font-xs text-gray-800">問題数は1~50問のあいだです
         </p>
-        <button onclick={startGame} class="btn btn-base rounded-2xl mt-5">
-            決定
+        <button onclick={startGame} class="btn btn-active btn-primary rounded-2xl mt-5">
+            ▶テスト開始
+        </button>
+        <button onclick={()=> goto("./wordsdashboard")} class="btn mx-auto w-1/2 btn-sm btn-outline font-bold rounded-2xl btn-primary">
+            戻る
         </button>
     </div>
     </div>
     {/if}
-    <div class="w-full md:w-4/5 lg:w-3/10 mx-auto flex flex-col bg-white rounded-2xl shadow-xl">
-        <div class="bg-linear-to-br from-slate-600 to-slate-300 rounded-2xl text-white p-8">
+    <div class="w-full md:w-4/5 lg:w-3/10 mx-auto flex flex-col bg-slate-50 rounded-2xl shadow-xl">
+        <div class="bg-linear-to-br from-indigo-600 to-indigo-300 rounded-2xl text-white p-8">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-1">
                     <h1 class="text-2xl font-bold">{wb_name}</h1>
@@ -142,14 +160,19 @@
                     </div>
                     </div>
                 </div>
-                <h2 class="font-semibold text-lg text-gray-700 mb-8">
-                    意味を選んでね！
-                </h2>
+                    <div class={{"text-center shrink mt-8":true,"opacity-0":!showResult}}>
+                        <div class={{
+                            "w-3/5 inline-flex items-center gap-2 px-6 lg:py-1 lg:mb-2 py-3 rounded-full font-semibold mb-6":true,
+                            "bg-green-100 text-green-800":answer==main_display.meaning,
+                            "bg-red-100 text-red-800":!(answer==main_display.meaning)}}>
+                        {answer==main_display.meaning? "✔正解":"✗不正解"}    
+                        </div>
+                    </div>
             </div>
             <div class="flex flex-col items-center grow gap-4 mb-8">
-                {#each subdisplays as subdisplay, i}
-                <button  disabled={showResult} onclick={() => postAnswer(subdisplay.meaning)} class={{
-                    "w-full px-3 py-4 text-left rounded-xl border-2 transition-all duration-200 font-medium":true,
+                {#each subdisplays as subdisplay, i (i)}
+                <button disabled={showResult} onclick={() => {postAnswer(subdisplay.meaning).then(() => {nextQuestion()});}} class={{
+                    "w-full px-3 py-4 text-left rounded-xl border-2 transition-all duration-300 font-medium":true,
                     "border-slate-200 hover:border-blue-300 hober:bg-blue-50 bg-slate-100 hover:shadow-md cursor-pointer":!showResult,
                     "border-green-500 bg-green-100 text-green-800":showResult && answerInfo[i],
                     "border-red-500 bg-red-100 text-red-800": showResult && !answerInfo[i] && answer==subdisplay.meaning,
@@ -158,19 +181,6 @@
                 {subdisplay.meaning}
                 </button>
                 {/each}
-                {#if showResult}
-                    <div  class="text-center shrink mt-8 lg:absolute lg:bottom-30 lg:right-40">
-                        <div class={{
-                            "inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold mb-6":true,
-                            "bg-green-100 text-green-800":answer==main_display.meaning,
-                            "bg-red-100 text-red-800":!(answer==main_display.meaning)}}>
-                        {answer==main_display.meaning? "✔正解":"✗不正解"}    
-                        </div>
-                        <button onclick={() => {clearInfo();showQuestion()}} class="btn btn-active btn-primary rounded-2xl">
-                        次の問題へ➙
-                        </button>
-                    </div>
-                {/if}
             </div>
             
             {:else}
@@ -189,7 +199,7 @@
                 <button onclick={()=> goto("./wordsdashboard")} class="btn btn-lg btn-active font-bold rounded-2xl btn-primary">
                     勉強終了
                 </button>
-                <button onclick={()=>{clearInfo;createQuestions(wordslist);showQuestion}} class="rounded-2xl font-bold btn btn-lg btn-active btn-primary">
+                <button onclick={()=>{clearInfo();createQuestions(wordslist);questionIndex=-1;showQuestion();isQuizComplete=false;score=0;}} class="rounded-2xl font-bold btn btn-lg btn-active btn-primary">
                 もう一回勉強する
                 </button>
                 </div>

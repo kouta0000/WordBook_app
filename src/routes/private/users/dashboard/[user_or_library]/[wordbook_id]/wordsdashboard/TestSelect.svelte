@@ -1,5 +1,5 @@
 
-<div class="h-screen w-full pt-15 pb-15 flex items-center justify-center bg-linear-to-br from-indigo-900 to-indigo-700 absolute z-20">
+<div class="h-screen w-full pt-15 pb-15 flex items-center justify-center bg-slate-100 absolute z-20">
     <div class="system-2">
         <div class="display">
             <div class="screen">
@@ -8,8 +8,8 @@
                     <a href="./4taku" class="block menu-item w-full">
                         ４択問題
                     </a>
-                    <a href="./tsuzuri" class="block menu-item w-full">
-                        綴り問題
+                    <a href="./input" class="block menu-item w-full">
+                        入力問題
                     </a>
                     <div class="menu-item">クロスワード（開発中）</div>
                     <div class="menu-item">もぐらたたき（開発中）</div>
@@ -21,7 +21,7 @@
 </div>
 <style>
  .system-2 .display {
-            background: linear-gradient(145deg, #2a2a3a, #1a1a2a);
+            background: linear-gradient(145deg, #cecedf, #a9a9e4);
             border: 15px solid #444;
             border-radius: 25px;
             position: relative;
@@ -31,7 +31,7 @@
         .system-2 .screen {
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, #010175 0%, #000091 100%);
+            background: linear-gradient(to bottom, #cecee9 0%, #c4c4f5 100%);
             border-radius: 10px;
             padding: 25px;
             position: relative;
@@ -51,14 +51,15 @@
 
 
         .system-2 .menu-item {
-            background: linear-gradient(145deg, #333366, #222244);
+            background: linear-gradient(145deg, #8b8beb, #424294);
             border: 2px solid #5555aa;
             border-radius: 10px;
             padding: 15px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            color: #cadffd;
+            color: #f7f8fa;
+            font-weight: 900;
         }
 
         .system-2 .menu-item:hover {

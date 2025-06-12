@@ -3,219 +3,198 @@
     import TestBackground1 from './TestBackground1.svelte';
     import TestBackground2 from './TestBackground2.svelte';
     import type { Action } from 'svelte/action';
+    import {fit, parent_style} from "@leveluptuts/svelte-fit";
     import {onMount} from "svelte";
-    onMount(()=>{
-        displayNewWords();
-        showdisplays=true;
-    })
+    import Test from './Test.svelte';
+    import { goto } from '$app/navigation';
+    import {tick} from "svelte";
 
     //変数宣言
-    let { wordslist, user_or_library } = $props();
-
-
-    let progress:number = $state(0);
-    let main_display: string = $state("");
-    let subdisplays: Array<Word> = $state([]);
-    let showcurtain: boolean = $state(true);
-    let showarrow: boolean = $state(false);
-    let t_start_x: number = $state(0);
-    let t_end_x: number = $state(0);
-    const swipeLength: number = 50;
-    let showdisplays: boolean = $state(false);
-    let testend: boolean = $state(false);
-    let isCorrect: boolean = $state(false);
-    let isWrong: boolean = $state(false);
-    let showContinue: boolean = $state(false);
-
-    let blocks: Array<string> = $state([]);
-    let answer:string = $state("")
-    let inputedWord:string[] = $state([]);
-
-    let toContinue:boolean = $state(false);
-    let corrects = [10,20,30,40,50]
-  
+    let { wordslist, wb_name, user_or_library } = $props();
+    let main_input:HTMLInputElement | null = $state(null);
+    let wordslength = $state(wordslist.length);
+    let count = $state(0)
+    let testStarted = $state(false);
+    let length = $state(10);
+    let message = $state("");
+    let questions:Word[] = $state([]);
+    let isQuizComplete = $state(false);
+    let main_display = $state("");
+    let currentWord:Word = $state({term:"",meaning:""})
+    let questionIndex = $state(-1);
+    let score =$state(0);
+    let answer = $state("");
+    let showResult = $state(false);
+    let isCorrect = $state(true);
     interface Word {
         "term": string;
         "meaning": string;
 
     };
-    //関数宣言
-    //テスト開始画面
-   
-    
-    //単語のランダム選択ロジック。
-    const getBlocks = (word:string):Array<string> => {
-        const blocks:Array<string> = Array(25).fill("")
-        const length = word.length;
-       
-        const indices: Set<number> = new Set();
-        while (indices.size < 25) {
-            const n = Math.floor(Math.random()*(25));
-            indices.add(n);
+    const startGame = () => {
+        if(typeof length != "number" || length<1 || length > 50) {
+            message = "問題数が不正です";
+            return
         }
-        let wordarray=word.split("");
-        for (const i of indices) {
-            if (wordarray.length >0){
-                blocks[i] = wordarray.pop()!;
-            }
-        }
-        return blocks
-    };
-
-    //選択した単語をdisplay変数に代入
-    const displayNewWords = () => {
-        const length = wordslist.length
-        let index = Math.floor(Math.random()*(length));
-        let word = wordslist[index];
-        while (word.term.length>=25) {
-            index = Math.floor(Math.random()*(length));
-            word = wordslist[index];
-        }
-        blocks = getBlocks(word.term);
-        main_display = word.meaning
-        answer = word.term
-        showdisplays = true;
-    };
-    const handleOnBlockClick = (block:string, i:number):void => {
-        inputedWord.push(block);
-        blocks[i]="";
+        testStarted = true;
+        createQuestions(wordslist);
+        showQuestion();
     }
-    const handleOnclickBack = ():void => {
-        if (!inputedWord) return;
-        let wordtoback = inputedWord.pop();
-        while (wordtoback) {
-            const randomIndex = Math.floor(Math.random()*25);
-            if (!blocks[randomIndex]) {
-                [blocks[randomIndex], wordtoback] = [wordtoback, ""]
-            }
+    const getRandomWord = (words:Word[]):Word => {
+        const randomIndex = Math.floor(Math.random()*wordslength);
+        const result = words[randomIndex];
+        return result
+    }
+    const createQuestions = (words:Array<Word>) => {
+        for (let i=0;i<length;i++) {
+            questions.push(getRandomWord(words));
         }
     }
-    const checkAnswer = (res:string[]):void => {
-        const length = res.length;
-        if (res.join("") == answer.slice(0,length)) {
-            if (!blocks.join("")) {
-                isCorrect = true;
-                showarrow=true;
-            } else {
-                isWrong=false;
-                return
-            }           
+    const showQuestion = async () => {
+        questionIndex++;
+        if (questionIndex<length) {
+            currentWord = questions[questionIndex];
+            main_display = currentWord.meaning;
+            await tick();
+            setTimeout(()=> main_input?.focus(), 50);            
         } else {
-            isWrong = true;
+            isQuizComplete = true;
+        }
+
+    }
+    const clearInfo = () => {
+        count=0;
+        showResult = false;
+        answer = "";
+        currentWord={meaning:"", term:""};
+    }
+    const checkAnswer = async () => {
+        if (answer == currentWord.term) {
+            isCorrect = true;
+            if(!count) score++;
+            count++
+            showResult = true;
+            setTimeout(()=>{nextQuestion()}, 1500);
+        } else {
+            count++;
+            answer="";
+            isCorrect = false;
+            showResult = true;
+            await tick();
+            setTimeout(()=> main_input?.focus(),50);
+            setTimeout(()=>showResult=false, 1500);
+            
+            
         }
     }
+    
+    const nextQuestion = () => {
+        clearInfo();
+        showQuestion();
+    }
 
-    //スワイプ操作処理
-    const handleOnTouchStart = (e: TouchEvent) => {
-        t_start_x = e.touches[0].clientX;
-    };
-   /* const handleOnTouchMove = (e: TouchEvent) => {
-        const t_acctualx: number = e.touches[0].clientX;
-        if (t_start_x-t_acctualx >= 0) {
-            arrowx = (t_start_x-t_acctualx);
-        }
-
-    };*/
-
-    const handleOnTouchEnd = (e: TouchEvent) => {
-            t_end_x = e.changedTouches[0].clientX;
-        if (t_start_x-t_end_x >= swipeLength) {
-            showarrow = false;
-            showdisplays = false;
-            toContinue=false;
-            if (isCorrect) progress++
-            isCorrect = false;
-            isWrong = false;
-            inputedWord=[];
-        };
-
-        
-        
-    };
 </script>
 
 
-<div id="displays" class="w-full h-screen pt-30 lg:pt-35 pb-10 flex flex-col lg:flex-row  justify-center  items-center overflow-clip z-19 relative">
-    {#each corrects as i (i)}
-    {#if progress==i && i<20 && !toContinue}
-    <div out:fade in:scale={{duration:1000, opacity:0, start:0.1}} id="displays" class="w-full h-full flex absolute justify-center items-center  z-22 bg-gray-900/50">
-        <div class="w-full md:w-3/5 flex flex-col  gap-7 justify-center items-center p-5 rounded-xl bg-linear-to-br from-gray-950 via-emerald-950 to-gray-950 shadow-2xl shadow-emerald-500 inset-shadow-2xl  border-1 border-emerald-300 text-emerald-500 ">
-        <h1 class="text-4xl whitespace-nowrapt">{i}問正解🎉</h1>
-        <p class="text-2xl">テストを続けますか</p>
-        <button class="btn btn-outline border-1 border-emerald-300 rounded-3xl shadow-lg" onclick={() => {toContinue=true}}><p class="text-xl text-emerald-300">続ける</p></button>
-        <button class="btn btn-outline  border-1 border-emerald-300 rounded-3xl shadow-lg" onclick={() => {testend=true; showdisplays=false; isCorrect=false; isWrong=false;showarrow=false;progress=0}}><p class="text-xl text-emerald-300">終わる</p></button>
+<div id="displays" class="w-full  bg-linear-to-br from-white to-slate-100 h-screen p-4 flex gap-4 overflow-auto absolute z-20 relative">
+    {#if !testStarted}
+    <div class="absolute inset-0 bg-slate-100 flex justify-center items-center z-21">
+    <div class="flex flex-col  gap-3 justify-between bg-white w-9/10 md:w-3/5 lg:w-3/10  p-8 rounded-2xl shadow-lg">
+        <div class="mb-3">
+            <h1 class="text-4xl text-center font-bold text-gray-800 mb-1">単語入力テスト</h1>
         </div>
+        <h1 class="text-center text-xl text-gray-700 mb-5">問題数を決めてね！</h1>
+        <label class="input validator w-2/3 mx-auto rounded-2xl mx-auto text-lg text-gray-900 rounded-2xl bg-slate-100">
+        <input type="number" min="1" max="50" bind:value={length} class="text-center ">
+        問
+        </label>
+        <p class="text-right font-xs text-red-800">{message}</p>
+        <p class="text-right font-xs text-gray-800 ">問題数は1~50問のあいだです
+        </p>
+        <button onclick={startGame} class="btn btn-active btn-primary rounded-2xl mt-5">
+            ▶テスト開始
+        </button>
+        <button onclick={()=> goto("./wordsdashboard")} class="btn mx-auto w-1/2 btn-sm btn-outline font-bold rounded-2xl btn-primary">
+            戻る
+        </button>
     </div>
-    {:else if progress==i && i==20}
-    <div out:fade in:scale={{duration:1000, opacity:0, start:0.1}} id="displays" class="w-full h-full absolute flex justify-center items-center  z-22 bg-stone-100/40">
-        <div class="w-full md:w-3/5 flex flex-col  gap-7 justify-center items-center p-5 rounded-xl bg-linear-to-br from-gray-950 via-emerald-950 to-gray-950 shadow-2xl shadow-emerald-500 inset-shadow-2xl  border-1 border-emerald-300 text-emerald-500 ">
-        <h1 class="text-4xl whitespace-nowrap">{i}問正解🎉🚀😁</h1>
-        <p class="text-2xl">テストを続けますか</p>
-        <button class="btn btn-outline border-1 border-emerald-300 rounded-3xl shadow-lg" onclick={() => {progress=0}}><p class="text-xl text-emerald-300">続ける</p></button>
-        <button class="btn btn-outline border-1 border-emerald-300  rounded-3xl shadow-lg" onclick={() => {testend=true; showdisplays=false; isCorrect=false; showAnswers=false;toContinue=false;isDisabled=false;isWrong=false;showarrow=false;progress=0}}><p class="text-xl text-emerald-300 ">終わる</p></button>
-        </div>
     </div>
     {/if}
-    {/each}
-    <TestBackground1 />
-    {#if showdisplays}
-    
-        <div class="flex w-4/5 md:w-3/5 lg:w-1/2 lg:mr-10 flex-col gap-8">
-        <div  id="main_display" class="screen screen2 aspect-3/2 lg:aspect-4/1 bg-linear-to-br from-gray-950 via-emerald-950 to-gray-950 shadow-2xl shadow-emerald-500 inset-shadow-2xl flex w-full  lg:ml-5 rounded-3xl border-1 border-emerald-300 text-emerald-500 mb-10 lg:mb-6 relative z-18" >
-            <h1 onoutroend={() => displayNewWords()} transition:fade class="text-shadow-sm text-emerald-100 text-shadow-emerald-100/50 m-auto text-2xl md:text-5xl p-2 lg:p-5">{ main_display }</h1>
-            <svg preserveAspectRatio="xMidYMidmeet" height="110" width="110" class={{"absolute -right-8 lg:right-10 -top-15 fill-none rotate-140":true, "opacity-0":!isCorrect}}>
-                <circle cx="55" cy="55" r="50" stroke-linecap="round" class="overflow-visible stroke-red-400 transition-all duration-500 ease-out" stroke-width="10" stroke-dasharray="314 315" style="stroke-dashoffset:{isCorrect? 0: 315};" />
-            </svg>
-            <svg preserveAspectRatio="xMidYMidmeet" height="110" width="110" class="absolute -right-8 lg:right-auto lg:left-10 -top-15 fill-none">
-                <line x1="105" y1="5" x2="5" y2="105" stroke-linecap="round" class="stroke-sky-500 transition-all duration-200" stroke-width="10" stroke-dasharray="142" style="stroke-dashoffset:{isWrong? 0: 142};" />
-                <line x1="5" y1="5" x2="105" y2="105" stroke-linecap="round" class="stroke-sky-500 transition-all delay-200 duration-200" stroke-width="10" stroke-dasharray="142" style="stroke-dashoffset:{isWrong? 0: 142};" />
-            </svg>
-        </div>
-        </div>
-        <div class="flex items-center flex-col mt-8 lg:mt-3 w-4/5 md:w-3/5 lg:w-3/10 z-18 gap-2">
-            <div id="main_input" class="screen screen2  bg-linear-to-br from-gray-950 via-emerald-950 to-gray-950  shadow-emerald-500 inset-shadow-xl flex  w-full lg:ml-5 rounded-3xl border-1 border-emerald-300 text-emerald-500 mb-3 lg:mb-6 relative z-18" >
-                <h1 class="text-shadow-sm text-emerald-100 text-shadow-emerald-100/50 m-auto p-1  lg:p-4 text-2xl md:text-4xl overflow-auto ">{inputedWord.join("")}<span class="blink text-bold text-shadow-sm text-emerald-100 text-shadow-emerald-100/50 text-3xl md:text-4xl font-semibold">|</span></h1>
-                <button onclick={()=>{handleOnclickBack();checkAnswer(inputedWord)}} class="text-emerald-200 text-shadow-emerald-200 text-shadow-sm text-xl absolute top-0 bottom-0 rounded-3xl right-0 border-1 border-emerald-300 aspect-square">◀</button>
+    {#if isQuizComplete}
+    <div class="absolute inset-0 bg-slate-100 flex justify-center items-center z-21">
+        <div class="flex flex-col  gap-3 justify-between bg-white w-9/10 md:w-3/5 lg:w-1/5  p-8 rounded-2xl shadow-lg">
+            <div class="mb-3">
+                <h1 class="text-3xl text-center font-bold text-gray-800 mb-1">テスト完了🎉</h1>
+                <p class="text-gray-600 text-center">お疲れ様でした</p>
             </div>
-        <div transition:fade class="w-4/5 md:w-3/5 aspect-square grid grid-cols-5">
-        {#each blocks as block, i (i)}
-        <div class="screen screen2 aspect-square bg-linear-to-r from-gray-950 via-emerald-950 to-gray-950 border-1 border-emerald-300 shadow-2xl inset-shadow-2xl shadow-emerald-500 bg-black relative">
-        {#if !(block=="")}
-        <div out:fly={{duration:500, y:-200}} onclick={() => {handleOnBlockClick(block, i);checkAnswer(inputedWord)}} class="cursor-pointer absolute inset-0 flex justify-center items-center bg-linear-to-r from-gray-950 via-emerald-950 to-gray-950 aspect-square border-1 border-emerald-300 shadow-2xl inset-shadow-2xl shadow-emerald-500 bg-black">
-           <p  class="text-shdow-lg text-shadow-emerald-300/80 text-emerald-200 text-3xl md:text-4xl">{block === "\u0020"? "▶": block}</p>
+            <div class="mb-5 p-6  rounded-xl">
+            <div class="bg-linear-to-r from-blue-100 to-indigo-100 rounded-2xl p-8 mb-8">
+                <h1 class="font-semibold text-gray-800 mb-3">結果</h1>
+                <div class="text-5xl font-bold text-blue-600 mb-2">
+                    {score}/{length}
+                </div>
+                <div class="text-xl text-gray-600">
+                    正答率：{Math.round((score / length)*100)}%
+                </div>
+            </div>
+            </div>
+            <div class="w-full flex gap-1 justify-center p-5">
+            <button onclick={()=> goto("./wordsdashboard")} class="btn btn-lg btn-active font-bold rounded-2xl btn-primary">
+                勉強終了
+            </button>
+            <button onclick={()=>{clearInfo();createQuestions(wordslist);questionIndex=-1;showQuestion();isQuizComplete=false;score=0;}} class="rounded-2xl font-bold btn btn-lg btn-active btn-primary">
+            もう一回勉強する
+            </button>
+            </div>
         </div>
-        {:else}
-        <div class="absolute inset-0 flex justify-center items-center aspect-square">
-            <p class="text-shdow-lg text-shadow-emerald-300/80 text-emerald-200 text-3xl md:text-4xl">{block}</p>
-         </div>
-        {/if}
-        </div>
-        {/each}
-        </div>
-        <div id="test_buttons" class="w-full flex flex-row gap-3 items-center mt-6 lg:mt-3 lg:mr-5">
-            <a href="./wordsdashboard" class={{
-                "btn btn-outline border-1 border-emerald-300 text-emerald-300 font-bold rounded-2xl lg:grow btn-info": true
-                }} >テスト終了</a>
-            <button class={{
-                "hidden lg:block btn btn-outline rounded-2xl border-1 border-emerald-300 text-emerald-300 grow": true, 
-                }} onclick={() => {showdisplays = false;if(isCorrect)progress++;toContinue=false;isCorrect=false;isWrong=false;inputedWord=[]}}>次の問題</button>
-        </div>
-        </div>
-        
-        
-    {/if}
-    
-
-    {#if showarrow}
-    <div id="swipe_arrow" class="z-20 flex justify-center items-end lg:hidden w-1/3 h-full absolute right-10 bottom-0" 
-    ontouchstart={handleOnTouchStart} ontouchend={handleOnTouchEnd}>
-        <svg  viewBox="0 0 100 100" height="50" width="50" class="mb-65 animate-bounce opacity-90" >
-            <polyline points="50,0 0,50 50,100" class="fill-emerald-300" stroke-width="10" stroke-linecap="round"/>
-            <polyline points="100,0 50,50 100,100" class="fill-emerald-300" stroke-width="10" stroke-linecap="round"/>
-        </svg>
     </div>
     {/if}
-   
+    {#if !isQuizComplete}
+    <div class="w-full md:w-4/5 lg:w-3/10 mx-auto flex flex-col bg-slate-50 rounded-2xl shadow-xl">
+        <div class=" shadow-lg shadow-slate-100 bg-linear-to-br from-indigo-400 to-indigo-300 rounded-2xl text-gray-100 font-bold p-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1">
+                    <h1 class="text-2xl max-w-4/5">{wb_name}</h1>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm opacity-90 whitespace-nowrap">進行度</div>
+                    <div class="text-lg font-bold">
+                        {`${questionIndex}/${length}`}
+                    </div>
+                </div>
+                
+            </div>
+            <form class="w-full p-5 ">
+                <input bind:this={main_input} class="w-full focus:outline-none p-4 border-none rounded-xl bg-gray-100 h-18 text-gray-900 text-2xl" type="text" bind:value={answer} placeholder={!isCorrect? currentWord.term:""}>
+                <button onclick={checkAnswer} class="hidden" type="submit"></button>
+            </form>
+            
+            <div class={{"transition-all duration-200 text-center shrink":true,"opacity-0":!showResult}}>
+                <div class={{
+                    " w-3/5 inline-flex items-center gap-2 px-6 py-2 lg:mb-2 rounded-full font-semibold mb-3":true,
+                    "bg-green-100 text-green-800":isCorrect,
+                    "bg-red-100 text-red-800":!isCorrect}}>
+                    {isCorrect? "✔正解":"✗不正解"}    
+                </div>
+            </div>
+            <div class="w-full">
+                <progress class="progress progress-primary h-2 bg-slate-50" value={questionIndex*(100/length)} max="100"></progress>
+            </div>
+        </div>
+
+        <div class="p-8 grow flex flex-col">
+            <div class="text-center">
+                <div class="bg-indigo-100 rounded-2xl mb-4">
+                    <div style={parent_style}>
+                        <div use:fit={{min_size:10, max_size:35}} class="px-5 py-8 max-h-40 lg:max-h-20 lg:py-3 text-wrap font-bold text-gray-800">
+                            {main_display}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/if}
 </div>
    
 <style>

@@ -32,7 +32,7 @@
         "dock-active text-gray-900":currentView =="edit",
         "text-gray-500":currentView=="memo" || currentView=="test" || currentView == "test2"
         }}>
-        <span class="dock-label">ホーム</span>
+        
     </button>
     {/if}
     <button onclick={()=> currentView = "memo"} class={{
@@ -40,7 +40,18 @@
         "dock-active text-gray-900":currentView=="memo",
         "text-gray-500": currentView=="test" || currentView == "edit" || currentView == "test2"
         }}>
-        <span class="dock-label">覚える</span>
+        <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        class="size-6 text-gray-700"
+      >
+        <line x1="3" y1="20" x2="21" y2="20" stroke="currentColor" stroke-width="1.5" />
+        
+        <rect x="5" y="14" width="4" height="6" fill="currentColor" rx="0.5" ry="0.5" />
+        
+        <rect x="10" y="10" width="4" height="10" fill="currentColor" rx="0.5" ry="0.5" />
+        <rect x="15" y="6" width="4" height="14" fill="currentColor" rx="0.5" ry="0.5" />
+      </svg>
     </button>
     
     <button onclick={() => currentView = "test"} class={{
@@ -48,7 +59,21 @@
         "dock-active text-gray-900":currentView=="test",
         "text-gray-500": currentView=="memo" || currentView == "edit" || currentView == "test2"
         }}>
-        <span class="dock-label">テスト</span>
+        <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        class="size-6 text-gray-700"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2" fill="none" />
+        <polyline
+          points="7,12 10,15 17,8"
+          stroke="currentColor"
+          stroke-width="3"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
     </button>
 </div>
 

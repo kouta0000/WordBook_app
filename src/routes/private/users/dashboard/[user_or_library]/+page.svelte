@@ -20,9 +20,24 @@
 
 <div class="dock">
     <button onclick={() => currentView = "user"} class={{"dock-active text-gray-900":currentView=="user","text-gray-500":currentView=="library"}} >
-        <span class="dock-label">単語帳</span>
+        <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        class="size-6 text-gray-700 fill-none"
+      >
+        <polygon points="4 11 12 3 20 11" stroke="currentColor" stroke-width="2" />
+        <rect x="5" y="10" width="14" height="11" rx="1" ry="1" stroke="currentColor" stroke-width="2"/>
+      </svg>
     </button>
     <button onclick={() => currentView = "library"} class={{"dock-active text-gray-900":currentView=="library","text-gray-500":currentView=="user"}}>
-        <span class="dock-label">ライブラリー</span>
+        <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    class="size-6 text-green-800"
+  >
+    <rect x="4" y="15" width="16" height="4" fill="currentColor" rx="1" ry="1" />
+    <rect x="6" y="9.5" width="16" height="4" fill="currentColor" rx="1" ry="1" />
+    <rect x="8" y="4" width="16" height="4" fill="currentColor" rx="1" ry="1" />
+  </svg>
     </button>
 </div>

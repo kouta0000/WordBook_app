@@ -25,27 +25,31 @@ let { session, supabase } = $derived(data);
         </div>
         <div class="dropdown dropdown-end p-3 h-full aspect-square relative">
             <div tabindex="0" role="button" class="size-full">
-                <svg class="size-full" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <!-- 中央の円盤 -->
-                    <circle cx="50" cy="50" r="20" fill="#888888"/>
-                    
-                    <!-- 8つの四角い歯（円盤とくっつけて配置） -->
-                    <rect x="47" y="10" width="8" height="20" fill="#888888"/>
-                    <rect x="70" y="47" width="20" height="8" fill="#888888"/>
-                    <rect x="47" y="70" width="8" height="20" fill="#888888"/>
-                    <rect x="10" y="47" width="20" height="8" fill="#888888"/>
-                    <rect x="60.61" y="25.25" width="14.14" height="12" fill="#888888" transform="rotate(45 67.68 28.25)"/>
-                    <rect x="60.61" y="68.75" width="14.14" height="12" fill="#888888" transform="rotate(135 67.68 71.75)"/>
-                    <rect x="25.25" y="68.75" width="14.14" height="12" fill="#888888" transform="rotate(-135 32.32 71.75)"/>
-                    <rect x="25.25" y="25.25" width="14.14" height="12" fill="#888888" transform="rotate(-45 32.32 28.25)"/>
-                    
-                    <!-- 中央の穴 -->
-                    <circle cx="50" cy="50" r="8" fill="white"/>
-                  </svg>
+              <svg
+              class="size-full text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
             </div>
             <ul tabindex="0" class="dropdown-content menu bg-white rounded-box w-4/1 p-2 shadow-sm">
               <li class="hover:bg-slate-100 p-3 cursor-pointer " onclick={logout}>ログアウト</li><hr class="border-slate-100 w-4/5">
-              <li class="hover:bg-slate-100 p-3 cursor-pointer ">プロフィール</li><hr class="border-slate-100 w-4/5">
+              <li class="hover:bg-slate-100 p-3 cursor-pointer">プロフィール
+              </li><hr class="border-slate-100 w-4/5">
             </ul>
           </div>
     </div>

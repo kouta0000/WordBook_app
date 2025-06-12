@@ -21,7 +21,7 @@
 
 
     
-<div class="bg-slate-200/80 px-4 flex justify-end items-center fixed absolute top-15 py-2  lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-11">
+<div class="bg-slate-100/80 px-4 flex justify-end items-center fixed absolute top-15 py-2  lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-11">
 {#if user_or_library == "user"}
 <a href="../../../dashboard/user" class="active:scale-80 btn bg-indigo-200 rounded-3xl w-1/3 w-min basis-0 text-black">
    <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
@@ -33,10 +33,10 @@
 {/if}
 </div>
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center ">
-        <div class="text mt-23 mb-4 lg:mt-20 w-full flex justify-center items-center realtive h-20">
-            <h1 class=" shadow-lg p-6 mb-6 text-white text-2xl rounded-3xl bg-linear-to-br from-indigo-800 to-sky-500">{wb_name}</h1>
+        <div class="text mt-23 mb-10 lg:mt-20 w-full flex justify-start items-center realtive h-20">
+            <h1 class="shadow-lg p-6 ml-10 mb-6 text-white text-2xl max-w-3/5 rounded-3xl bg-linear-to-br from-indigo-500 to-sky-500">{wb_name}</h1>
         </div> 
-        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-x-0 items-center place-items-center relative">
+        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
             <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-4 justify-end items-center absolute fixed bottom-17 md:bottom-22 md:right-20 z-20">
                 {#if creating}
                 <div out:fade={{delay:800}} class="btn bg-indigo-500 rounded-3xl flex gap-1">

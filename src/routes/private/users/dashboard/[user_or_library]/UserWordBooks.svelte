@@ -111,7 +111,7 @@ interface Wordbook {
                     <Gabyo />                           
                 </div>
                 <h1 class="text-xl mb-2">{wordbook.wb_name}</h1>
-                <p class="text-sm text-stone-400">言語：{wordbook.language?? "none"} ; 語数： ; 最終更新：</p>
+                <p class="text-sm text-stone-400">言語：{wordbook.language?? "none"}</p>
                 <hr class="h-2 w-full bg-indigo-300 rounded-3xl">
             </div>
             {/each}

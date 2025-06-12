@@ -28,7 +28,7 @@
     
     </script>
     
-    <div class="bg-slate-200/80 px-2 flex justify-center md:justify-end items-center fixed absolute top-15 py-2 lg:h-15 w-full flex flex-row flex-wrap gap-1 mb-10 z-11">
+<div class="bg-slate-100/80 px-2 flex justify-center md:justify-end items-center fixed absolute top-15 py-2 lg:h-15 w-full flex flex-row flex-wrap gap-1 mb-10 z-11">
         <button class="active:scale-0.8 shadow-sm btn btn-sm bg-indigo-500 rounded-3xl w-min basis-0" onclick={() => shuffleWords(wordsc)}>
             <p class="whitespace-nowrap text-white font-bold">混ぜる</p>
         </button>
@@ -50,10 +50,14 @@
     </div>
     
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center">
-        <div class="mt-23 mb-4 lg:mt-20  w-full flex justify-center  items-center realtive h-20">
-            <h1 class="shadow-lg p-6 mb-6 text-white text-2xl rounded-3xl bg-linear-to-br from-indigo-800 to-sky-500">{wb_name}</h1>
+        <div class="mt-23 mb-10 lg:mt-20  w-full flex gap-5 justify-center items-center realtive h-20">
+            <h1 class="shadow-lg p-6 text-white text-2xl max-w-3/5 rounded-3xl bg-linear-to-br from-indigo-500 to-sky-500">{wb_name}</h1>
+            <div class="flex flex-col gap-2 justify-center">
+            <a href="./4taku" class="btn btn-base border-none shadow-sm rounded-3xl">4択テスト</a>
+            <a href="./input" class="btn btn-base border-none shadow-sm rounded-3xl">入力テスト</a>
+            </div>
         </div> 
-        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-x-0 items-center place-items-center relative">
+        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
             <button onclick={() => isChecked = false} class={{"w-4/5 md:w-2/5 lg:w-1/5 lg:h-20 absolute fixed opacity-95 z-11 bottom-24 lg:bottom-25 lg:right-5 btn btn-info rounded-2xl grow opacity-80":true, "hidden":!isChecked, "block":isChecked}}>
                 <p class="text-white">削除</p>
             </button>
@@ -68,9 +72,11 @@
                         </div>
                         <div class="w-full min-h-8">
                         {#if shows[i]}
-                        <p transition:fade={{duration:300}} class="text-gray-500 text-right font-sans p-1 pr-2">
+                        <div style={parent_style}>
+                        <p use:fit={{min_size:5, max_size:20}} transition:fade={{duration:300}} class="text-gray-500 text-right font-sans p-1 pr-2">
                         {isFlipped? word.term: word.meaning}
                         </p>
+                        </div>
                         {/if}
                         </div>
                     </div>  
