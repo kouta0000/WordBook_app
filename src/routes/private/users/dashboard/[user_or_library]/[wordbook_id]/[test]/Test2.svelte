@@ -150,11 +150,11 @@
     </div>
     {/if}
     {#if !isQuizComplete}
-    <div class="w-full md:w-4/5 lg:w-3/10 mx-auto flex flex-col bg-slate-50 rounded-2xl shadow-xl">
+    <div class="w-full md:w-4/5 lg:w-3/10 mx-auto h-1/2 lg:h-full flex flex-col bg-slate-50 rounded-2xl shadow-xl">
         <div class=" shadow-lg shadow-slate-100 bg-linear-to-br from-indigo-400 to-indigo-300 rounded-2xl text-gray-100 font-bold p-8">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-1">
-                    <h1 class="text-2xl max-w-4/5">{wb_name}</h1>
+                    <h1 class="text-sm max-w-4/5">{wb_name}</h1>
                 </div>
                 <div class="text-right">
                     <div class="text-sm opacity-90 whitespace-nowrap">進行度</div>
@@ -164,14 +164,14 @@
                 </div>
                 
             </div>
-            <form class="w-full p-5 ">
-                <input bind:this={main_input} class="w-full focus:outline-none p-4 border-none rounded-xl bg-gray-100 h-18 text-gray-900 text-2xl" type="text" bind:value={answer} placeholder={!isCorrect? currentWord.term:""}>
+            <form class="w-full p-3 ">
+                <input bind:this={main_input} class="w-full focus:outline-none p-3 border-none rounded-xl bg-gray-100 h-15 text-gray-900 text-xl" type="text" bind:value={answer} placeholder={!isCorrect? currentWord.term:""}>
                 <button onclick={checkAnswer} class="hidden" type="submit"></button>
             </form>
             
             <div class={{"transition-all duration-200 text-center shrink":true,"opacity-0":!showResult}}>
                 <div class={{
-                    " w-3/5 inline-flex items-center gap-2 px-6 py-2 lg:mb-2 rounded-full font-semibold mb-3":true,
+                    " w-3/5 inline-flex items-center gap-2 px-6 py-1 lg:mb-2 rounded-full font-semibold mb-3":true,
                     "bg-green-100 text-green-800":isCorrect,
                     "bg-red-100 text-red-800":!isCorrect}}>
                     {isCorrect? "✔正解":"✗不正解"}    
@@ -186,7 +186,7 @@
             <div class="text-center">
                 <div class="bg-indigo-100 rounded-2xl mb-4">
                     <div style={parent_style}>
-                        <div use:fit={{min_size:10, max_size:35}} class="px-5 py-8 max-h-40 lg:max-h-20 lg:py-3 text-wrap font-bold text-gray-800">
+                        <div use:fit={{min_size:5, max_size:25}} class="px-5 py-5 max-h-25 lg:max-h-20 lg:py-3 text-wrap font-bold text-gray-800">
                             {main_display}
                         </div>
                     </div>

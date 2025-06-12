@@ -32,7 +32,22 @@
         "dock-active text-gray-900":currentView =="edit",
         "text-gray-500":currentView=="memo" || currentView=="test" || currentView == "test2"
         }}>
-        
+        <svg
+        class="size-6 text-gray-700"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="6" cy="6" r="2" />
+        <circle cx="12" cy="6" r="2" />
+        <circle cx="18" cy="6" r="2" />
+        <circle cx="6" cy="12" r="2" />
+        <circle cx="12" cy="12" r="2" />
+        <circle cx="18" cy="12" r="2" />
+        <circle cx="6" cy="18" r="2" />
+        <circle cx="12" cy="18" r="2" />
+        <circle cx="18" cy="18" r="2" />
+      </svg>
     </button>
     {/if}
     <button onclick={()=> currentView = "memo"} class={{
