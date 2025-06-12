@@ -19,7 +19,7 @@ interface Wordbook {
     let forms:Array<HTMLFormElement> = $state([]);
     let deleting: boolean = $state(false);
     let dialog: HTMLDialogElement | undefined = $state();
-    const dinosors = ["/images/trex.png", "/images/ptella.png", "/images/raptor.png", "/imgaes/tri.png","/images/presio", "/images/presio", "images/black.png"]
+    const dinosors = ["/images/tlex.png", "/images/ptella.png", "/images/raptor.png", "/imgaes/tri.png","/images/presio", "/images/presio", "images/black.png"]
 </script>
    
 <dialog bind:this={dialog} id="my_modal" class="modal">
