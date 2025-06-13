@@ -67,7 +67,6 @@
         showResult = false;
         answer = "";
         currentWord={meaning:"", term:""};
-        questions = [];
     }
     const checkAnswer = async () => {
         if (answer == currentWord.term) {
@@ -143,7 +142,7 @@
             <button onclick={()=> goto("./wordsdashboard")} class="btn btn-lg btn-active font-bold rounded-2xl btn-primary">
                 勉強終了
             </button>
-            <button onclick={()=>{clearInfo();createQuestions(wordslist);questionIndex=-1;showQuestion();isQuizComplete=false;score=0;}} class="rounded-2xl font-bold btn btn-lg btn-active btn-primary">
+            <button onclick={()=>{clearInfo();questions = [];createQuestions(wordslist);questionIndex=-1;showQuestion();isQuizComplete=false;score=0;}} class="rounded-2xl font-bold btn btn-lg btn-active btn-primary">
             もう一回勉強する
             </button>
             </div>
