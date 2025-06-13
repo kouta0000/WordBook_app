@@ -177,7 +177,7 @@
                     "border-green-500 bg-green-100 text-green-800":showResult && answerInfo[i],
                     "border-red-500 bg-red-100 text-red-800": showResult && !answerInfo[i] && answer==subdisplay.meaning,
                     "border-slate-200 bg-slate-100":showResult && !answerInfo[i] && !(answer==subdisplay.meaning)}}>
-                <span class="rounded-full bg-radial from-white to-slate-100 p-3 mr-4">{i}</span>
+                <span class="rounded-full bg-radial from-white to-slate-100 p-3 mr-4">{i+1}</span>
                 {subdisplay.meaning}
                 </button>
                 {/each}
@@ -186,7 +186,7 @@
             {:else}
             <div class="text-center">
                 <div class="text-6xl mb-6">🎉</div>
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">お疲れ様でした</h2>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">お疲れ様です！</h2>
                 <div class="bg-linear-to-r from-blue-100 to-indigo-100 rounded-2xl p-8 mb-8">
                     <div class="text-5xl font-bold text-blue-600 mb-2">
                         {score}/{length}

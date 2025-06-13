@@ -19,7 +19,7 @@ const russian:Array<Wordbook> = [];
 const chinese:Array<Wordbook> = [];
 const korean:Array<Wordbook> = [];
 const oldjap:Array<Wordbook> = [];
-const dinosors = ["/images/tlex.png", "/images/ptella.png", "/images/raptor.png", "/images/tri.png","/images/presio.png", "/images/black.png"]
+let animaux = $state(["/images/comodo.png", "/images/monkey.png", "/images/turtle.png", "/images/penguin.png", "/images/camereon.png", "/images/tasma.png", "/images/frog.png", "/images/aligator.png", "/images/lezard.png"])
 for (const wordbook of wordbooks) {
     if (wordbook.language=="英語") english.push(wordbook)
     else if (wordbook.language=="フランス語") french.push(wordbook)
@@ -30,18 +30,18 @@ for (const wordbook of wordbooks) {
     else if (wordbook.language=="古文") oldjap.push(wordbook)
 }
 const languages = [
-            { id: 'english', name: '英語', nativeName: 'English', data:english },
-            { id: 'chinese', name: '中国語', nativeName: '中文', data:chinese },
-            { id: 'korean', name: '韓国語', nativeName: '한국어', data:korean },
-            { id: 'german', name: 'ドイツ語', nativeName: 'Deutsch', data:german },
-            { id: 'french', name: 'フランス語', nativeName: 'Français', data:french },
-            { id: 'russian', name: 'ロシア語', nativeName: 'Русский', data:russian },
+            { id: 1, name: '英語', nativeName: 'English', data:english },
+            { id: 2, name: '中国語', nativeName: '中文', data:chinese },
+            { id: 3, name: '韓国語', nativeName: '한국어', data:korean },
+            { id: 4, name: 'ドイツ語', nativeName: 'Deutsch', data:german },
+            { id: 5, name: 'フランス語', nativeName: 'Français', data:french },
+            { id: 6, name: 'ロシア語', nativeName: 'Русский', data:russian },
         ];
 
 </script>
     
     <div class="w-full min-h-screen pt-30 flex flex-col items-center">
-        <div class="tabs tabs-border tabs-xs md:tabs-lg  bg-white/80 rounded-b-3xl overflow-x-auto overflow-y-hidden flex-nowrap fixed absolute top-15 py-2 h-15 w-full flex flex-row justify-center items-center overflow-x-auto gap-1 z-11">
+        <div class="tabs tabs-border tabs-xs md:tabs-lg  bg-white/80 rounded-b-3xl overflow-x-auto overflow-y-hidden flex-nowrap fixed absolute top-15 py-2 h-15 w-full flex flex-row justify-center items-center overflow-x-auto gap-1 z-10">
             {#each languages as language (language.id)}
             
             <input onchange={()=> currentLang=language.name} type="radio" aria-label={language.name} id={language.id} name="language" class="tab">
@@ -58,9 +58,9 @@ const languages = [
                 <a href="./library/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
                 <div class="flex w-full justify-center items-center">
                     <div class="avatar w-1/5 aspect-square self-center">
-                        <div class="mask mask-squircle size-full p-1 relative">
+                        <div class="mask mask-squircle size-full relative">
                             <div class="absolute inset-0 bg-radial from-indigo-400/20 to-indigo-100/20"></div>
-                          <img class="" src={dinosors[id%dinosors.length]} />
+                          <img class="" src={animaux[(id+1)*(language.id)%(animaux.length)]} />
                         </div>
                     </div>
                     <div class="w-4/5 flex flex-col justify-center p-3">

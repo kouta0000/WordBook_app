@@ -5,6 +5,7 @@
     import {fly} from "svelte/transition";
     import Edit from "./Edit.svelte";
     import TestSelect from "./TestSelect.svelte";
+    import {navigating} from "$app/state";
      
      let { data, form }: PageProps = $props();
      let words = $state(data.loaddata.words.data);
@@ -16,7 +17,12 @@
      const wordbook_id = data.loaddata.wordbook_id; 
      
 </script>
-
+{#if navigating.to}
+<div class="w-full h-screen bg-slate-100 flex justify-center items-center">
+  <span class="loading loading-xl loading-bars text-indigo-500">
+  </span>
+</div>
+{/if}
 {#if currentView == "memo"}
 <Memo words={data.loaddata.words.data} user_or_library={user_or_library} wb_name={wb_name} language={language}/> 
 {:else if currentView == "edit"}

@@ -4,6 +4,7 @@
     import type { PageProps } from "./$types";
     import {fly} from "svelte/transition";
     import LibraryWordBooks from "./LibraryWordBooks.svelte";
+    import {navigating} from "$app/state";
     interface Wordbook {
     wb_name: any;
     id: any;
@@ -12,6 +13,13 @@
     let user_or_library = data.user_or_library;
     let currentView: string = $state(user_or_library);
 </script>
+{#if navigating.to || navigating.from}
+<div class="w-full h-screen bg-slate-100 flex justify-center items-center">
+  <span class="loading loading-xl loading-bars text-indigo-500">
+
+  </span>
+</div>
+{/if}
 {#if currentView == "user"}
 <UserWordBooks wordbooks={data.loaddata.user_wordbooks.data ?? []}/>
 {:else if currentView == "library"}

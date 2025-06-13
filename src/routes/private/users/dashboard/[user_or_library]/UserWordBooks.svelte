@@ -3,7 +3,8 @@ import {fly, fade} from "svelte/transition";
 import {enhance} from "$app/forms";
 import Gabyo from "./Gabyo.svelte";
 import Gabyo2 from "./Gabyo2.svelte";
-import LanguageRadioGroup from "./LanguageRadioGroup.svelte"
+import LanguageRadioGroup from "./LanguageRadioGroup.svelte";
+import {onMount} from "svelte";
 
 interface Props {
     wordbooks: Wordbook[];
@@ -13,13 +14,25 @@ interface Wordbook {
     id: any;
     language: any;
 }
+
     let { wordbooks }: Props = $props();
     let isChecked: boolean = $state(false);
     let dialogs: Array<HTMLDialogElement> = $state([]);
     let forms:Array<HTMLFormElement> = $state([]);
     let deleting: boolean = $state(false);
     let dialog: HTMLDialogElement | undefined = $state();
-    const dinosors = ["/images/tlex.png", "/images/ptella.png", "/images/raptor.png", "/images/tri.png","/images/presio.png", "/images/black.png"]
+    let animaux = $state(["/images/tlex.png", "/images/ptella.png", "/images/raptor.png", "/images/tri.png","/images/presio.png", "/images/black.png"])
+    
+    const shuffleImages = (images:string[]) => {
+        const length: number = images.length-1;
+        for (let i = length; i > 0; i--) {
+            const random: number = Math.floor(Math.random()*(i+1));
+            [images[i], images[random]] = [images[random], images[i]];
+        }
+    }
+onMount(()=>{
+    shuffleImages(animaux);
+    })
 </script>
    
 <dialog bind:this={dialog} id="my_modal" class="modal">
@@ -96,7 +109,7 @@ interface Wordbook {
                             deleting=false;
                         }
                     };
-                }} transition:fade={{duration:150}}  method="POST" action="?/delete" class={{"absolute z-2 top-0 right-0 bottom-0 aspect-square rounded-3xl":true}}>
+                }} transition:fade={{duration:150}}  method="POST" action="?/delete" class={{"absolute z-2 top-0 right-0 size-20 aspect-square rounded-3xl":true}}>
                     <button type="submit" class={{"h-full w-full flex":true}}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-1/3 aspect-ratio-1/1 my-auto ml-auto mr-2 bg-white/80">
                             <rect x="7" y="6" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
@@ -110,13 +123,13 @@ interface Wordbook {
                 </form>
                 {/if}
                 <div class="flex ">
-                    <div class="avatar w-1/5 aspect-square">
+                    <div class="avatar w-3/11 aspect-square">
                         <div class="mask mask-squircle p-1 self-center relative">
-                            <div class="absolute inset-0 bg-radial from-indigo-400/20 to-indigo-100/20"></div>
-                          <img src={dinosors[id%dinosors.length]} />
+                            <div class="absolute inset-0 bg-radial from-indigo-400/10 to-indigo-100/10"></div>
+                          <img src={animaux[id%animaux.length]} />
                         </div>
                     </div>
-                    <div class="w-4/5 flex flex-col justify-center p-3">
+                    <div class="w-8/11 flex flex-col justify-center p-3">
                     <h1 class="text-xl text-center mb-3">{wordbook.wb_name}</h1>
                     <p class="text-sm text-stone-400 text-right">言語：{wordbook.language?? "none"}</p>
                     </div>
