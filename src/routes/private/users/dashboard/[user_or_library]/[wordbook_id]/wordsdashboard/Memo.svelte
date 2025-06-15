@@ -13,6 +13,8 @@
     let isChecked: boolean = $state(false);
     let isFlipped: boolean = $state(false);
     let soundmode: boolean = $state(false);
+    let showPhrases: boolean[] = $state([]);
+    let displays:Promise<string>[] = $state([]);
     interface Word {
             term: string;
             meaning: string;
@@ -24,6 +26,18 @@
             const random: number = Math.floor(Math.random()*(i+1));
             [words[i], words[random]] = [words[random], words[i]];
         }
+    }
+    const fetchtext = async (word:string, type:string) => {
+        const res = await fetch(`/api/text?language=${language}&type=${type}`, {
+            method:"POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body:JSON.stringify({text: word})
+        });
+        const response = await res.json();
+        const text = response.result;
+        return text.split("*").join('\n') as string
     }
     
     </script>
@@ -63,7 +77,7 @@
             </button>
             
             {#each wordsc as word,i (word.id)}
-            <IntersectionObserver element={cards[i]} on:observe={(e) => {shows[i] = false;}}>
+            <IntersectionObserver element={cards[i]} on:observe={(e) => {shows[i] = false;showPhrases[i]=false;}}>
             <div bind:this={cards[i]} out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-4/5 sm:grow flex flex-col justify-center items-start relative">
                 <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-xl relative">
                     <div class="grow flex flex-col max-w-7/8 relative">
@@ -85,7 +99,36 @@
                         <button class="w-full aspect-square bg-indigo-400 text-sm text-white text-bold" onclick={() => {shows[i] = !shows[i]}}>
                         {"意味"}
                         </button>
-                    </div>      
+                    </div>
+                </div>
+                <div class="w-full bg-white rounded-b-3xl overflow-hidden relative transition-all duration-200">
+                <div class="w-full flex self-start">
+                    <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"synonym")}} class="btn btn-sm bg-red-300 text-white border-tr-white border-bl-black border-1 w-1/3 text-sm">
+                        類語
+                    </button>
+                    <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"collocation")}} class="btn btn-sm bg-blue-300 text-white w-1/3 text-sm">
+                        表現
+                    </button>
+                    <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term, "phrase")}} class="btn btn-sm bg-green-300 text-white w-1/3 text-sm">
+                        例文
+                    </button>
+                </div>
+                {#if showPhrases[i]}
+                <div class={{"w-full overflow-hidden bg-white  flex flex-col transition-all duration-200":true}}>
+                    <div class="w-full p-5 pt-10 flex flex-col">
+                    <div class="bg-gray-100 rounded-xl w-full p-3 overflow-y-auto">
+                        {#await displays[i]}
+                        <p>生成中</p><p class="loading loading-dots"></p>
+                        {:then value}
+                        <p  style="white-space: pre-line;">{value}</p>
+                        {:catch error}
+                        <p>通信エラー：もう一度試してください</p>
+                        {/await}
+                    </div>
+                    <button onclick={() => showPhrases[i] = false} class="text-lg btn btn-xs btn-netural btn-outline self-end aspect-square mt-3">☓</button>
+                    </div>
+                </div>
+                {/if}
                 </div>
             </div>
             </IntersectionObserver>
