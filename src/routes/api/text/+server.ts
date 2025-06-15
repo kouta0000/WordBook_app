@@ -32,7 +32,7 @@ export const POST: RequestHandler = async ({url, request}) => {
         - 日本語訳`
     }
     const response = await google_genai.models.generateContent({
-        model: 'models/gemini-2.5-flash-preview-05-20',
+        model: 'models/gemini-2.0-flash-lite',
         contents: prompt,
     });
     return new Response(JSON.stringify({result:response.text}), {
