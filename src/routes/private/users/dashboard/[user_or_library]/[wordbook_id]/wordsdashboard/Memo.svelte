@@ -79,7 +79,7 @@
             {#each wordsc as word,i (word.id)}
             <IntersectionObserver element={cards[i]} on:observe={(e) => {shows[i] = false;showPhrases[i]=false;}}>
             <div bind:this={cards[i]} out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-4/5 sm:grow flex flex-col justify-center items-start relative">
-                <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-xl relative">
+                <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-t-xl relative">
                     <div class="grow flex flex-col max-w-7/8 relative">
                         <div style={parent_style} class="w-full">
                             <p use:fit={{min_size:10, max_size:22}} class="font-sans font-semibold pl-5 pr-1 pt-5 pb-1 text-2xl">{!soundmode? (isFlipped? word.meaning: word.term) : "📢"}</p>
@@ -101,8 +101,8 @@
                         </button>
                     </div>
                 </div>
-                <div class="w-full bg-white rounded-b-3xl overflow-hidden relative transition-all duration-200">
-                <div class="w-full flex self-start">
+                <div class="w-full bg-white relative transition-all duration-200 rounded-b-3xl">
+                <div class="w-7/8 rounded-b-3xl overflow-hiddenflex self-start">
                     <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"synonym")}} class="btn btn-sm bg-red-300 text-white border-tr-white border-bl-black border-1 w-1/3 text-sm">
                         類語
                     </button>
