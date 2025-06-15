@@ -5,6 +5,7 @@
     import Overlay from "./Overlay.svelte";
     import IntersectionObserver from "svelte-intersection-observer";
     import AudioButton from "./AudioButton.svelte";
+    import { Transition } from "svelte-transition";
     let { words, wb_name, user_or_library, language} = $props();
     let wordsc = $state(words);
     let hide:boolean = $state(false)
@@ -15,6 +16,7 @@
     let soundmode: boolean = $state(false);
     let showPhrases: boolean[] = $state([]);
     let displays:Promise<string>[] = $state([]);
+    let showButtons:boolean[] = $state(Array(words.length).fill(false));
     interface Word {
             term: string;
             meaning: string;
@@ -77,14 +79,29 @@
             </button>
             
             {#each wordsc as word,i (word.id)}
-            <IntersectionObserver element={cards[i]} on:observe={(e) => {shows[i] = false;showPhrases[i]=false;}}>
+            <IntersectionObserver element={cards[i]} on:observe={(e) => {shows[i] = false;showPhrases[i]=false;showButtons[i]=false}}>
             <div bind:this={cards[i]} out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-4/5 sm:grow flex flex-col justify-center items-start relative">
                 <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-t-xl relative">
                     <div class="grow flex flex-col max-w-7/8 relative">
                         <div style={parent_style} class="w-full">
                             <p use:fit={{min_size:10, max_size:22}} class="font-sans font-semibold pl-5 pr-1 pt-5 pb-1 text-2xl">{!soundmode? (isFlipped? word.meaning: word.term) : "📢"}</p>
                         </div>
-                        <div class="w-full min-h-8">
+                        <div class="flex w-full">
+                        <div onclick={()=>{showButtons[i]=!showButtons[i];showPhrases[i]=false;}} class="w-1/8 aspect-square p-[10px]">
+                            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                
+                                <g class="transition-all duration-200" transform={!showButtons[i]? "rotate(0)": "rotate(45,100,100)"}>
+                                <polygon stroke-width="15" stroke="gray" points="100,20 90,100 110,100" />
+                                <polygon stroke-width="15" stroke="gray" points="180,100 100,90 100,110" />
+                                <polygon stroke-width="15" stroke="gray" points="100,180 90,100 110,100"  />
+                                <polygon stroke-width="15" stroke="gray" points="20,100 100,90 100,110" />
+                                </g>
+                                <!-- 風車の中心 -->
+                                <circle cx="100" cy="100" r="10" fill="gray" />
+                              </svg>
+                              
+                              
+                        </div>
                         {#if shows[i]}
                         <div style={parent_style}>
                         <p use:fit={{min_size:5, max_size:20}} transition:fade={{duration:300}} class="text-gray-500 text-right font-sans p-1 pr-2">
@@ -101,20 +118,23 @@
                         </button>
                     </div>
                 </div>
-                <div class="w-full bg-white relative transition-all duration-200 rounded-b-3xl">
-                <div class="w-7/8 rounded-b-3xl overflow-hidden flex self-start">
-                    <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"synonym")}} class="btn btn-sm bg-red-300 text-white border-tr-white border-bl-black border-1 w-1/3 text-sm">
-                        類語
-                    </button>
-                    <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"collocation")}} class="btn btn-sm bg-blue-300 text-white w-1/3 text-sm">
-                        表現
-                    </button>
-                    <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term, "phrase")}} class="btn btn-sm bg-green-300 text-white w-1/3 text-sm">
-                        例文
-                    </button>
-                </div>
+                
+                    <div class="w-full bg-white relative transition-all duration-200 rounded-b-3xl">
+                        {#if showButtons[i]}
+                        <div transition:slide class="w-full rounded-b-3xl overflow-hidden flex self-start">
+                            <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"synonym")}} class="btn btn-sm bg-red-300 text-white border-tr-white border-bl-black border-1 w-1/3 text-sm">
+                                類語
+                            </button>
+                            <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"collocation")}} class="btn btn-sm bg-blue-300 text-white w-1/3 text-sm">
+                                表現
+                            </button>
+                            <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term, "phrase")}} class="btn btn-sm bg-green-300 text-white w-1/3 text-sm">
+                                例文
+                            </button>
+                        </div>
+                        {/if}
                 {#if showPhrases[i]}
-                <div class={{"w-full overflow-hidden bg-white rounded-3xl flex flex-col transition-all duration-200":true}}>
+                <div transition:slide class={{"w-full overflow-hidden bg-white rounded-3xl flex flex-col transition-all duration-200":true}}>
                     <div class="w-full p-5 pt-10 flex flex-col">
                     <div class="bg-gray-100 rounded-xl w-full p-3 overflow-y-auto">
                         {#await displays[i]}

@@ -35,6 +35,7 @@
 		"@tailwindcss/vite": "^4.1.5",
 		"daisyui": "^5.0.35",
 		"google-auth-library": "^10.0.0-rc.3",
+		"svelte-transition": "^0.0.17",
 		"tailwindcss": "^4.1.5"
 	}
 }
