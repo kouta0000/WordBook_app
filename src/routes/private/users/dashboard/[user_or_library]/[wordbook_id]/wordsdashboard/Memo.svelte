@@ -102,7 +102,7 @@
                     </div>
                 </div>
                 <div class="w-full bg-white relative transition-all duration-200 rounded-b-3xl">
-                <div class="w-7/8 rounded-b-3xl overflow-hiddenflex self-start">
+                <div class="w-7/8 rounded-b-3xl overflow-hidden flex self-start">
                     <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"synonym")}} class="btn btn-sm bg-red-300 text-white border-tr-white border-bl-black border-1 w-1/3 text-sm">
                         類語
                     </button>
@@ -114,7 +114,7 @@
                     </button>
                 </div>
                 {#if showPhrases[i]}
-                <div class={{"w-full overflow-hidden bg-white  flex flex-col transition-all duration-200":true}}>
+                <div class={{"w-full overflow-hidden bg-white rounded-3xl flex flex-col transition-all duration-200":true}}>
                     <div class="w-full p-5 pt-10 flex flex-col">
                     <div class="bg-gray-100 rounded-xl w-full p-3 overflow-y-auto">
                         {#await displays[i]}
