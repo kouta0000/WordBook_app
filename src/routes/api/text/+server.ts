@@ -2,42 +2,85 @@
 import type { RequestHandler } from "@sveltejs/kit";
 import { json } from "@sveltejs/kit";
 import { google_genai } from "$lib/config/googleCloudClient";
+import { Type } from "@google/genai";
+import { supabase } from "$lib//config/supabaseClient";
 
 export const POST: RequestHandler = async ({url, request}) => {
     const language = url.searchParams.get("language");
     const type = url.searchParams.get("type");
+    const id = url.searchParams.get("id");
+    const regenerate = url.searchParams.get("regenerate")
     const {text} = await request.json();
     let prompt:string = "";
+    let schema = {
+          type: Type.OBJECT,
+          properties: {
+            examples: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                    example:{
+                        type:Type.STRING,
+                    },
+                    translation:{
+                        type:Type.STRING
+                    }    
+                }
+              },
+            },
+          },
+      };
     if (type == "synonym") {
-        prompt = `あなたは本当に優秀な教師です。${language}の${text}の類語を5つ教えてください。返答は箇条書きのみで簡潔に。余計な言葉は要らない。フォーマットは以下のように。
-        類義語：
-        1. 英語の表現1 - 日本語訳
-        2. 英語の表現2 - 日本語訳
-        3. 英語の表現3 - 日本語訳
-        4. 英語の表現2 - 日本語訳
-        5. 英語の表現3 - 日本語訳
-        `;
+        const res = await supabase.from("Words").select("synonym").eq("id",id);
+        if (res.data?.[0].synonym && !regenerate) {
+            return new Response(res.data[0].synonym, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        }
+        prompt = `あなたは言語アシスタントです。${language}の${text}の類語の例を3つ、日本語の翻訳付きで教えてください。`;
+        
     } else if (type == "collocation") {
-        prompt = `あなたは本当に優秀な教師です。${language}の${text}のコロケーション表現を日本語訳付きで3つ教えてください。返答は箇条書きのみで簡潔に。余計な言葉は要らない。フォーマットは以下のように。
-        フレーズ：
-        1. 英語の表現1 - 日本語訳
-        2. 英語の表現2 - 日本語訳
-        3. 英語の表現3 - 日本語訳`;
+        const res = await supabase.from("Words").select("collocation").eq("id",id);
+        if (res.data?.[0].collocation && !regenerate) {
+            return new Response(res.data[0].collocation, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        }
+        prompt = `あなたは言語アシスタントです。${language}の${text}の2~4語からなるコロケーション表現の例を日本語の翻訳付きで3つ教えてください。返答は以下のjson形式で。`;
     } else if (type == "phrase" ) {
-        prompt = `あなたは本当に優秀な教師です。${language}の${text}の例文を日本語訳付きで2つ作ってください。返答は箇条書きのみで簡潔に。余計な言葉は要らない。フォーマットは以下のように。
-        例文：
-        1. 英語の表現1 
-        - 日本語訳
-        2. 英語の表現2 
-        - 日本語訳`
-    }
+        const res = await supabase.from("Words").select("sentence").eq("id",id);
+        if (res.data?.[0].sentence && !regenerate) {
+            return new Response(res.data[0].sentence, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        }
+        prompt = `あなたは言語アシスタントです。${language}の${text}の例文を日本語の翻訳付きで2つ作ってください。`
+    };
     const response = await google_genai.models.generateContent({
         model: 'models/gemini-2.0-flash-lite',
         contents: prompt,
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: schema
+          },
     });
-    return new Response(JSON.stringify({result:response.text}), {
+    if (type == "synonym") {
+        const {error} = await supabase.from("Words").update({synonym:response.text}).eq("id",id);
+    } else if (type == "collocation") {
+        const {error} = await supabase.from("Words").update({collocation:response.text}).eq("id",id);
+    } else if (type == "phrase" ) {
+        const {error} = await supabase.from("Words").update({sentence:response.text}).eq("id",id);
+    }
+    return new Response(response.text, {
         headers: {
             'Content-Type': 'application/json'
         }
     })
-    } 
+} 

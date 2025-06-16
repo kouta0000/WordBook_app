@@ -6,7 +6,7 @@
     import IntersectionObserver from "svelte-intersection-observer";
     import AudioButton from "./AudioButton.svelte";
     import { Transition } from "svelte-transition";
-    let { words, wb_name, user_or_library, language} = $props();
+    let { words,wb_id, wb_name, user_or_library, language} = $props();
     let wordsc = $state(words);
     let hide:boolean = $state(false)
     let shows: boolean[] = $state(Array(words.length).fill(false));
@@ -14,8 +14,9 @@
     let isChecked: boolean = $state(false);
     let isFlipped: boolean = $state(false);
     let soundmode: boolean = $state(false);
+    let regenerate:boolean = $state(false);
     let showPhrases: boolean[] = $state([]);
-    let displays:Promise<string>[] = $state([]);
+    let displays:Promise<{examples:Array<{example:string,translation:string}>}>[] = $state([]);
     let showButtons:boolean[] = $state(Array(words.length).fill(false));
     interface Word {
             term: string;
@@ -29,8 +30,8 @@
             [words[i], words[random]] = [words[random], words[i]];
         }
     }
-    const fetchtext = async (word:string, type:string) => {
-        const res = await fetch(`/api/text?language=${language}&type=${type}`, {
+    const fetchtext = async (word:string, type:string, id:number, regenerate:boolean) => {
+        const res = await fetch(`/api/text?language=${language}&type=${type}&id=${id}&regenerate=${regenerate? "yes":""}`, {
             method:"POST",
             headers: {
                 "Content-type": "application/json"
@@ -38,8 +39,7 @@
             body:JSON.stringify({text: word})
         });
         const response = await res.json();
-        const text = response.result;
-        return text.split("*").join('\n') as string
+        return response
     }
     
     </script>
@@ -112,7 +112,7 @@
                         </div>
                     </div>  
                     <div class="flex flex-col border-l-1 border-indigo-300 justify-center items-center w-1/8 z-2">
-                        <AudioButton word={word} language={language} />
+                        <AudioButton word={word.term} language={language} />
                         <button class="w-full aspect-square bg-indigo-400 text-sm text-white text-bold" onclick={() => {shows[i] = !shows[i]}}>
                         {"意味"}
                         </button>
@@ -122,25 +122,35 @@
                     <div class="w-full bg-white relative transition-all duration-200 rounded-b-3xl">
                         {#if showButtons[i]}
                         <div transition:slide class="w-full rounded-b-3xl overflow-hidden flex self-start">
-                            <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"synonym")}} class="btn btn-sm bg-red-300 text-white border-tr-white border-bl-black border-1 w-1/3 text-sm">
+                            <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"synonym",word.id,regenerate)}} class="btn btn-sm bg-red-300 text-white border-tr-white border-bl-black border-1 w-1/3 text-sm">
                                 類語
                             </button>
-                            <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"collocation")}} class="btn btn-sm bg-blue-300 text-white w-1/3 text-sm">
+                            <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"collocation",word.id,regenerate)}} class="btn btn-sm bg-blue-300 text-white w-1/3 text-sm">
                                 表現
                             </button>
-                            <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term, "phrase")}} class="btn btn-sm bg-green-300 text-white w-1/3 text-sm">
+                            <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term, "phrase", word.id,regenerate)}} class="btn btn-sm bg-green-300 text-white w-1/3 text-sm">
                                 例文
                             </button>
                         </div>
                         {/if}
                 {#if showPhrases[i]}
                 <div transition:slide class={{"w-full overflow-hidden bg-white rounded-3xl flex flex-col transition-all duration-200":true}}>
-                    <div class="w-full p-5 pt-10 flex flex-col">
-                    <div class="bg-gray-100 rounded-xl w-full p-3 overflow-y-auto">
+                    <div class="w-full p-5 flex flex-col">
+                    <div class="rounded-xl w-full overflow-y-auto flex flex-col gap-3">
+                        <button class={{"self-end btn btn-xs  w-1/3 rounded-3xl btn-primary text-xs text-bold":true,"btn-outline":!regenerate, "btn-active":regenerate}} onclick={()=> regenerate = !regenerate}>{regenerate?"✔ ":""}再生成</button>
+                        
                         {#await displays[i]}
-                        <p>生成中</p><p class="loading loading-dots"></p>
+                        <p class="loading loading-dots"></p>
                         {:then value}
-                        <p  style="white-space: pre-line;">{value}</p>
+                        {#each value.examples as ex,index (index)}
+                            <div class="bg-gray-100 rounded-xl w-full p-3 pt-5 flex flex-col">
+                            <p>{ex.example}</p>
+                            <p>({ex.translation})</p>
+                            <div class="w-1/8 self-end">
+                                <AudioButton word={ex.example} language={language}/>
+                            </div>
+                            </div>
+                        {/each}
                         {:catch error}
                         <p>通信エラー：もう一度試してください</p>
                         {/await}

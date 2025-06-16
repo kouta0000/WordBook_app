@@ -8,7 +8,7 @@
             headers: {
                 "Content-type": "application/json"
             },
-            body:JSON.stringify({text: word.term})
+            body:JSON.stringify({text: word})
         });
         const audioBlob = await res.blob();
         const audioUrl = URL.createObjectURL(audioBlob);
