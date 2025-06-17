@@ -13,12 +13,17 @@ interface Wordbook {
     wb_name: any;
     id: any;
     language: any;
+    word_number:any;
 }
 
     let { wordbooks }: Props = $props();
     let isChecked: boolean = $state(false);
     let dialogs: Array<HTMLDialogElement> = $state([]);
     let forms:Array<HTMLFormElement> = $state([]);
+    let sum =$state(0);
+    for (const w of wordbooks) {
+        sum+=w.word_number;
+    }
     let deleting: boolean = $state(false);
     let dialog: HTMLDialogElement | undefined = $state();
     let animaux = $state(["/images/tlex.png", "/images/ptella.png", "/images/raptor.png", "/images/tri.png","/images/presio.png", "/images/black.png"])
@@ -64,7 +69,17 @@ onMount(()=>{
     </div>
 </dialog>
 
-    <div class="w-full min-h-screen pt-30 flex flex-col items-center">
+    <div class="w-full min-h-screen pt-20 flex flex-col items-center">
+        <div class="flex mb-10 justify-start w-full">
+        <div class="gap-2 text-xl mask mask-squircle bg-white size-27 flex flex-col justify-center items-center">
+            <p>単語帳数</p>
+            <p>{wordbooks.length}</p>
+        </div>
+        <div class="gap-2 text-xl mask mask-squircle bg-white size-27 flex flex-col justify-center items-center">
+            <p>総単語数</p>
+            <p>{sum}</p>
+        </div>
+        </div>
         <h1 class="text-3xl mb-10 font-bold bg-gradient-to-r from-sky-500 to-indigo-500 inline-block text-transparent bg-clip-text">単語帳</h1>
         <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 lg:bottom-22 lg:right-5 z-20">
             <button type="button" onclick={() => isChecked=!isChecked} class={{"btn btn-lg btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-indigo-500":!isChecked, "bg-linear-to-br from-indigo-500 to-sky-500":isChecked}}>
@@ -90,7 +105,7 @@ onMount(()=>{
                 </div>
             </dialog>
            
-            <div in:fly={{duration:300, y:20}} out:fade class="shadow-sm active:bg-indigo-100 transition-all duration-200 w-4/5 sm:grow p-7 flex flex-col gap-2 rounded-xl bg-white relative">
+            <div in:fly={{duration:300, y:20}} out:fade class="shadow-sm active:bg-indigo-100 transition-all duration-200 w-9/10 sm:grow p-7 flex flex-col gap-2 rounded-xl bg-white relative">
                 <a href="./user/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
                 {#if isChecked}
                 <form use:enhance={ async (submitEvent) => {
@@ -122,16 +137,11 @@ onMount(()=>{
                     <input type="hidden" name="wordbook_id" value={wordbook.id}>
                 </form>
                 {/if}
-                <div class="flex ">
-                    <div class="avatar w-3/11 aspect-square">
-                        <div class="mask mask-squircle p-1 self-center relative">
-                            <div class="absolute inset-0 bg-radial from-indigo-400/10 to-indigo-100/10"></div>
-                          <img src={animaux[id%animaux.length]} />
-                        </div>
-                    </div>
+                <div class="flex">
+                    <div class="w-2/11 self-center mask mask-squircle p-4 flex justify-center items-center bg-radial from-indigo-600 to-sky-400/70 text-white font-black text-3xl aspect-square text-center">{wordbook.wb_name[0]}</div>
                     <div class="w-8/11 flex flex-col justify-center p-3">
                     <h1 class="text-xl text-center mb-3">{wordbook.wb_name}</h1>
-                    <p class="text-sm text-stone-400 text-right">言語：{wordbook.language?? "none"}</p>
+                    <p class="text-right text-indigo-400 text-md">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p>  
                     </div>
                 </div>
             </div>

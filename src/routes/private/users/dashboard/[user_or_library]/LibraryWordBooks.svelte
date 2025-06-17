@@ -54,7 +54,7 @@ const languages = [
             {#each languages as language}
             {#if currentLang==language.name}
             {#each language.data as wordbook, id (wordbook.id)}
-            <div  class="shadow-sm active:bg-indigo-100 transition-all duration-200 flex flex-col gap-2 p-7 w-4/5 sm:grow rounded-xl bg-white relative">
+            <div  class="shadow-sm active:bg-indigo-100 transition-all duration-200 flex flex-col gap-2 p-7 w-9/10 sm:grow rounded-xl bg-white relative">
                 <a href="./library/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
                 <div class="flex w-full justify-center items-center">
                     <div class="avatar w-1/5 aspect-square self-center">
@@ -65,7 +65,7 @@ const languages = [
                     </div>
                     <div class="w-4/5 flex flex-col justify-center p-3">
                     <h1 class="text-xl text-center mb-3">{wordbook.wb_name}</h1>
-                    <p class="text-right text-indigo-400 text-lg">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p> 
+                    <p class="text-right text-indigo-400 text-md">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p> 
                     </div>
                 </div>
                 

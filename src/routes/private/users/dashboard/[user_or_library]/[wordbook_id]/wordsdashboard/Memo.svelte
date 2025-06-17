@@ -16,8 +16,9 @@
     let soundmode: boolean = $state(false);
     let regenerate:boolean = $state(false);
     let showPhrases: boolean[] = $state([]);
+    let formToChecks:HTMLButtonElement[] =$state([])
     let displays:Promise<{examples:Array<{example:string,translation:string}>}>[] = $state([]);
-    let showButtons:boolean[] = $state(Array(words.length).fill(false));
+    let currentviews:string[] = $state(Array(words.length).fill(false));
     interface Word {
             term: string;
             meaning: string;
@@ -79,39 +80,33 @@
             </button>
             
             {#each wordsc as word,i (word.id)}
-            <IntersectionObserver element={cards[i]} on:observe={(e) => {shows[i] = false;showPhrases[i]=false;showButtons[i]=false}}>
-            <div bind:this={cards[i]} out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-4/5 sm:grow flex flex-col justify-center items-start relative">
+            <IntersectionObserver element={cards[i]} on:observe={(e) => {shows[i] = false;showPhrases[i]=false}}>
+            <div bind:this={cards[i]} out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
                 <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-t-xl relative">
-                    <div class="grow flex flex-col max-w-7/8 relative">
+                    <div class="grow flex flex-col max-w-9/10 relative">
+                        <!--
+                        <div class="absolute top-0 right-0 w-1/7">
+                        <form method="POST"class="p-3" use:enhance action="?/checked">
+                            <input name="checked" value={word.checked} type="hidden">
+                            <input type="hidden" value={word.id} name="id">
+                            <button type="submit" class={{"btn aspect-square btn-warning btn-xs":true, "btn-outline":!word.checked, "btn-active":word.checked}}>{word.checked?"✔":" "}</button>
+                        </form>
+                        </div>
+                    -->
                         <div style={parent_style} class="w-full">
                             <p use:fit={{min_size:10, max_size:22}} class="font-sans font-semibold pl-5 pr-1 pt-5 pb-1 text-2xl">{!soundmode? (isFlipped? word.meaning: word.term) : "📢"}</p>
                         </div>
-                        <div class="flex w-full">
-                        <div onclick={()=>{showButtons[i]=!showButtons[i];showPhrases[i]=false;}} class="w-1/8 aspect-square p-[10px]">
-                            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                                
-                                <g class="transition-all duration-200" transform={!showButtons[i]? "rotate(0)": "rotate(45,100,100)"}>
-                                <polygon stroke-width="15" stroke="gray" points="100,20 90,100 110,100" />
-                                <polygon stroke-width="15" stroke="gray" points="180,100 100,90 100,110" />
-                                <polygon stroke-width="15" stroke="gray" points="100,180 90,100 110,100"  />
-                                <polygon stroke-width="15" stroke="gray" points="20,100 100,90 100,110" />
-                                </g>
-                                <!-- 風車の中心 -->
-                                <circle cx="100" cy="100" r="10" fill="gray" />
-                              </svg>
-                              
-                              
-                        </div>
+                        <div class="flex w-full p-1 h-7">
                         {#if shows[i]}
                         <div style={parent_style}>
-                        <p use:fit={{min_size:5, max_size:20}} transition:fade={{duration:300}} class="text-gray-500 text-right font-sans p-1 pr-2">
+                        <p use:fit={{min_size:5, max_size:15}} transition:fade={{duration:300}} class="text-gray-500 text-left pl-8 font-sans">
                         {isFlipped? word.term: word.meaning}
                         </p>
                         </div>
                         {/if}
                         </div>
                     </div>  
-                    <div class="flex flex-col border-l-1 border-indigo-300 justify-center items-center w-1/8 z-2">
+                    <div class="flex flex-col border-l-1 border-indigo-300 justify-center items-center w-1/10 z-2">
                         <AudioButton word={word.term} language={language} />
                         <button class="w-full aspect-square bg-indigo-400 text-sm text-white text-bold" onclick={() => {shows[i] = !shows[i]}}>
                         {"意味"}
@@ -119,34 +114,33 @@
                     </div>
                 </div>
                 
-                    <div class="w-full bg-white relative transition-all duration-200 rounded-b-3xl">
-                        {#if showButtons[i]}
-                        <div transition:slide class="w-full rounded-b-3xl overflow-hidden flex self-start">
-                            <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"synonym",word.id,regenerate)}} class="btn btn-sm bg-red-300 text-white border-tr-white border-bl-black border-1 w-1/3 text-sm">
+                    <div class="w-full relative transition-all duration-200 rounded-b-3xl">
+                        <div transition:slide class="w-9/10 rounded-b-3xl overflow-hidden flex self-start">
+                            <button onclick={() => {showPhrases[i]=true;currentviews[i]="synonym"; displays[i] = fetchtext(word.term,"synonym",word.id,false)}} class="btn  btn-sm bg-sky-400 text-white font-bold w-1/3">
                                 類語
                             </button>
-                            <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term,"collocation",word.id,regenerate)}} class="btn btn-sm bg-blue-300 text-white w-1/3 text-sm">
+                            <button onclick={() => {showPhrases[i]=true;currentviews[i]="collocation";displays[i] = fetchtext(word.term,"collocation",word.id,false)}} class="btn btn-sm bg-sky-500 text-white font-bold w-1/3">
                                 表現
                             </button>
-                            <button onclick={() => {showPhrases[i]=true;displays[i] = fetchtext(word.term, "phrase", word.id,regenerate)}} class="btn btn-sm bg-green-300 text-white w-1/3 text-sm">
+                            <button onclick={() => {showPhrases[i]=true;currentviews[i]="sentence";displays[i] = fetchtext(word.term, "sentence", word.id,false)}} class="btn btn-sm bg-sky-700 text-white font-bold w-1/3">
                                 例文
                             </button>
                         </div>
-                        {/if}
                 {#if showPhrases[i]}
                 <div transition:slide class={{"w-full overflow-hidden bg-white rounded-3xl flex flex-col transition-all duration-200":true}}>
-                    <div class="w-full p-5 flex flex-col">
-                    <div class="rounded-xl w-full overflow-y-auto flex flex-col gap-3">
-                        <button class={{"self-end btn btn-xs  w-1/3 rounded-3xl btn-primary text-xs text-bold":true,"btn-outline":!regenerate, "btn-active":regenerate}} onclick={()=> regenerate = !regenerate}>{regenerate?"✔ ":""}再生成</button>
+                    <div class="w-full p-5 flex flex-col gap-3">
+                        <button class={{"self-end btn btn-xs  w-1/3 rounded-3xl btn-primary text-xs text-bold btn-outline":true}} onclick={()=> displays[i]=fetchtext(word.term, currentviews[i],word.id,true)}>再生成</button>
+                    <div class={{"rounded-xl w-full gap-3":true, "flex flex-col":currentviews[i] == "sentence", "grid grid-cols-2":currentviews[i] != "sentence"}}>
+                        
                         
                         {#await displays[i]}
                         <p class="loading loading-dots"></p>
                         {:then value}
                         {#each value.examples as ex,index (index)}
-                            <div class="bg-gray-100 rounded-xl w-full p-3 pt-5 flex flex-col">
+                            <div class="bg-gray-100 rounded-xl w-full p-5 pt-6 flex flex-col relative">
                             <p>{ex.example}</p>
                             <p>({ex.translation})</p>
-                            <div class="w-1/8 self-end">
+                            <div class={{"absolute bottom-0 right-0":true, "w-1/11":currentviews[i]=="sentence", "w-1/5":currentviews[i] != "sentence"}}>
                                 <AudioButton word={ex.example} language={language}/>
                             </div>
                             </div>

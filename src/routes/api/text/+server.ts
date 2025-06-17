@@ -40,7 +40,7 @@ export const POST: RequestHandler = async ({url, request}) => {
                 }
             })
         }
-        prompt = `あなたは言語アシスタントです。${language}の${text}の類語の例を3つ、日本語の翻訳付きで教えてください。`;
+        prompt = `あなたは言語アシスタントです。${language}の${text}の類語の例を4つ、日本語の翻訳付きで教えてください。`;
         
     } else if (type == "collocation") {
         const res = await supabase.from("Words").select("collocation").eq("id",id);
@@ -51,8 +51,8 @@ export const POST: RequestHandler = async ({url, request}) => {
                 }
             })
         }
-        prompt = `あなたは言語アシスタントです。${language}の${text}の2~4語からなるコロケーション表現の例を日本語の翻訳付きで3つ教えてください。返答は以下のjson形式で。`;
-    } else if (type == "phrase" ) {
+        prompt = `あなたは言語アシスタントです。${language}の${text}の2~4語からなるコロケーション表現の例を日本語の翻訳付きで4つ教えてください。返答は以下のjson形式で。`;
+    } else if (type == "sentence" ) {
         const res = await supabase.from("Words").select("sentence").eq("id",id);
         if (res.data?.[0].sentence && !regenerate) {
             return new Response(res.data[0].sentence, {
@@ -75,7 +75,7 @@ export const POST: RequestHandler = async ({url, request}) => {
         const {error} = await supabase.from("Words").update({synonym:response.text}).eq("id",id);
     } else if (type == "collocation") {
         const {error} = await supabase.from("Words").update({collocation:response.text}).eq("id",id);
-    } else if (type == "phrase" ) {
+    } else if (type == "sentence" ) {
         const {error} = await supabase.from("Words").update({sentence:response.text}).eq("id",id);
     }
     return new Response(response.text, {
