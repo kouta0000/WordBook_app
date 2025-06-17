@@ -68,7 +68,7 @@
     
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center">
         <div class="mt-23 mb-10 lg:mt-20  w-full flex gap-5 justify-center items-center realtive h-20">
-            <h1 class="shadow-lg p-6 text-white text-2xl max-w-3/5 rounded-3xl bg-linear-to-br from-indigo-500 to-sky-500">{wb_name}</h1>
+            <h1 class="shadow-lg p-6 text-white text-xl max-w-3/5 rounded-3xl bg-linear-to-br from-indigo-500 to-sky-500">{wb_name}</h1>
             <div class="flex flex-col gap-2 justify-center">
             <a href="./4taku" class="btn btn-base border-none shadow-sm rounded-3xl">4択テスト</a>
             <a href="./input" class="btn btn-base border-none shadow-sm rounded-3xl">入力テスト</a>
