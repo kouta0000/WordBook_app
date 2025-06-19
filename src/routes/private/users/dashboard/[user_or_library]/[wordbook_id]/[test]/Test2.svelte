@@ -33,7 +33,7 @@
         id:number;
         term: string;
         meaning: string;
-        examples:{example:string, translation:string};
+        sentence:{examples:{example:string, translation:string}[]};
 
     };
     const startGame = () => {
