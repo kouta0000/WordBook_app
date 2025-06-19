@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Fuse from 'fuse.js';
     import { fly, fade, scale } from 'svelte/transition';
     import TestBackground1 from './TestBackground1.svelte';
     import TestBackground2 from './TestBackground2.svelte';
@@ -21,23 +22,24 @@
     let questions:Word[] = $state([]);
     let isQuizComplete = $state(false);
     let main_display = $state("");
-    let currentWord:Word = $state({id:0, term:"", meaning:"", examples: {example:"", translation:""}})
+    let currentWord:Word = $state({id:0, term:"", meaning:"", sentence:""})
     let questionIndex = $state(-1);
     let score =$state(0);
-    let answer = $state("");
+    let inputedAnswer = $state("");
+    let answerWord = $state("");
     let showResult = $state(false);
     let isCorrect = $state(true);
 
 
-    let beforeInput:string = $state("");
-    let afterInput:string= $state("");
+    let beforeInput:string[] = $state([]);
+    let afterInput:string[]= $state([]);
     let isfetching:boolean = $state(false);
 
     interface Word {
         id:number;
         term: string;
         meaning: string;
-        examples:{example:string, translation:string};
+        sentence:string;
 
     };
     const startGame = () => {
@@ -68,6 +70,7 @@
             },
             body:JSON.stringify({text: currentWord.term})
         });
+        isfetching=false;
         const response = await res.json();
         return response
     }
@@ -75,9 +78,47 @@
         questionIndex++;
         if (questionIndex<length) {
             currentWord = questions[questionIndex];
-            beforeInput = currentWord.examples?.example.split(`${currentWord.term}`, 2)[0];
-            afterInput = currentWord.examples?.example.split(`${currentWord.term}`, 2)[1];
-            main_display = currentWord.examples?.translation;
+            if (currentWord.sentence) {
+            const examples:{examples:{example:string, translation:string}[]} = JSON.parse(currentWord.sentence)
+            const list = examples.examples?.[0].example.split(" ");
+            const lword = list.pop()?? "";
+            const baf = [...list, lword.slice(0,-1), "."];
+            const options = {// 検索対象のキーを指定
+                keys:[""],
+                threshold: 1.0,           // 類似度の閾値を設定
+                shouldSort: true,
+                includeScore:true          // スコア順に結果を並べ替える
+            };
+            const fuse = new Fuse(baf, options);
+            const result = fuse.search(currentWord.term);
+            const answerword=result[0].item;
+            const parts = examples.examples?.[0].example.split(answerword,2);
+            answerWord = answerword;
+            beforeInput = parts[0].split(" ");
+            afterInput = parts[1].split(" ");
+            main_display = examples.examples?.[0].translation;
+            } else {
+                const res = await fetchsentence();
+                const list = res.examples?.[0].example.split(" ");
+                const lword = list.pop()?? "";
+                const baf = [...list, lword.slice(0,-1), "."];
+                const options = {// 検索対象のキーを指定
+                keys:[""],
+                threshold: 1.0,           // 類似度の閾値を設定
+                shouldSort: true,
+                includeScore:true          // スコア順に結果を並べ替える
+            };
+                const fuse = new Fuse(baf, options);
+               
+                const result = fuse.search(currentWord.term);
+                const answerword=result[0].item;
+                const parts = res.examples?.[0].example.split(answerword,2);
+                answerWord = answerword;
+                beforeInput=parts[0].split(" ");
+                afterInput=parts[1].split(" ");
+                main_display=res.examples?.[0].translation;
+            }
+
             await tick();
             setTimeout(()=> main_input?.focus(), 50);            
         } else {
@@ -88,11 +129,15 @@
     const clearInfo = () => {
         count=0;
         showResult = false;
-        answer = "";
-        currentWord={id:0, meaning:"", term:"", examples:{example:"", translation:""}};
+        answerWord = "";
+        inputedAnswer=""
+        beforeInput=[];
+        afterInput=[];
+        main_display="";
+        currentWord={id:0, meaning:"", term:"", sentence:""};
     }
     const checkAnswer = async () => {
-        if (answer == currentWord.term) {
+        if (inputedAnswer.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() == answerWord.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() ) {
             isCorrect = true;
             if(!count) score++;
             count++
@@ -100,7 +145,7 @@
             setTimeout(()=>{nextQuestion()}, 1500);
         } else {
             count++;
-            answer="";
+            inputedAnswer="";
             isCorrect = false;
             showResult = true;
             await tick();
@@ -173,9 +218,9 @@
     </div>
     {/if}
     {#if !isQuizComplete}
-    <div class="w-full md:w-4/5 lg:w-3/10 mx-auto h-1/2 lg:h-full flex flex-col bg-slate-50 rounded-2xl shadow-xl">
-        <div class=" shadow-lg shadow-slate-100 bg-linear-to-br from-indigo-400 to-indigo-300 rounded-2xl text-gray-100 font-bold p-8">
-            <div class="flex items-center justify-between">
+    <div class="w-full md:w-4/5 lg:w-3/10 mx-auto  lg:h-full flex flex-col bg-slate-50 rounded-2xl shadow-xl">
+        <div class=" shadow-lg shadow-slate-100 bg-linear-to-br from-indigo-400 to-indigo-300 rounded-2xl text-gray-100 font-bold p-3">
+            <div class="flex items-center justify-between p-5">
                 <div class="flex items-center gap-1">
                     <h1 class="text-sm max-w-4/5">{wb_name}</h1>
                 </div>
@@ -187,16 +232,22 @@
                 </div>
                 
             </div>
-            <div class="w-full p-3">
-                <form class="flex flex-wrap gap-3 items-center justify-center">
+            <div class="w-full mt-3">
+                <form class="flex flex-wrap gap-1 items-center justify-center">
                     {#if isfetching}
                     <span class="loading loading-spinner"></span>
-                    {:else if beforeinput || afterinput}
-                    <span class="text-xl">{beforeinput}</span>
+                    {:else}
+                    {#each beforeInput as b}
+                    <span class="py-2 text-xl">{b}</span>
+                    {/each}
                     <span>
-                        <input bind:this={main_input} class="focus:outline-none w-20 border-none p-2 rounded-xl bg-gray-100 text-gray-900" type="text" bind:value={answer} placeholder={!isCorrect? currentWord.term:""}>
+                    <span style={parent_style}>
+                        <input use:fit={{min_size:5, max_size:20}} bind:this={main_input} class="text-center focus:outline-none border-none p-1 py-2 w-40 text-2xl rounded-lg bg-gray-200 text-gray-900" type="text" bind:value={inputedAnswer} placeholder={!isCorrect? answerWord:""}>
                     </span>
-                    <span class="text-xl">{afterinput}</span>
+                    </span>
+                    {#each afterInput as a}
+                    <span class="text-xl py-2">{a}</span>
+                    {/each}
                     {/if}
                 <button onclick={checkAnswer} class="hidden" type="submit"></button>
                 </form>
