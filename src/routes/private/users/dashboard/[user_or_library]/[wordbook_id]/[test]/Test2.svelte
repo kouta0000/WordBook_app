@@ -71,8 +71,8 @@
         questionIndex++;
         if (questionIndex<length) {
             currentWord = questions[questionIndex];
-            beforeinput = currentWord.sentence.examples?.example.split(`${currentWord.term}`, 2)[0];
-            afterinput = currentWord.sentence.examples?.example.split(`${currentWord.term}`, 2)[1];
+            beforeinput = currentWord.sentence.examples?.[0].example.split(`${currentWord.term}`, 2)[0];
+            afterinput = currentWord.sentence.examples?.[0].example.split(`${currentWord.term}`, 2)[1];
             main_display = currentWord.examples?.translation;
             await tick();
             setTimeout(()=> main_input?.focus(), 50);            
