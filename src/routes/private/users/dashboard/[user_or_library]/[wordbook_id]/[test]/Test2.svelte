@@ -184,7 +184,7 @@
                 
             </div>
             <div class="w-full p-3">
-                <form class="flex flex-wrap gap-3">
+                <form class="flex flex-wrap gap-3 items-center justify-center">
                     {#if beforeinput || afterinput}
                     <span class="text-xl">{beforeinput}</span>
                     <span>

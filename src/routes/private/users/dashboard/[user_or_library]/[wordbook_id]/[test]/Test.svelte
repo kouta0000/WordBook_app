@@ -124,7 +124,7 @@
         <p class="text-right font-xs text-red-800">{message}</p>
         <p class="text-right font-xs text-gray-800">問題数は1~50問のあいだです
         </p>
-        <button onclick={startGame} class="btn btn-active btn-primary rounded-2xl mt-5">
+        <button onclick={startGame} class="w-2/3 self-center btn btn-active btn-primary rounded-2xl mt-5">
             ▶テスト開始
         </button>
         <button onclick={()=> goto("./wordsdashboard")} class="btn mx-auto w-1/2 btn-sm btn-outline font-bold rounded-2xl btn-primary">
