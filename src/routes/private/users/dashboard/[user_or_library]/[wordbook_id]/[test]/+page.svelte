@@ -6,7 +6,8 @@
      
      let { data, form }: PageProps = $props();
      let words = $state(data.loaddata.words.data);
-     const wb_name = data.loaddata.wb_name.data?.[0].wb_name;
+     const wb_name = data.loaddata.wb_name;
+     const language = data.loaddata.language;
      let user_or_library = $state(data.loaddata.user_or_library);
      const test = data.loaddata.test;
 </script>
@@ -19,5 +20,5 @@
 {#if test == "4taku"}
 <Test wordslist={words} wb_name={wb_name} user_or_library={user_or_library} />
 {:else if test =="input"}
-<Test2 wordslist={words} wb_name={wb_name} user_or_library={user_or_library} />
+<Test2 wordslist={words} wb_name={wb_name} language={language} user_or_library={user_or_library} />
 {/if}

@@ -8,9 +8,10 @@
     import Test from './Test.svelte';
     import { goto } from '$app/navigation';
     import {tick} from "svelte";
+    import { stringFromBase64URL } from '@supabase/ssr';
 
     //変数宣言
-    let { wordslist, wb_name, user_or_library } = $props();
+    let { wordslist, wb_name, language, user_or_library } = $props();
     let main_input:HTMLInputElement | null = $state(null);
     let wordslength = $state(wordslist.length);
     let count = $state(0)
@@ -20,15 +21,19 @@
     let questions:Word[] = $state([]);
     let isQuizComplete = $state(false);
     let main_display = $state("");
-    let currentWord:Word = $state({term:"",meaning:""})
+    let currentWord:Word = $state({id:0, term:"", meaning:"", examples: {example:"", translation:""}})
     let questionIndex = $state(-1);
     let score =$state(0);
     let answer = $state("");
     let showResult = $state(false);
     let isCorrect = $state(true);
+    let beforeinput:string = $state("");
+    let afterinput:string= $state("");
     interface Word {
-        "term": string;
-        "meaning": string;
+        id:number;
+        term: string;
+        meaning: string;
+        examples:{example:string, translation:string};
 
     };
     const startGame = () => {
@@ -50,11 +55,25 @@
             questions.push(getRandomWord(words));
         }
     }
+    const fetchsentence = async ():Promise<{examples:{example:string, translation:string}[]}> => {
+        const res = await fetch(`/api/text?language=${language}&type=${"sentence"}&id=${currentWord.id}&regenerate=""`, {
+            method:"POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body:JSON.stringify({text: currentWord.term})
+        });
+        const response = await res.json();
+        main_display = response.examples[0].translation;
+        return response
+    }
     const showQuestion = async () => {
         questionIndex++;
         if (questionIndex<length) {
             currentWord = questions[questionIndex];
-            main_display = currentWord.meaning;
+            beforeinput = currentWord.examples?.example.split(`${currentWord.term}`, 2)[0];
+            afterinput = currentWord.examples?.example.split(`${currentWord.term}`, 2)[1];
+            main_display = currentWord.examples?.translation;
             await tick();
             setTimeout(()=> main_input?.focus(), 50);            
         } else {
@@ -66,7 +85,7 @@
         count=0;
         showResult = false;
         answer = "";
-        currentWord={meaning:"", term:""};
+        currentWord={id:0, meaning:"", term:"", examples:{example:"", translation:""}};
     }
     const checkAnswer = async () => {
         if (answer == currentWord.term) {
@@ -111,7 +130,7 @@
         <p class="text-right font-xs text-red-800">{message}</p>
         <p class="text-right font-xs text-gray-800 ">問題数は1~50問のあいだです
         </p>
-        <button onclick={startGame} class="btn btn-active btn-primary rounded-2xl mt-5">
+        <button onclick={startGame} class="btn self-center btn-active btn-primary w-2/3 rounded-2xl mt-5">
             ▶テスト開始
         </button>
         <button onclick={()=> goto("./wordsdashboard")} class="btn mx-auto w-1/2 btn-sm btn-outline font-bold rounded-2xl btn-primary">
@@ -164,10 +183,30 @@
                 </div>
                 
             </div>
-            <form class="w-full p-3 ">
-                <input bind:this={main_input} class="w-full focus:outline-none p-3 border-none rounded-xl bg-gray-100 h-15 text-gray-900 text-xl" type="text" bind:value={answer} placeholder={!isCorrect? currentWord.term:""}>
+            <div class="w-full p-3">
+                <form class="flex flex-wrap gap-3">
+                    {#if beforeinput || afterinput}
+                    <span class="text-xl">{beforeinput}</span>
+                    <span>
+                        <input bind:this={main_input} class="focus:outline-none w-20 border-none p-2 rounded-xl bg-gray-100 text-gray-900" type="text" bind:value={answer} placeholder={!isCorrect? currentWord.term:""}>
+                    </span>
+                    <span class="text-xl">{afterinput}</span>
+                    {:else}
+                    {#if currentWord.term}
+                    {#await fetchsentence()}
+                    <span class="loading loading-spinner"></span>
+                    {:then value}
+                    <span class="text-xl">{value.examples[0].example.split(currentWord.term, 2)[0]}</span>
+                    <span>
+                        <input bind:this={main_input} class="focus:outline-none border-none rounded-xl p-2 bg-gray-100 text-gray-900" type="text" bind:value={answer} placeholder={!isCorrect? currentWord.term:""}>
+                    </span>
+                    <span class="text-xl">{value.examples[0].example.split(currentWord.term, 2)[1]}</span>
+                    {/await}
+                    {/if}
+                    {/if}
                 <button onclick={checkAnswer} class="hidden" type="submit"></button>
-            </form>
+                </form>
+            </div>
             
             <div class={{"transition-all duration-200 text-center shrink":true,"opacity-0":!showResult}}>
                 <div class={{
