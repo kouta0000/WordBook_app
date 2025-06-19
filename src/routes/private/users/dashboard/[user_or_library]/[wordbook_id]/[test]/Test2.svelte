@@ -73,7 +73,7 @@
             currentWord = questions[questionIndex];
             beforeinput = currentWord.sentence.examples?.[0].example.split(`${currentWord.term}`, 2)[0];
             afterinput = currentWord.sentence.examples?.[0].example.split(`${currentWord.term}`, 2)[1];
-            main_display = currentWord.examples?.translation;
+            main_display = currentWord.sentence.examples?.[0].translation;
             await tick();
             setTimeout(()=> main_input?.focus(), 50);            
         } else {
