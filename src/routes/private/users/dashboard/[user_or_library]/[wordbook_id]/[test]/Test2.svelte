@@ -27,8 +27,12 @@
     let answer = $state("");
     let showResult = $state(false);
     let isCorrect = $state(true);
-    let beforeinput:string = $state("");
-    let afterinput:string= $state("");
+
+
+    let beforeInput:string = $state("");
+    let afterInput:string= $state("");
+    let isfetching:boolean = $state(false);
+
     interface Word {
         id:number;
         term: string;
@@ -56,6 +60,7 @@
         }
     }
     const fetchsentence = async ():Promise<{examples:{example:string, translation:string}[]}> => {
+        isfetching=true;
         const res = await fetch(`/api/text?language=${language}&type=${"sentence"}&id=${currentWord.id}&regenerate=""`, {
             method:"POST",
             headers: {
@@ -64,15 +69,14 @@
             body:JSON.stringify({text: currentWord.term})
         });
         const response = await res.json();
-        main_display = response.examples[0].translation;
         return response
     }
     const showQuestion = async () => {
         questionIndex++;
         if (questionIndex<length) {
             currentWord = questions[questionIndex];
-            beforeinput = currentWord.examples?.example.split(`${currentWord.term}`, 2)[0];
-            afterinput = currentWord.examples?.example.split(`${currentWord.term}`, 2)[1];
+            beforeInput = currentWord.examples?.example.split(`${currentWord.term}`, 2)[0];
+            afterInput = currentWord.examples?.example.split(`${currentWord.term}`, 2)[1];
             main_display = currentWord.examples?.translation;
             await tick();
             setTimeout(()=> main_input?.focus(), 50);            
@@ -185,24 +189,14 @@
             </div>
             <div class="w-full p-3">
                 <form class="flex flex-wrap gap-3 items-center justify-center">
-                    {#if beforeinput || afterinput}
+                    {#if isfetching}
+                    <span class="loading loading-spinner"></span>
+                    {:else if beforeinput || afterinput}
                     <span class="text-xl">{beforeinput}</span>
                     <span>
                         <input bind:this={main_input} class="focus:outline-none w-20 border-none p-2 rounded-xl bg-gray-100 text-gray-900" type="text" bind:value={answer} placeholder={!isCorrect? currentWord.term:""}>
                     </span>
                     <span class="text-xl">{afterinput}</span>
-                    {:else}
-                    {#if currentWord.term}
-                    {#await fetchsentence()}
-                    <span class="loading loading-spinner"></span>
-                    {:then value}
-                    <span class="text-xl">{value.examples[0].example.split(currentWord.term, 2)[0]}</span>
-                    <span>
-                        <input bind:this={main_input} class="focus:outline-none border-none rounded-xl p-2 bg-gray-100 text-gray-900" type="text" bind:value={answer} placeholder={!isCorrect? currentWord.term:""}>
-                    </span>
-                    <span class="text-xl">{value.examples[0].example.split(currentWord.term, 2)[1]}</span>
-                    {/await}
-                    {/if}
                     {/if}
                 <button onclick={checkAnswer} class="hidden" type="submit"></button>
                 </form>
