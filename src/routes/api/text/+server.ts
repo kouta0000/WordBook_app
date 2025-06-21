@@ -61,7 +61,7 @@ export const POST: RequestHandler = async ({url, request}) => {
                 }
             })
         }
-        prompt = `あなたは言語アシスタントです。${language}の${text}の例文を日本語の翻訳付きで2つ作ってください。`
+        prompt = `あなたは言語アシスタントです。${language}の${text}を使った50文字以内の例文を2つ作り、日本語の翻訳もつけてください`
     };
     const response = await google_genai.models.generateContent({
         model: 'models/gemini-2.0-flash-lite',

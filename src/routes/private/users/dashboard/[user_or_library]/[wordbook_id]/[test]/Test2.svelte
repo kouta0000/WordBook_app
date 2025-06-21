@@ -221,14 +221,13 @@
     <div class="w-full md:w-4/5 lg:w-3/10 mx-auto  lg:h-full flex flex-col bg-slate-100 rounded-2xl shadow-xl">
         <div class="border-5 border-double border-indigo-300/50 shadow-lg shadow-slate-100 bg-gray-50/80 rounded-2xl text-gray-600 font-bold px-2 flex flex-col items-center">
             <div class="w-4/5">
-                <progress class="progress progress-primary h-2 bg-slate-200" value={questionIndex*(100/length)} max="100"></progress>
+                <progress class="progress progress-primary h-3 bg-slate-200 my-3" value={questionIndex*(100/length)} max="100"></progress>
             </div>
             <div class="w-full flex items-center justify-between py-1 px-5">
                 <div class="flex items-center gap-1">
                     <h1 class="text-xs max-w-4/5 whitespace-nowrap">{wb_name}</h1>
                 </div>
                 <div class="text-right">
-                    <div class="text-xs opacity-90 whitespace-nowrap">進行度</div>
                     <div class="text-sm font-bold">
                         {`${questionIndex}/${length}`}
                     </div>
@@ -257,9 +256,9 @@
                 </form>
             </div>
             
-            <div class={{"transition-all duration-200 text-center shrink":true,"opacity-0":!showResult}}>
+            <div class={{"transition-all duration-200 w-full flex justify-end":true,"opacity-0":!showResult}}>
                 <div class={{
-                    " text-center w-3/5 inline-flex items-center gap-2 px-6 py-1 lg:mb-2 rounded-full font-bold mb-1":true,
+                    "text-center w-1/2 gap-2 px-6 py-1 lg:mb-2 rounded-full font-bold mb-1":true,
                     "bg-green-100 text-green-800":isCorrect,
                     "bg-red-100 text-red-800":!isCorrect}}>
                     {isCorrect? "✔正解":"✗不正解"}    

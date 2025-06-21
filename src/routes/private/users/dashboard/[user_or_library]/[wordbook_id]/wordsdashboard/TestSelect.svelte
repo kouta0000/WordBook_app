@@ -1,23 +1,40 @@
 
-<div class="h-screen w-full pt-25 pb-15 flex flex-col items-center justify-start bg-slate-100 absolute z-20">
-    <div class="full p-10">
+<div class="min-h-screen w-full pt-20 pb-15 flex flex-col items-center justify-start bg-slate-100">
+    <div class="full p-5">
         <h1 style="animation: rainbow 1s ease-in-out;" class=" text-center font-bold text-3xl">テスト</h1>
     </div>
-                <div class="grid grid-cols-2  gap-4 w-9/10 lg:w-1/3 p-5">
-                    <div class="w-full aspect-square  mask mask-squircle bg-white  hover:bg-indigo-200/80 relative">
-                    <a href="./4taku" class="absolute inset-0 flex justify-center items-center">
-                        ４択問題
-                    </a>
-                    </div>
-                    <div class="w-full aspect-square  mask mask-squircle grow bg-white  hover:bg-indigo-200/80 relative">
-                        <a href="./input" class="absolute inset-0 flex justify-center items-center">
-                        入力
+                <div class="bg-white rounded-3xl grid grid-cols-2  gap-4 w-9/10 lg:w-1/3 px-15 py-5">
+                    <div class="w-full">
+                    <div class="w-full aspect-square  mask mask-squircle bg-white flex flex-col items-center  relative">
+                        <div class="w-full aspect-square p-7 relative">
+                        <img class="size-full" src="/images/4taku.png">
+                        </div>
+                        <a href="./4taku" class="absolute bg-gray-200/30 hover:bg-indigo-200/40 inset-0 flex justify-center items-center">
                         </a>
                     </div>
-                    <div class="w-full aspect-square  mask mask-squircle grow bg-white opacity-50 relative">
-                        <a href="./" class="absolute inset-0 flex justify-center items-center">
-                        並び替え
+                    <div class="w-full text-center p-1 font-black text-gray-600">4択問題</div>
+                    </div>
+                    <div class="w-full">
+                    <div class="w-full aspect-square  mask mask-squircle bg-white flex flex-col items-center  relative">
+                        <div class="w-full p-6 aspect-square flex flex-col justify-start items-center">
+                        <img class="size-9/10" src="/images/input.png">
+                        </div>
+                        
+                        <a href="./input" class="absolute bg-gray-200/30 hover:bg-indigo-200/40 inset-0 flex justify-center items-center">
                         </a>
+                    </div>
+                    <div class="w-full text-center p-1  text-gray-600 font-black">入力問題</div>
+                    </div>
+                    <div class="w-full">
+                    <div class="w-full aspect-square  mask mask-squircle bg-white flex flex-col items-center  relative">
+                        <div class="w-full p-8 aspect-square relative">
+                        <img class="size-full" src="/images/order.png">
+                        </div>
+                        
+                        <a href="./" class="absolute bg-gray-200/80 inset-0 flex justify-center items-center">
+                        </a>
+                    </div>
+                    <div class="w-full text-center p-1  text-gray-500 font-black">並び替え問題</div>
                     </div>
                 </div>
 </div>

@@ -34,7 +34,7 @@
 </div>
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center ">
         <div class="text mt-23 mb-10 lg:mt-20 w-full flex justify-start items-center realtive h-20">
-            <h1 class="shadow-lg p-6 ml-10 mb-6 text-white text-xl max-w-3/5 rounded-3xl bg-linear-to-br from-indigo-500 to-sky-500">{wb_name}</h1>
+            <h1 class="shadow-lg p-6 ml-10 mb-6 text-indigo-700 text-xl max-w-3/5 rounded-3xl bg-linear-to-br from-indigo-100 to-gray-100">{wb_name}</h1>
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
             <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-4 justify-end items-center absolute fixed bottom-17 md:bottom-22 md:right-20 z-20">
