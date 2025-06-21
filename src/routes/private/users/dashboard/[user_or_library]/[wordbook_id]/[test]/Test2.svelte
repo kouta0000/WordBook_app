@@ -219,24 +219,24 @@
     {/if}
     {#if !isQuizComplete}
     <div class="w-full md:w-4/5 lg:w-3/10 mx-auto  lg:h-full flex flex-col bg-slate-100 rounded-2xl shadow-xl">
-        <div class="border-5 border-double border-indigo-300/50 shadow-lg shadow-slate-100 bg-gray-50/80 rounded-2xl text-gray-600 font-bold p-3 flex flex-col">
+        <div class="border-5 border-double border-indigo-300/50 shadow-lg shadow-slate-100 bg-gray-50/80 rounded-2xl text-gray-600 font-bold p-2 flex flex-col">
             <div class="w-full">
                 <progress class="progress progress-primary h-2 bg-slate-200" value={questionIndex*(100/length)} max="100"></progress>
             </div>
             <div class="flex items-center justify-between p-5">
                 <div class="flex items-center gap-1">
-                    <h1 class="text-sm max-w-4/5">{wb_name}</h1>
+                    <h1 class="text-xs max-w-4/5">{wb_name}</h1>
                 </div>
                 <div class="text-right">
-                    <div class="text-sm opacity-90 whitespace-nowrap">進行度</div>
+                    <div class="text-xs opacity-90 whitespace-nowrap">進行度</div>
                     <div class="text-lg font-bold">
                         {`${questionIndex}/${length}`}
                     </div>
                 </div>
                 
             </div>
-            <hr class="h-1 bg-gray-200 mt-1 mb-2 mx-auto">
-            <div class="w-full mt-3">
+            <hr class="h-1 bg-gray-200 mt-1 mb-1 mx-auto">
+            <div class="w-full mt-1">
                 <form class="flex flex-wrap gap-1 items-center justify-center text-indigo-800/80 ">
                     {#if isfetching}
                     <span class="loading loading-spinner"></span>
