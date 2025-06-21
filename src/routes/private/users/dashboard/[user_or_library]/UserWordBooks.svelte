@@ -19,12 +19,14 @@ interface Wordbook {
     let { wordbooks }: Props = $props();
     let isChecked: boolean = $state(false);
     let dialogs: Array<HTMLDialogElement> = $state([]);
+    let dialogs2:Array<HTMLDialogElement> = $state([]);
     let forms:Array<HTMLFormElement> = $state([]);
     let sum =$state(0);
     for (const w of wordbooks) {
         sum+=w.word_number;
     }
     let deleting: boolean = $state(false);
+    let updating: boolean = $state(false);
     let dialog: HTMLDialogElement | undefined = $state();
     let animaux = $state(["/images/tlex.png", "/images/ptella.png", "/images/raptor.png", "/images/tri.png","/images/presio.png", "/images/black.png"])
     
@@ -70,12 +72,12 @@ onMount(()=>{
 </dialog>
 
     <div class="w-full min-h-screen pt-20 flex flex-col items-center">
-        <div class="flex mb-10 justify-start w-full">
-        <div class="gap-2 text-xl mask mask-squircle bg-white size-27 flex flex-col justify-center items-center">
+        <div class="flex mb-10 justify-start w-full p-1 px-5 gap-5">
+        <div class="gap-2 text-sm text-indigo-900 mask mask-squircle bg-linear-to-r from-indigo-100 to-pink-50 size-20 flex flex-col justify-center items-center">
             <p>単語帳数</p>
             <p>{wordbooks.length}</p>
         </div>
-        <div class="gap-2 text-xl mask mask-squircle bg-white size-27 flex flex-col justify-center items-center">
+        <div class="gap-2 text-sm text-indigo-900 mask mask-squircle bg-linear-to-r from-indigo-100 to-pink-50 size-20 flex flex-col justify-center items-center">
             <p>総単語数</p>
             <p>{sum}</p>
         </div>
@@ -97,45 +99,60 @@ onMount(()=>{
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-13 sm:gap-x-0 items-center place-items-center">
             
             {#each wordbooks as wordbook, id (wordbook.id)}
+            <!--削除だいあろぐ-->
             <dialog bind:this={dialogs[id]} class="modal">
                 <div class="modal-box flex bg-slate-100 flex-col gap-4 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
                     <p>本当に削除しますか？</p>
+                    <form method="POST" action="?/delete" use:enhance={ async () => {
+                        return async ({ update }) => {
+                                await update();
+                                deleting=false;
+                            }}
+                        }> 
                     <button class="btn btn-base" onclick={() => {deleting=true;dialogs[id]?.close()}}>はい</button>
-                    <button class="btn btn-base" onclick={() => {deleting=false;dialogs[id]?.close()}}>いいえ</button>
+                    <input type="hidden" name="wordbook_id" value={wordbook.id}>
+                    </form>
+                    <button class="btn btn-base" onclick={() => {dialogs[id]?.close()}}>いいえ</button>
+                </div>
+            </dialog>
+            <!--更新だいあろぐ-->
+            <dialog bind:this={dialogs2[id]} class="modal">
+                <div class="modal-box flex bg-slate-100 flex-col gap-4 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
+                    <p>変更</p>
+                    <form method="POST" action="?/update" use:enhance={ async () => {
+                        return async ({ update }) => {
+                                await update();
+                                updating=false;
+                            }}
+                        } class="w-4/5 flex flex-col justify-center items-center gap-3">
+                    <label class="input rounded-xl text-gray-500">
+                        名前
+                        <input type="text" class="text-center text-gray-900" name="wb_name" value={wordbook.wb_name} required>
+                    </label>
+                    <button class="btn btn-base" onclick={() => {updating=true;dialogs2[id]?.close()}}>送信</button>
+                    <input type="hidden" name="wordbook_id" value={wordbook.id}>
+                    </form>
+                    <button class="btn btn-base" onclick={() => {dialogs2[id]?.close()}}>閉じる</button>
                 </div>
             </dialog>
            
             <div in:fly={{duration:300, y:20}} out:fade class="shadow-sm active:bg-indigo-100 transition-all duration-200 w-9/10 sm:grow p-7 flex flex-col gap-2 rounded-xl bg-white relative">
                 <a href="./user/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
                 {#if isChecked}
-                <form use:enhance={ async (submitEvent) => {
-                    dialogs[id]?.showModal();
-                    const wait_dialog = () => {
-                        return new Promise((resolve) => {
-                            dialogs[id]?.addEventListener("close", () => {resolve("success")}, {once: true});
-                        });
-                    }
-                    await wait_dialog();
-                    if (!deleting) {
-                        submitEvent.cancel();
-                    } else {
-                        return async ({ update }) => {
-                            await update();
-                            deleting=false;
-                        }
-                    };
-                }} transition:fade={{duration:150}}  method="POST" action="?/delete" class={{"absolute z-2 top-0 right-0 size-20 aspect-square rounded-3xl":true}}>
-                    <button type="submit" class={{"h-full w-full flex":true}}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-1/3 aspect-ratio-1/1 my-auto ml-auto mr-2 bg-white/80">
-                            <rect x="7" y="6" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
-                            <rect x="8" y="4" width="8" height="2" fill="none" stroke="gray" stroke-width="1"/>
-                            <line x1="9" y1="8" x2="9" y2="16" stroke="gray" stroke-width="1"/>
-                            <line x1="12" y1="8" x2="12" y2="16" stroke="gray" stroke-width="1"/>
-                            <line x1="15" y1="8" x2="15" y2="16" stroke="gray" stroke-width="1"/>
-                          </svg>
+                <div transition:fade={{duration:150}}  class={{"absolute z-2 top-0 right-0 w-full py-1 px-2 flex gap-2  justify-end":true}}>
+                    <button onclick={()=>dialogs[id]?.showModal()} class="text-gray-500 hover:text-indigo-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                        </svg>                          
                     </button>
-                    <input type="hidden" name="wordbook_id" value={wordbook.id}>
-                </form>
+                    <button onclick={()=>dialogs2[id]?.showModal()} class="text-gray-500 hover:text-indigo-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>                     
+                    </button>
+                   
+                </div>
                 {/if}
                 <div class="flex">
                     <div class="w-2/11 self-center mask mask-squircle p-4 flex justify-center items-center bg-radial from-indigo-600 to-sky-400/70 text-white font-black text-3xl aspect-square text-center">{wordbook.wb_name[0]}</div>

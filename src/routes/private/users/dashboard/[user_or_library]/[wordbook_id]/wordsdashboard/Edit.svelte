@@ -67,7 +67,7 @@
             {#each words as word, id (word.id)}
             <dialog bind:this={dialogs[id]} class="modal w-full">
                 <div class="modal-box bg-slate-100 flex flex-col gap-4 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
-                    <p>本当に削除しますか？</p>
+                    <p>削除しますか？</p>
                     <form use:enhance={()=>{
                         deleting=true;
                         return async ({update}) => {
@@ -97,20 +97,23 @@
                         
                             <div  class="w-full flex">
                                 <label class="input input-ghost input-sm rounded-xl">
-                                <p class="text-2xl text-stone-400">{">"}</p>
-                                <input type="text" placeholder="変更" id="term" name="term" value={word.term} class="m-auto font-semibold font-sans text-xl">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                      </svg>                                      
+                                <input type="text" placeholder="変更" id="term" name="term" value={word.term} class="pb-1 font-semibold font-sans text-xl">
                                 </label>
                             </div>
                             <div class="px-2 flex w-full relative bg-white">
                                 <label class="input input-ghost input-sm rounded-xl max-w-9/10 font-sans text-sm  mx-auto">
-                                <p class="text-stone-400">{">"}</p>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.49 12 3.75 3.75m0 0-3.75 3.75m3.75-3.75H3.74V4.499" />
+                                      </svg>                                      
                                 <input type="text" id="meaning" name="meaning" value={word.meaning}>
                                 </label>
-                                <button type="button" onclick={()=>{isChecked=!isChecked;updatings[id] = false}} class="btn btn-base rounded-full my-auto btn-xs">
-                                    戻る
-                                </button>
-                                <button type="submit" class="btn btn-base rounded-full my-auto btn-xs">
-                                    保存
+                                <button type="submit" class="btn btn-base rounded-full my-auto btn-sm text-gray-900">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                                      </svg>                                      
                                 </button>
                                 <input type="hidden" id="id" name="id" value={word.id}>
                         </div>
@@ -128,27 +131,17 @@
                         </div>
                         <p class="text-gray-500 text-right font-sans p-1 pr-2">{word.meaning}</p>
                     </div>  
-                    <div class="flex flex-col border-l-1 border-indigo-300 justify-center items-center w-1/8 z-2">
+                    <div class="flex flex-col bg-indigo-200  rounded-r-xl border-indigo-300 justify-center items-center w-1/8 z-2">
                         <button  class="h-full aspect-ration-1/1" onclick={() => dialogs[id]?.showModal()}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" class="w-full m-auto fill-none rounded-3xl">
-                                <rect x="7" y="9" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
-                                <rect x="8" y="7" width="8" height="2" fill="none" stroke="gray" stroke-width="1"/>
-                                <line x1="9" y1="11" x2="9" y2="19" stroke="gray" stroke-width="1"/>
-                                <line x1="12" y1="11" x2="12" y2="19" stroke="gray" stroke-width="1"/>
-                                <line x1="15" y1="11" x2="15" y2="19" stroke="gray" stroke-width="1"/>
-                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                              </svg>                                               
                         </button>
-                        <button class="h-full aspect-ratio-1/1" onclick={() => {updatings[id]=true;isChecked=!isChecked}}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67 67" class="w-full m-auto fill-none rounded-3xl">
-                                <g transform="translate(32,32) scale(1.2) rotate(-45) translate(-32,-32)">
-                                  <!-- 鉛筆の先端（尖った部分） -->
-                                  <polygon points="18,28 12,32 18,36" fill="#808080" />
-                                  <!-- 鉛筆の本体（太めで角を丸く） -->
-                                  <rect x="18" y="28" width="28" height="8" rx="3" ry="3" fill="#808080" />
-                                  <!-- 消しゴム部分（可愛らしい丸みをプラス） -->
-                                  <rect x="46" y="28" width="6" height="8" rx="1.5" ry="1.5" fill="#808080" />
-                                </g>
-                            </svg>
+                        <button class="h-full aspect-ratio-1/1" onclick={() => {updatings[id]=!updatings[id]}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
+                              </svg>
+                                                          
                         </button>
                     </div>      
                 </div>

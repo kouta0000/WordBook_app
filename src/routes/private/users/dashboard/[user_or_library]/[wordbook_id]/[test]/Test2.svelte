@@ -219,7 +219,7 @@
     {/if}
     {#if !isQuizComplete}
     <div class="w-full md:w-4/5 lg:w-3/10 mx-auto  lg:h-full flex flex-col bg-slate-100 rounded-2xl shadow-xl">
-        <div class="border-5 border-double border-indigo-300/50 shadow-lg shadow-slate-100 bg-gray-50/80 rounded-2xl text-gray-600 font-bold px-2 flex flex-col items-center">
+        <div class="border-5 border-double border-indigo-300/50 shadow-lg shadow-slate-100 bg-white rounded-2xl text-gray-600 font-bold px-2 flex flex-col items-center">
             <div class="w-4/5">
                 <progress class="progress progress-primary h-3 bg-slate-200 my-3" value={questionIndex*(100/length)} max="100"></progress>
             </div>

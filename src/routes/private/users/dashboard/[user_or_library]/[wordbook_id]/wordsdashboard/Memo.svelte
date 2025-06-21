@@ -70,8 +70,19 @@
         <div class="mt-23 mb-10 lg:mt-20  w-full flex gap-5 justify-center items-center realtive h-20">
             <h1 class="shadow-lg p-6 text-indigo-700 text-xl max-w-3/5 rounded-3xl bg-linear-to-br from-indigo-100 to-gray-100">{wb_name}</h1>
             <div class="flex flex-col gap-2 justify-center">
-            <a href="./4taku" class="btn btn-base border-none shadow-sm rounded-3xl">4択テスト</a>
-            <a href="./input" class="btn btn-base border-none shadow-sm rounded-3xl">入力テスト</a>
+            <a href="./4taku" class="btn btn-base border-none shadow-sm rounded-3xl">
+                
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12" />
+                </svg>
+                4択テスト
+            </a>
+            <a href="./input" class="btn btn-base border-none shadow-sm rounded-3xl">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                  </svg>
+                  入力テスト
+                </a>
             </div>
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
@@ -82,7 +93,7 @@
             {#each wordsc as word,i (word.id)}
             <IntersectionObserver element={cards[i]} on:observe={(e) => {shows[i] = false;showPhrases[i]=false}}>
             <div bind:this={cards[i]} out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
-                <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-t-xl relative">
+                <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-t-xl rounded-r-xl relative">
                     <div class="grow flex flex-col max-w-9/10 relative">
                         <!--
                         <div class="absolute top-0 right-0 w-1/7">
@@ -96,20 +107,29 @@
                         <div style={parent_style} class="w-full">
                             <p use:fit={{min_size:10, max_size:22}} class="font-sans font-semibold pl-5 pr-1 pt-5 pb-1 text-2xl">{!soundmode? (isFlipped? word.meaning: word.term) : "📢"}</p>
                         </div>
-                        <div class="flex w-full p-1 h-7">
+                        <div class="flex w-full p-1 h-9">
                         {#if shows[i]}
                         <div style={parent_style}>
-                        <p use:fit={{min_size:5, max_size:15}} transition:fade={{duration:300}} class="text-gray-500 text-left pl-8 font-sans">
+                        <p use:fit={{min_size:15, max_size:25}} transition:fade={{duration:300}} class="text-gray-500 text-right font-sans p-1 pr-2">
                         {isFlipped? word.term: word.meaning}
                         </p>
                         </div>
                         {/if}
                         </div>
                     </div>  
-                    <div class="flex flex-col border-l-1 border-indigo-300 justify-center items-center w-1/10 z-2">
+                    <div class="flex flex-col bg-indigo-200 rounded-r-xl justify-center items-center w-1/10 z-2">
                         <AudioButton word={word.term} language={language} />
-                        <button class="w-full aspect-square bg-indigo-400 text-sm text-white text-bold" onclick={() => {shows[i] = !shows[i]}}>
-                        {"意味"}
+                        <button class="w-full aspect-square text-sm p-2" onclick={() => {shows[i] = !shows[i]}}>
+                            {#if !shows[i]}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-full">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                              </svg>
+                            {:else}
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-full">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                              </svg>
+                            {/if}                          
                         </button>
                     </div>
                 </div>
@@ -129,7 +149,12 @@
                 {#if showPhrases[i]}
                 <div transition:slide class={{"w-full overflow-hidden bg-white rounded-3xl flex flex-col transition-all duration-200":true}}>
                     <div class="w-full p-5 flex flex-col gap-3">
-                        <button class={{"self-end btn btn-xs  w-1/3 rounded-3xl btn-primary text-xs text-bold btn-outline":true}} onclick={()=> displays[i]=fetchtext(word.term, currentviews[i],word.id,true)}>再生成</button>
+                        <button class={{"self-end btn btn-xs  w-1/3 rounded-3xl btn-primary text-xs text-bold btn-outline":true}} onclick={()=> displays[i]=fetchtext(word.term, currentviews[i],word.id,true)}>
+                            再生成
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ml-3 size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5" />
+                              </svg>
+                            </button>
                     <div class={{"rounded-xl w-full gap-3":true, "flex flex-col":currentviews[i] == "sentence", "grid grid-cols-2":currentviews[i] != "sentence"}}>
                         
                         
@@ -149,7 +174,11 @@
                         <p>通信エラー：もう一度試してください</p>
                         {/await}
                     </div>
-                    <button onclick={() => showPhrases[i] = false} class="text-lg btn btn-xs btn-netural btn-outline self-end aspect-square mt-3">☓</button>
+                    <button onclick={() => showPhrases[i] = false} class="self-end aspect-square mt-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75 14.25 12m0 0 2.25 2.25M14.25 12l2.25-2.25M14.25 12 12 14.25m-2.58 4.92-6.374-6.375a1.125 1.125 0 0 1 0-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33Z" />
+                          </svg>
+                        </button>
                     </div>
                 </div>
                 {/if}

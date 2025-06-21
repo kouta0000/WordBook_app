@@ -28,8 +28,12 @@ export const load:PageServerLoad = async ({cookies, params, locals}) => {
     delete: async ({request}) => {
         const data: FormData = await request.formData();
         const wordbook_id = data.get("wordbook_id");
-        console.log(typeof wordbook_id)
         const {error} = await supabase.from("WordBooks").delete().eq("id", wordbook_id);  
-        console.log(wordbook_id)
+    }, 
+    update: async ({request}) => {
+        const data: FormData = await request.formData();
+        const wordbook_id = data.get("wordbook_id");
+        const wb_name = data.get("wb_name");
+        const {error } = await supabase.from("WordBooks").update({wb_name:wb_name}).eq("id",wordbook_id);
     }
 };
