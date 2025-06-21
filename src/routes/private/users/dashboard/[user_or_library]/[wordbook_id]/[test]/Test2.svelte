@@ -223,7 +223,7 @@
             <div class="w-4/5">
                 <progress class="progress progress-primary h-2 bg-slate-200" value={questionIndex*(100/length)} max="100"></progress>
             </div>
-            <div class="flex items-center justify-between py-1 px-5">
+            <div class="w-full flex items-center justify-between py-1 px-5">
                 <div class="flex items-center gap-1">
                     <h1 class="text-xs max-w-4/5 whitespace-nowrap">{wb_name}</h1>
                 </div>
