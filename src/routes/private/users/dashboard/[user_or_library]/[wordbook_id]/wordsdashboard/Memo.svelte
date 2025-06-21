@@ -115,14 +115,14 @@
                 </div>
                 
                     <div class="w-full relative transition-all duration-200 rounded-b-3xl">
-                        <div transition:slide class="w-9/10 rounded-b-3xl overflow-hidden flex self-start">
-                            <button onclick={() => {showPhrases[i]=true;currentviews[i]="synonym"; displays[i] = fetchtext(word.term,"synonym",word.id,false)}} class="btn  btn-sm bg-sky-400 text-white font-bold w-1/3">
+                        <div transition:slide class=" w-9/10 rounded-b-3xl overflow-hidden flex self-start">
+                            <button onclick={() => {showPhrases[i]=true;currentviews[i]="synonym"; displays[i] = fetchtext(word.term,"synonym",word.id,false)}} class="btn  btn-sm bg-gray-200 text-indigo-700  w-1/3">
                                 類語
                             </button>
-                            <button onclick={() => {showPhrases[i]=true;currentviews[i]="collocation";displays[i] = fetchtext(word.term,"collocation",word.id,false)}} class="btn btn-sm bg-sky-500 text-white font-bold w-1/3">
+                            <button onclick={() => {showPhrases[i]=true;currentviews[i]="collocation";displays[i] = fetchtext(word.term,"collocation",word.id,false)}} class="btn btn-sm bg-gray-300/80 text-indigo-700  w-1/3">
                                 表現
                             </button>
-                            <button onclick={() => {showPhrases[i]=true;currentviews[i]="sentence";displays[i] = fetchtext(word.term, "sentence", word.id,false)}} class="btn btn-sm bg-sky-700 text-white font-bold w-1/3">
+                            <button onclick={() => {showPhrases[i]=true;currentviews[i]="sentence";displays[i] = fetchtext(word.term, "sentence", word.id,false)}} class="btn btn-sm bg-gray-300 text-indigo-700  w-1/3">
                                 例文
                             </button>
                         </div>

@@ -164,7 +164,7 @@
 </script>
 
 
-<div id="displays" class="w-full  bg-linear-to-br from-white to-slate-100 h-screen p-4 flex gap-4 overflow-auto absolute z-20 relative">
+<div id="displays" class="w-full  bg-linear-to-br from-slate-100 to-slate-200 h-screen p-4 flex gap-4 overflow-auto absolute z-20 relative">
     {#if !testStarted}
     <div class="absolute inset-0 bg-slate-100 flex justify-center items-center z-21">
     <div class="flex flex-col  gap-3 justify-between bg-white w-9/10 md:w-3/5 lg:w-3/10  p-8 rounded-2xl shadow-lg">
@@ -208,18 +208,21 @@
             </div>
             <div class="w-full flex gap-1 justify-center p-5">
             <button onclick={()=> goto("./wordsdashboard")} class="btn btn-lg btn-active font-bold rounded-2xl btn-primary">
-                勉強終了
+                終了
             </button>
             <button onclick={()=>{clearInfo();questions = [];createQuestions(wordslist);questionIndex=-1;showQuestion();isQuizComplete=false;score=0;}} class="rounded-2xl font-bold btn btn-lg btn-active btn-primary">
-            もう一回勉強する
+            もう一回
             </button>
             </div>
         </div>
     </div>
     {/if}
     {#if !isQuizComplete}
-    <div class="w-full md:w-4/5 lg:w-3/10 mx-auto  lg:h-full flex flex-col bg-slate-50 rounded-2xl shadow-xl">
-        <div class=" shadow-lg shadow-slate-100 bg-linear-to-br from-indigo-400 to-indigo-300 rounded-2xl text-gray-100 font-bold p-3">
+    <div class="w-full md:w-4/5 lg:w-3/10 mx-auto  lg:h-full flex flex-col bg-slate-100 rounded-2xl shadow-xl">
+        <div class="border-5 border-double border-indigo-300/50 shadow-lg shadow-slate-100 bg-gray-50/80 rounded-2xl text-gray-600 font-bold p-3 flex flex-col">
+            <div class="w-full">
+                <progress class="progress progress-primary h-2 bg-slate-200" value={questionIndex*(100/length)} max="100"></progress>
+            </div>
             <div class="flex items-center justify-between p-5">
                 <div class="flex items-center gap-1">
                     <h1 class="text-sm max-w-4/5">{wb_name}</h1>
@@ -232,8 +235,9 @@
                 </div>
                 
             </div>
+            <hr class="h-1 bg-gray-200 mt-1 mb-2 mx-auto">
             <div class="w-full mt-3">
-                <form class="flex flex-wrap gap-1 items-center justify-center">
+                <form class="flex flex-wrap gap-1 items-center justify-center text-indigo-800/80 ">
                     {#if isfetching}
                     <span class="loading loading-spinner"></span>
                     {:else}
@@ -242,7 +246,7 @@
                     {/each}
                     <span>
                     <span style={parent_style}>
-                        <input use:fit={{min_size:5, max_size:20}} bind:this={main_input} class="text-center focus:outline-none border-none p-1 py-2 w-40 text-2xl rounded-lg bg-gray-200 text-gray-900" type="text" bind:value={inputedAnswer} placeholder={!isCorrect? answerWord:""}>
+                        <input use:fit={{min_size:10, max_size:20}} bind:this={main_input} class="text-center focus:outline-none border-none p-1 py-2 w-40 text-2xl rounded-lg bg-gray-200 text-gray-900" type="text" bind:value={inputedAnswer} placeholder={!isCorrect? answerWord:""}>
                     </span>
                     </span>
                     {#each afterInput as a}
@@ -255,22 +259,20 @@
             
             <div class={{"transition-all duration-200 text-center shrink":true,"opacity-0":!showResult}}>
                 <div class={{
-                    " w-3/5 inline-flex items-center gap-2 px-6 py-1 lg:mb-2 rounded-full font-semibold mb-3":true,
+                    " text-center w-3/5 inline-flex items-center gap-2 px-6 py-1 lg:mb-2 rounded-full font-bold mb-3":true,
                     "bg-green-100 text-green-800":isCorrect,
                     "bg-red-100 text-red-800":!isCorrect}}>
                     {isCorrect? "✔正解":"✗不正解"}    
                 </div>
             </div>
-            <div class="w-full">
-                <progress class="progress progress-primary h-2 bg-slate-50" value={questionIndex*(100/length)} max="100"></progress>
-            </div>
+            
         </div>
-
+        
         <div class="p-8 grow flex flex-col">
             <div class="text-center">
                 <div class="bg-indigo-100 rounded-2xl mb-4">
                     <div style={parent_style}>
-                        <div use:fit={{min_size:5, max_size:25}} class="px-5 py-5 max-h-25 lg:max-h-20 lg:py-3 text-wrap font-bold text-gray-800">
+                        <div use:fit={{min_size:5, max_size:20}} class="p-8 lg:p-5 text-wrap font-[650] text-gray-800/95">
                             {main_display}
                         </div>
                     </div>

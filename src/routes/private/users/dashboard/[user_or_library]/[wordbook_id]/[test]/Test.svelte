@@ -109,7 +109,7 @@
         answer = "";
     }
 </script>
-<div id="displays" class="w-full bg-linear-to-br from-white to-slate-100 h-screen p-4 flex gap-4 overflow-auto absolute z-20 relative">
+<div id="displays" class="w-full bg-linear-to-br from-slate-100 to-slate-200 h-screen p-4 flex gap-4 overflow-auto absolute z-20 relative">
     {#if lengthdeciding}
     <div class="absolute inset-0 bg-slate-100 flex justify-center items-center z-21">
     <div class="flex flex-col  gap-3 justify-between bg-white w-9/10 md:w-3/5 lg:w-3/10  p-8 rounded-2xl shadow-lg">
@@ -134,10 +134,10 @@
     </div>
     {/if}
     <div class="w-full md:w-4/5 lg:w-3/10 mx-auto flex flex-col bg-slate-50 rounded-2xl shadow-xl">
-        <div class="bg-linear-to-br from-indigo-600 to-indigo-300 rounded-2xl text-white p-8">
+        <div class="border-5 border-double border-indigo-300 bg-gray-100 rounded-2xl text-gray-700 p-8">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-1">
-                    <h1 class="text-2xl font-bold">{wb_name}</h1>
+                    <h1 class="text-lg font-bold">{wb_name}</h1>
                 </div>
                 <div class="text-right">
                     <div class="text-sm opacity-90">進行度</div>
@@ -147,22 +147,22 @@
                 </div>
             </div>
             <div class="w-full">
-                <progress class="progress progress-primary h-2 bg-slate-50" value={questionIndex*(100/length)} max="100"></progress>
+                <progress class="bg-slate-200 progress progress-primary h-2 bg-slate-50" value={questionIndex*(100/length)} max="100"></progress>
             </div>
         </div>
         <div class="p-8 grow flex flex-col">
             {#if !isQuizComplete}
-            <div class="text-center">
-                <div class="bg-linear-to-r from-blue-100 to-indigo-100 rounded-2xl mb-4">
+            <div class="text-center flex flex-col">
+                <div class="bg-linear-to-r from-indigo-100 to-gray-200 rounded-2xl ">
                     <div style={parent_style}>
-                    <div use:fit={{min_size:10, max_size:35}} class="px-5 py-8 max-h-40 lg:max-h-20 lg:py-3 text-wrap font-bold text-gray-800">
+                    <div use:fit={{min_size:10, max_size:35}} class="px-5 py-8 max-h-40 lg:max-h-20 lg:py-3 text-wrap font-bold text-indigo-700">
                         {main_display.term}
                     </div>
                     </div>
                 </div>
-                    <div class={{"text-center shrink mt-8":true,"opacity-0":!showResult}}>
+                    <div class={{"text-center self-end w-1/2 m-2":true,"opacity-0":!showResult}}>
                         <div class={{
-                            "w-3/5 inline-flex items-center gap-2 px-6 lg:py-1 lg:mb-2 py-3 rounded-full font-semibold mb-6":true,
+                            "w-full px-6 lg:py-1 lg:mb-2 py-3 rounded-full font-semibold mb-6":true,
                             "bg-green-100 text-green-800":answer==main_display.meaning,
                             "bg-red-100 text-red-800":!(answer==main_display.meaning)}}>
                         {answer==main_display.meaning? "✔正解":"✗不正解"}    
@@ -172,12 +172,12 @@
             <div class="flex flex-col items-center grow gap-4 mb-8">
                 {#each subdisplays as subdisplay, i (i)}
                 <button disabled={showResult} onclick={() => {postAnswer(subdisplay.meaning).then(() => {nextQuestion()});}} class={{
-                    "w-full px-3 py-4 text-left rounded-xl border-2 transition-all duration-300 font-medium":true,
-                    "border-slate-200 hover:border-blue-300 hober:bg-blue-50 bg-slate-100 hover:shadow-md cursor-pointer":!showResult,
+                    "w-full px-3 py-1 text-left rounded-xl border-2 transition-all duration-300 font-medium":true,
+                    "border-slate-200 hover:border-blue-300 hober:bg-blue-50 bg-linear-to-r from-blue-50 to-gray-100 hover:shadow-md cursor-pointer":!showResult,
                     "border-green-500 bg-green-100 text-green-800":showResult && answerInfo[i],
                     "border-red-500 bg-red-100 text-red-800": showResult && !answerInfo[i] && answer==subdisplay.meaning,
-                    "border-slate-200 bg-slate-100":showResult && !answerInfo[i] && !(answer==subdisplay.meaning)}}>
-                <span class="rounded-full bg-radial from-white to-slate-100 p-3 mr-4">{i+1}</span>
+                    "border-slate-200 bg-linear-to-r from-blue-50 to-gray-100":showResult && !answerInfo[i] && !(answer==subdisplay.meaning)}}>
+                <span class="mask mask-circle bg-white p-3 mr-4">{i+1}</span>
                 {subdisplay.meaning}
                 </button>
                 {/each}

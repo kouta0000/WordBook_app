@@ -1,23 +1,25 @@
 
-<div class="h-screen w-full pt-15 pb-15 flex items-center justify-center bg-slate-100 absolute z-20">
-    <div class="system-2">
-        <div class="display">
-            <div class="screen">
-                <div class="title">TEST GAME</div>
-                <div class="flex flex-col lg:grid grid-cols-2 gap-4">
-                    <a href="./4taku" class="block menu-item w-full">
+<div class="h-screen w-full pt-25 pb-15 flex flex-col items-center justify-start bg-slate-100 absolute z-20">
+    <div class="full p-10">
+        <h1 style="animation: rainbow 1s ease-in-out;" class=" text-center font-bold text-3xl">テスト</h1>
+    </div>
+                <div class="grid grid-cols-2  gap-4 w-9/10 lg:w-1/3 p-5">
+                    <div class="w-full aspect-square  mask mask-squircle bg-white  hover:bg-indigo-200/80 relative">
+                    <a href="./4taku" class="absolute inset-0 flex justify-center items-center">
                         ４択問題
                     </a>
-                    <a href="./input" class="block menu-item w-full">
-                        入力問題
-                    </a>
-                    <div class="menu-item">クロスワード（開発中）</div>
-                    <div class="menu-item">もぐらたたき（開発中）</div>
-                    <div class="menu-item">落下（開発中）</div>
+                    </div>
+                    <div class="w-full aspect-square  mask mask-squircle grow bg-white  hover:bg-indigo-200/80 relative">
+                        <a href="./input" class="absolute inset-0 flex justify-center items-center">
+                        入力
+                        </a>
+                    </div>
+                    <div class="w-full aspect-square  mask mask-squircle grow bg-white opacity-50 relative">
+                        <a href="./" class="absolute inset-0 flex justify-center items-center">
+                        並び替え
+                        </a>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
 </div>
 <style>
  .system-2 .display {
