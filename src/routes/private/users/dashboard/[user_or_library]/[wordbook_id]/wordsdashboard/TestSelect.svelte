@@ -44,10 +44,10 @@
                               </svg>
                         </div>
                         
-                        <a href="./sound" class="absolute bg-gray-200/40 inset-0 flex justify-center items-center">
+                        <a href="./sound" class="absolute bg-gray-200/30 inset-0 flex justify-center items-center">
                         </a>
                     </div>
-                    <div class="w-full text-center p-1  text-gray-500 font-black">音声</div>
+                    <div class="w-full text-center p-1  text-gray-600 font-black">音声</div>
                     </div>
                 </div>
 </div>
