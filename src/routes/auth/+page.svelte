@@ -3,24 +3,87 @@
   import {onMount} from "svelte";
   import {supabase} from "$lib/config/supabaseClient";
   import {goto} from "$app/navigation";
-  onMount(()=>{
-    (window as any).handleSignInWithGoogle = async (response:{credential?:string}) => {
-      if(response.credential) {
-        const {data, error} = await supabase.auth.signInWithIdToken({
-          provider:"google",
-          token:response.credential,
-        });
-        if(error) {
-          console.error("グーグル認証エラー", error.message);
-        } else {
-          console.log("ログイン完了", data.user);
-          goto("/private/users/dashboard/user");
-        } 
-      } else {
-          console.error("トークンエラー");
-      }
-    };
-  });
+  import { browser } from '$app/environment'; // browser 環境変数をインポート
+
+// コールバック関数を定義（これはクライアントサイドでのみ使用される）
+async function handleSignInWithGoogle(response: {credential?:string}) {
+  if(response.credential) {
+    const {data, error} = await supabase.auth.signInWithIdToken({
+      provider:"google",
+      token:response.credential,
+    });
+    if(error) {
+      console.error("グーグル認証エラー", error.message);
+    } else {
+      console.log("ログイン完了", data.user);
+      goto("/private/users/dashboard/user");
+    } 
+  } else {
+      console.error("トークンエラー");
+  }
+}
+
+// Google GSIライブラリのロードが完了し、
+// グローバルな `google.accounts.id` が利用可能になった後に実行される関数
+// この関数は、`onMount` の中で `window` オブジェクトに割り当てられます。
+function initializeGoogleSignIn() {
+  if ((window as any).google && (window as any).google.accounts && (window as any).google.accounts.id) {
+    // グローバルコールバックをセットアップ
+    // handleSignInWithGoogle は既に上記で定義されているので、それを参照
+    (window as any).handleSignInWithGoogle = handleSignInWithGoogle;
+
+    // GSI初期化
+    (window as any).google.accounts.id.initialize({
+      client_id: "1096950464221-hi47u5r38tejjgclo91i84o9sbaa6u6m.apps.googleusercontent.com",
+      callback: (window as any).handleSignInWithGoogle, // グローバルな関数を参照
+      context: "signin",
+      ux_mode: "popup",
+      // data-nonceはHTML側に記載があるので削除（またはサーバーサイドで動的に埋め込む）
+      auto_select: true,
+      itp_support: true,
+      use_fedcm_for_prompt: true,
+    });
+
+    // ボタンのレンダリング（HTMLにdivがあるため自動で処理されることも多いが、念のため）
+    const signInButton = document.getElementById("g_id_onload");
+    if (signInButton) {
+      (window as any).google.accounts.id.renderButton(
+        signInButton,
+        { theme: "outline", size: "large", text: "signin_with", shape: "rectangular", locale: "en-US", logo_alignment: "left" }
+      );
+    }
+  } else {
+      console.warn("Google GSI client library not loaded or initialized correctly.");
+  }
+}
+
+
+// コンポーネントがマウントされた時（クライアントサイドでのみ）実行
+onMount(() => {
+  if (browser) { // クライアントサイドでのみ実行されることを保証
+    // GSIスクリプトがまだ読み込まれていないかを確認し、動的に読み込む
+    // src/app.html に <script src="https://accounts.google.com/gsi/client" async defer></script>
+    // がある場合でも、念のためこのチェックと処理は残しておくのが安全です。
+    if (!(window as any).google || !(window as any).google.accounts || !(window as any).google.accounts.id) {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      
+      // スクリプトのロード完了を待ってから初期化処理を実行
+      script.onload = () => {
+        initializeGoogleSignIn();
+      };
+      script.onerror = (e) => {
+        console.error("Failed to load GSI client script", e);
+      };
+      document.head.appendChild(script);
+    } else {
+      // スクリプトが既にロードされている場合（例：SSR後のハイドレーション時）
+      initializeGoogleSignIn();
+    }
+  }
+});
 </script>
 <svelte:head>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
