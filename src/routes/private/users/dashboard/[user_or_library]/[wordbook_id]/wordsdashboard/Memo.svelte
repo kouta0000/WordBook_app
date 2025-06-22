@@ -164,22 +164,22 @@
                 
                     <div class="w-full relative transition-all duration-200 rounded-b-3xl">
                         <div transition:slide class=" w-9/10 rounded-b-3xl overflow-hidden flex self-start">
-                            <button onclick={() => {showPhrases[i]=true;currentviews[i]="synonym"; displays[i] = fetchtext(word.term,"synonym",word.id,false)}} class="btn  btn-sm bg-indigo-200/80 font-black w-1/3">
+                            <button onclick={() => {showPhrases[i]=true;showPhrases.forEach((v,id)=>{if(id!=i)showPhrases[id]=false});currentviews[i]="synonym"; displays[i] = fetchtext(word.term,"synonym",word.id,false)}} class="btn  btn-sm bg-indigo-200/80 font-black w-1/3">
                                 Syn.
                             </button>
-                            <button onclick={() => {showPhrases[i]=true;currentviews[i]="collocation";displays[i] = fetchtext(word.term,"collocation",word.id,false)}} class="btn btn-sm bg-indigo-200/90 font-black w-1/3">
+                            <button onclick={() => {showPhrases[i]=true;showPhrases.forEach((v,id)=>{if(id!=i)showPhrases[id]=false});currentviews[i]="collocation";displays[i] = fetchtext(word.term,"collocation",word.id,false)}} class="btn btn-sm bg-indigo-200/90 font-black w-1/3">
                             Col.
                             </button>
-                            <button onclick={() => {showPhrases[i]=true;currentviews[i]="sentence";displays[i] = fetchtext(word.term, "sentence", word.id,false)}} class="btn btn-sm bg-indigo-200  font-black  w-1/3">
+                            <button onclick={() => {showPhrases[i]=true;showPhrases.forEach((v,id)=>{if(id!=i)showPhrases[id]=false});currentviews[i]="sentence";displays[i] = fetchtext(word.term, "sentence", word.id,false)}} class="btn btn-sm bg-indigo-200  font-black  w-1/3">
                                 Ex.
                             </button>
                         </div>
                 {#if showPhrases[i]}
-                <div transition:slide class={{"w-full overflow-hidden bg-white rounded-3xl flex flex-col transition-all duration-200":true}}>
+                <div transition:slide class={{"absolute top-[100%] left-[50%] -translate-x-[50%] z-3 w-[98vw] md:w-[33vw] overflow-hidden bg-indigo-100/80 rounded-3xl flex flex-col transition-all duration-200":true}}>
                     <div class="w-full p-5 flex flex-col gap-3">
                         <button class={{"self-end btn btn-xs  w-1/3 rounded-3xl btn-primary text-xs text-bold btn-outline":true}} onclick={()=> displays[i]=fetchtext(word.term, currentviews[i],word.id,true)}>
                             再生成
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
                                 <path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" />
                             </svg>  
                             </button>
@@ -190,7 +190,7 @@
                         <p class="loading loading-dots"></p>
                         {:then value}
                         {#each value.examples as ex,index (index)}
-                            <div class="bg-gray-100 rounded-xl w-full p-5 pt-6 flex flex-col relative">
+                            <div class="bg-white rounded-xl w-full p-5 pt-6 flex flex-col relative">
                             <p>{ex.example}</p>
                             <p>({ex.translation})</p>
                             <div class={{"absolute bottom-0 right-0":true, "w-1/11":currentviews[i]=="sentence", "w-1/5":currentviews[i] != "sentence"}}>

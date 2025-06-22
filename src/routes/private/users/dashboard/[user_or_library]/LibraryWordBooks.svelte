@@ -56,16 +56,18 @@ const languages = [
             {#each language.data as wordbook, id (wordbook.id)}
             <div  class="shadow-sm active:bg-indigo-100 transition-all duration-200 flex flex-col gap-2 p-7 w-9/10 sm:grow rounded-xl bg-white relative">
                 <a href="./library/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
-                <div class="flex w-full justify-center items-center">
+                <div class="flex w-full justify-start items-center">
                     <div class="avatar w-1/5 aspect-square self-center">
                         <div class="mask mask-squircle size-full relative">
                             <div class="absolute inset-0 bg-radial from-indigo-400/20 to-indigo-100/20"></div>
                           <img class="" src={animaux[(id+1)*(language.id)%(animaux.length)]} />
                         </div>
                     </div>
-                    <div class="w-4/5 flex flex-col justify-center p-3">
-                    <h1 class="text-xl text-center mb-3">{wordbook.wb_name}</h1>
-                    <p class="text-right text-indigo-400 text-md">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p> 
+                    <div class="w-3/5 flex flex-col justify-center p-3">
+                    <h1 class="text-xl text-center">{wordbook.wb_name}</h1>
+                    </div>
+                    <div class="absolute bottom-0 right-0 p-2">
+                        <p class="text-right text-indigo-400 text-md">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p> 
                     </div>
                 </div>
                 

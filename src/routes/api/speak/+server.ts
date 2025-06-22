@@ -109,8 +109,8 @@ export const POST: RequestHandler = async ({url, request}) => {
     const {text} = await request.json();
     const [response] = await google_cloud_tts.synthesizeSpeech({
         input:{text},
-        voice:{languageCode: `${languagetopost}`, ssmlGender: 'NEUTRAL'},
-        audioConfig: {audioEncoding: 'MP3'}
+        voice:{languageCode: `${languagetopost}`, ssmlGender: 'MALE', },
+        audioConfig: {audioEncoding: 'MP3', speakingRate:0.9}
     });
     return new Response(response.audioContent as Buffer, {
         headers: {

@@ -84,9 +84,6 @@ onMount(()=>{
         </div>
         <h1 class="text-3xl mb-10 font-bold bg-gradient-to-r from-sky-500 to-indigo-500 inline-block text-transparent bg-clip-text">単語帳</h1>
         <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 lg:bottom-22 lg:right-5 z-20">
-            <button type="button" onclick={() => isChecked=!isChecked} class={{"btn btn-lg btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-indigo-500":!isChecked, "bg-linear-to-br from-indigo-500 to-sky-500":isChecked}}>
-                <p class="whitespace-nowrap text-white font-bold text-base">{ !isChecked? "選択": "元に戻す"}</p>
-            </button>
             <svg onclick={()=> dialog?.showModal()} xmlns="http://www.w3.org/2000/svg" class="active:scale-80" viewBox="0 0 64 64" width="56" height="56">
                 <!-- 楕円形の背景（空色） -->
                 <ellipse cx="32" cy="32" rx="30" ry="28" class="fill-indigo-500" />
@@ -136,10 +133,9 @@ onMount(()=>{
                 </div>
             </dialog>
            
-            <div in:fly={{duration:300, y:20}} out:fade class="shadow-sm active:bg-indigo-100 transition-all duration-200 w-9/10 sm:grow p-7 flex flex-col gap-2 rounded-xl bg-white relative">
+            <div class="shadow-sm active:bg-indigo-100 transition-all duration-200 w-9/10 sm:grow p-7 flex flex-col gap-2 rounded-xl bg-white relative">
                 <a href="./user/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
-                {#if isChecked}
-                <div transition:fade={{duration:150}}  class={{"absolute z-2 top-0 right-0 w-full py-1 px-2 flex gap-2  justify-end":true}}>
+                <div class={{"absolute z-2 top-0 right-0 w-full py-1 px-2 flex gap-2  justify-end":true}}>
                     <button onclick={()=>dialogs[id]?.showModal()} class="text-gray-500 hover:text-indigo-700">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -153,11 +149,12 @@ onMount(()=>{
                     </button>
                    
                 </div>
-                {/if}
-                <div class="flex">
-                    <div class="w-2/11 self-center mask mask-squircle p-4 flex justify-center items-center bg-radial from-indigo-600 to-sky-400/70 text-white font-black text-3xl aspect-square text-center">{wordbook.wb_name[0]}</div>
-                    <div class="w-8/11 flex flex-col justify-center p-3">
-                    <h1 class="text-xl text-center mb-3">{wordbook.wb_name}</h1>
+                <div class="flex items-center">
+                    <div class="w-2/13  mask mask-squircle p-4 flex justify-center items-center bg-radial from-indigo-600 to-sky-400/70 text-white font-black text-3xl aspect-square text-center">{wordbook.wb_name[0]}</div>
+                    <div class="w-8/13 flex flex-col justify-center items-center">
+                    <h1 class="text-xl text-center">{wordbook.wb_name}</h1>
+                    </div>
+                    <div class="absolute bottom-0 right-0 p-2">
                     <p class="text-right text-indigo-400 text-md">{wordbook.word_number? `${wordbook.word_number}語`: ""}</p>  
                     </div>
                 </div>

@@ -2,6 +2,7 @@
     import Test from "./Test.svelte";
     import Test2 from "./Test2.svelte";
     import Test3 from "./Test3.svelte";
+    import Test4 from "./Test4.svelte";
     import type { PageProps } from "./$types";
     import {navigating} from "$app/state";
      
@@ -24,4 +25,6 @@
 <Test2 wordslist={words} wb_name={wb_name} language={language} user_or_library={user_or_library} />
 {:else if test=="order"}
 <Test3 wordslist={words} wb_name={wb_name} language={language} user_or_library={user_or_library} />
+{:else if test=="sound"}
+<Test4 wordslist={words} wb_name={wb_name} language={language} user_or_library={user_or_library} />
 {/if}

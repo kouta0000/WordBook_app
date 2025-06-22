@@ -1,9 +1,9 @@
 
 <script lang="ts">
+    import { onMount, onDestroy, tick } from "svelte";
     let {word, language} = $props();
     let isChecked:boolean = $state(false);
     let audio:HTMLAudioElement | undefined = $state();
-    import { onDestroy } from "svelte";
     const fetchAudio = async () => {
         if (!audio) {
         const res = await fetch(`/api/speak?language=${language}`, {
@@ -23,15 +23,6 @@
         });
         isChecked = false;
     }
-    onDestroy(() => {
-        if (audio) {
-            audio.pause();
-            if (audio.src.startsWith('blob:')) {
-                URL.revokeObjectURL(audio.src);
-            }
-            audio = undefined;
-        }
-    });
 </script>
 <div class="w-full aspect-square my-auto p-2">
     <label class="swap">
