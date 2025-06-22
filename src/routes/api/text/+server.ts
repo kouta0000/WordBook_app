@@ -40,7 +40,7 @@ export const POST: RequestHandler = async ({url, request}) => {
                 }
             })
         }
-        prompt = `あなたは言語アシスタントです。${language}の${text}の類語の例を4つ、日本語の翻訳付きで教えてください。`;
+        prompt = `${language}の${text}の類語の例を4つ、日本語の翻訳付きで教えてください。`;
         
     } else if (type == "collocation") {
         const res = await supabase.from("Words").select("collocation").eq("id",id);
@@ -51,7 +51,7 @@ export const POST: RequestHandler = async ({url, request}) => {
                 }
             })
         }
-        prompt = `あなたは言語アシスタントです。${language}の${text}の2~4語からなるコロケーション表現の例を日本語の翻訳付きで4つ教えてください。返答は以下のjson形式で。`;
+        prompt = `${language}の${text}の2~4語からなるコロケーション表現の例を日本語の翻訳付きで4つ教えてください。返答は以下のjson形式で。`;
     } else if (type == "sentence" ) {
         const res = await supabase.from("Words").select("sentence").eq("id",id);
         if (res.data?.[0].sentence && !regenerate) {
@@ -61,7 +61,7 @@ export const POST: RequestHandler = async ({url, request}) => {
                 }
             })
         }
-        prompt = `あなたは言語アシスタントです。${language}の${text}を使った65文字以内の例文を2つ作ってください。それぞれに別で日本語のtranslationもつけてください。`
+        prompt = `${language}の${text}を使った簡潔な例文を2つ(60字以内)。日本語訳を別に付与。原文に訳文混入絶対不可。`
     };
     const response = await google_genai.models.generateContent({
         model: 'models/gemini-2.0-flash-lite',
