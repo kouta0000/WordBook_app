@@ -59,6 +59,11 @@
         const result = words[randomIndex];
         return result
     }
+    const getCleanWords = (sentence: string): string[] => {
+ 
+    const words = sentence.match(/[\p{L}\p{N}']+/gu);
+    return words ? words : []; // Return an empty array if no matches
+};
     const createQuestions = (words:Array<Word>) => {
         for (let i=0;i<length;i++) {
             questions.push(getRandomWord(words));
@@ -92,14 +97,14 @@
             currentWord = questions[questionIndex];
             if (currentWord.sentence) {
             const examples:{examples:{example:string, translation:string}[]} = JSON.parse(currentWord.sentence)
-            const list = examples.examples?.[0].example.split(" ");
-            answerphrase = [...list.slice(0, -1), list[list.length-1].slice(0,-1)];
+            const list = examples.examples?.[0].example;
+            answerphrase = getCleanWords(list);
             buttons = shuffle(answerphrase);
             main_display=examples.examples?.[0].translation;
             } else {
                 const res = await fetchsentence();
-                const list = res.examples?.[0].example.split(" ");
-                answerphrase = [...list.slice(0, -1), list[list.length-1].slice(0,-1)];
+                const list = res.examples?.[0].example;
+                answerphrase = getCleanWords(list);
                 buttons = shuffle(answerphrase);
                 main_display=res.examples?.[0].translation;
             }         

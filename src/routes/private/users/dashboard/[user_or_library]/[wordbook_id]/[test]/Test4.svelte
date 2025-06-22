@@ -108,21 +108,25 @@
         });
         isChecked = false;
     }
+    const getCleanWords = (sentence: string): string[] => {
+    const words = sentence.match(/[\p{L}\p{N}']+/gu);
+    return words ? words : []; // Return an empty array if no matches
+};
     const showQuestion = async () => {
         questionIndex++;
         if (questionIndex<length) {
             currentWord = questions[questionIndex];
             if (currentWord.sentence) {
             const examples:{examples:{example:string, translation:string}[]} = JSON.parse(currentWord.sentence)
-            const list = examples.examples?.[0].example.split(" ");
-            answerphrase = [...list.slice(0, -1), list[list.length-1].slice(0,-1)];
+            const list = examples.examples?.[0].example
+            answerphrase = getCleanWords(list);
             buttons = shuffle(answerphrase);
             playAudio();
             
             } else {
                 const res = await fetchsentence();
-                const list = res.examples?.[0].example.split(" ");
-                answerphrase = [...list.slice(0, -1), list[list.length-1].slice(0,-1)];
+                const list = res.examples?.[0].example;
+                answerphrase = getCleanWords(list);
                 buttons = shuffle(answerphrase);
                 main_display=res.examples?.[0].translation;
                 playAudio()
