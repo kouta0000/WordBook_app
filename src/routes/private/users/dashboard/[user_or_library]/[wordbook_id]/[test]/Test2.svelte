@@ -61,8 +61,9 @@
             questions.push(getRandomWord(words));
         }
     }
-    const fetchsentence = async ():Promise<{examples:{example:string, translation:string}[]}> => {
+    const fetchsentence = async (delay=500, retries=5):Promise<{examples:{example:string, translation:string}[]}> => {
         isfetching=true;
+        try {
         const res = await fetch(`/api/text?language=${language}&type=${"sentence"}&id=${currentWord.id}&regenerate=""`, {
             method:"POST",
             headers: {
@@ -73,16 +74,27 @@
         isfetching=false;
         const response = await res.json();
         return response
+    } catch (error) {
+        if (retries<=0) {
+            throw new Error('通信環境が不安定です。時間を置いて再度ロードしてください。' + error.message);
+        }
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return fetchsentence(delay,retries-1);
+    };
     }
+    const getCleanWords = (sentence: string): string[] => {
+ 
+ const words = sentence.match(/[\p{L}\p{N}']+/gu);
+ return words ? words : []; // Return an empty array if no matches
+};
     const showQuestion = async () => {
         questionIndex++;
         if (questionIndex<length) {
             currentWord = questions[questionIndex];
             if (currentWord.sentence) {
             const examples:{examples:{example:string, translation:string}[]} = JSON.parse(currentWord.sentence)
-            const list = examples.examples?.[0].example.split(" ");
-            const lword = list.pop()?? "";
-            const baf = [...list, lword.slice(0,-1), "."];
+            const list = examples.examples?.[0].example;
+            const baf = getCleanWords(list);
             const options = {// 検索対象のキーを指定
                 keys:[""],
                 threshold: 1.0,           // 類似度の閾値を設定
@@ -99,9 +111,8 @@
             main_display = examples.examples?.[0].translation;
             } else {
                 const res = await fetchsentence();
-                const list = res.examples?.[0].example.split(" ");
-                const lword = list.pop()?? "";
-                const baf = [...list, lword.slice(0,-1), "."];
+                const list = res.examples?.[0].example;
+                const baf = getCleanWords(list);
                 const options = {// 検索対象のキーを指定
                 keys:[""],
                 threshold: 1.0,           // 類似度の閾値を設定
@@ -114,8 +125,8 @@
                 const answerword=result[0].item;
                 const parts = res.examples?.[0].example.split(answerword,2);
                 answerWord = answerword;
-                beforeInput=parts[0].split(" ");
-                afterInput=parts[1].split(" ");
+                beforeInput=getCleanWords(parts[0]);
+                afterInput=getCleanWords(parts[1]);
                 main_display=res.examples?.[0].translation;
             }
 
@@ -245,7 +256,7 @@
                     {/each}
                     <span>
                     <span style={parent_style}>
-                        <input use:fit={{min_size:10, max_size:20}} bind:this={main_input} class="text-center focus:outline-none border-none p-1 py-2 w-40 text-2xl rounded-lg bg-gray-200 text-gray-900" type="text" bind:value={inputedAnswer} placeholder={!isCorrect? answerWord:""}>
+                        <input use:fit={{min_size:10, max_size:20}} bind:this={main_input} class="text-center focus:outline-none border-none p-1 py-2 w-40 text-2xl rounded-lg bg-gray-100 text-gray-900" type="text" bind:value={inputedAnswer} placeholder={!isCorrect? answerWord:""}>
                     </span>
                     </span>
                     {#each afterInput as a}
@@ -282,49 +293,4 @@
     {/if}
 </div>
    
-<style>
- @keyframes blink {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
 
-.blink {
-  animation: blink 1s steps(2, start) infinite;
-}
-.screen::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 4px,
-                rgba(0, 255, 0, 0.1) 4px,
-                rgba(0, 255, 0, 0.1) 6px
-            );
-            pointer-events: none;
-        }
-.screen2::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                90deg,
-                transparent,
-                transparent 4px,
-                rgba(0, 255, 0, 0.1) 4px,
-                rgba(0, 255, 0, 0.1) 6px
-            );
-            pointer-events: none;
-        }
-</style>

@@ -52,7 +52,6 @@
      data-context="signin"
      data-ux_mode="popup"
      data-callback="handleSignInWithGoogle"
-     data-nonce="" 
      data-auto_select="true" 
      data-itp_support="true"
      data-use_fedcm_for_prompt="true">

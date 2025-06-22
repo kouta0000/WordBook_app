@@ -69,19 +69,27 @@
             questions.push(getRandomWord(words));
         }
     }
-    const fetchsentence = async ():Promise<{examples:{example:string, translation:string}[]}> => {
+    const fetchsentence = async (delay=500, retries=5):Promise<{examples:{example:string, translation:string}[]}> => {
         isfetching=true;
-        const res = await fetch(`/api/text?language=${language}&type=${"sentence"}&id=${currentWord.id}&regenerate=""`, {
-            method:"POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body:JSON.stringify({text: currentWord.term})
-        });
-        isfetching=false;
-        const response = await res.json();
-        return response
-    }
+        try{
+            const res = await fetch(`/api/text?language=${language}&type=${"sentence"}&id=${currentWord.id}&regenerate=""`, {
+                method:"POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body:JSON.stringify({text: currentWord.term})
+            });
+            isfetching=false;
+            const response = await res.json();
+            return response
+        } catch (error) {
+        if (retries<=0) {
+            throw new Error('通信環境が不安定です。時間を置いて再度ロードしてください。'+error.message);
+        }
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return fetchsentence(delay,retries-1);
+    };
+}
     const shuffle = (input: Array<string>) => {
         const length: number = input.length-1;
         let words:string[] = [...input];

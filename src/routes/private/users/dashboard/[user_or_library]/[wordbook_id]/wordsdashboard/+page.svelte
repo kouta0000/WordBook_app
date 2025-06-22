@@ -35,7 +35,7 @@
     {#if user_or_library == "user"}
     <button onclick={()=> currentView = "edit"} class={{
         "btn btn-ghost font-bold h-full w-1/3 grow-1 basis-0":true,
-        "dock-active text-indigo-800":currentView =="edit",
+        "dock-active text-indigo-900":currentView =="edit",
         "text-gray-500":currentView=="memo" || currentView=="test" || currentView == "test2"
         }}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -45,7 +45,7 @@
     {/if}
     <button onclick={()=> currentView = "memo"} class={{
         "btn btn-ghost font-bold h-full w-1/3 grow-1 basis-0":true,
-        "dock-active text-indigo-800":currentView=="memo",
+        "dock-active text-indigo-900":currentView=="memo",
         "text-gray-500": currentView=="test" || currentView == "edit" 
         }}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -55,7 +55,7 @@
     
     <button onclick={() => currentView = "test"} class={{
         "btn btn-ghost font-bold h-full w-1/3 grow-1 basis-0":true,
-        "dock-active text-indigo-800":currentView=="test",
+        "dock-active text-indigo-900":currentView=="test",
         "text-gray-500": currentView=="memo" || currentView == "edit" 
         }}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-6">
