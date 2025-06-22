@@ -252,7 +252,7 @@
             </div>
             <div class="w-full bg-gray-100 rounded-xl flex flex-wrap gap-1 p-5">
                 {#each buttons as b,i}
-                <button onclick={()=>checkAnswer(b,i)} class={{"text-indigo-800 bg-linear-to-br from-indigo-100 to-gray-100 p-1 px-6 text-lg font-bold rounded-3xl transition-all duration-200":true,"opacity-0 btn-disabled btn-sm":inputedphrase.includes(b,0)}}>
+                <button onclick={()=>checkAnswer(b,i)} class={{"text-indigo-800 bg-linear-to-br from-indigo-100 to-gray-100 p-2 my-1 px-6 text-lg font-bold rounded-3xl transition-all duration-200":true,"opacity-0 btn-disabled btn-sm":inputedphrase.includes(b,0)}}>
                     {b}
                 </button>
                 {/each}
