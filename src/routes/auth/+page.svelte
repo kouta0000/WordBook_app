@@ -66,7 +66,7 @@
         // data-nonce="" はHTMLから削除し、必要であればサーバーで生成してここで渡す
         auto_select: true,
         itp_support: true,
-        use_fedcm_for_prompt: true,
+        use_fedcm_for_prompt: false,
       });
 
       
@@ -116,7 +116,7 @@
   data-nonce="" 
   data-auto_select="true" 
   data-itp_support="true"
-  data-use_fedcm_for_prompt="true">
+  data-use_fedcm_for_prompt="false">
 </div>
 <div class="g_id_signin"
   data-type="standard"
