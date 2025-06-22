@@ -29,8 +29,8 @@
     let answerWord = $state("");
     let showResult = $state(false);
     let isCorrect = $state(true);
-    let buttons:string[] = $state([]);
-    let inputedphrase:string[] = $state([]);
+    let buttons:{id:string, value:string}[] = $state([]);
+    let inputedphrase:{id:string,value:string}[] = $state([]);
     let answerphrase:string[] = $state([]);
 
 
@@ -99,13 +99,21 @@
             const examples:{examples:{example:string, translation:string}[]} = JSON.parse(currentWord.sentence)
             const list = examples.examples?.[0].example;
             answerphrase = getCleanWords(list);
-            buttons = shuffle(answerphrase);
+            const shuffledWords = shuffle(answerphrase);
+            buttons = shuffledWords.map((word, index) => ({
+                id: `${word}-${index}-${Math.random().toString(36).substring(2, 9)}`, // より確実にユニークなキー
+                value: word
+            }));
             main_display=examples.examples?.[0].translation;
             } else {
                 const res = await fetchsentence();
                 const list = res.examples?.[0].example;
                 answerphrase = getCleanWords(list);
-                buttons = shuffle(answerphrase);
+                const shuffledWords = shuffle(answerphrase);
+                buttons = shuffledWords.map((word, index) => ({
+                id: `${word}-${index}-${Math.random().toString(36).substring(2, 9)}`, // より確実にユニークなキー
+                value: word
+            }));
                 main_display=res.examples?.[0].translation;
             }         
         } else {
@@ -118,11 +126,12 @@
         showResult = false;
         inputedphrase=[];
         answerphrase=[];
+        buttons=[];
         main_display="";
         currentWord={id:0, meaning:"", term:"", sentence:""};
     }
-    const checkAnswer = async (input:string,i:number) => {
-        if (answerphrase[inputedphrase.length]==input) {
+    const checkAnswer = async (input:{id:string,value:string},i:number) => {
+        if (answerphrase[inputedphrase.length]==input.value) {
             inputedphrase.push(input);
             if (inputedphrase.length==answerphrase.length) {
                 isCorrect = true;
@@ -224,9 +233,12 @@
             </div>
             <hr class="h-1 bg-gray-200 mt-1 mb-1 mx-auto">
            
-            <div class="p-1 grow flex flex-col">
-                <div class="text-center">
-                    <div class="bg-indigo-50 rounded-2xl mb-1 p-2">
+            <div class="p-1 grow flex flex-col justify-center items-center">
+                <div class="text-center self-center">
+                    <div class="bg-indigo-50 rounded-2xl mb-1 p-2 flex justify-center items-center">
+                        {#if isfetching}
+                            <div class="loading loading-spinner text-center"></div>
+                        {/if}
                         <div style={parent_style}>
                             <div use:fit={{min_size:5, max_size:18}} class="p-8 lg:p-5 text-wrap font-[650] text-lg text-gray-800/95">
                                 {main_display}
@@ -249,16 +261,22 @@
         </div>
         <div class="w-full mt-1 p-4 flex flex-col justify-evenly gap-5 h-full">
             <div class="flex flex-wrap bg-gray-100 rounded-xl p-5 justify-evenly">
+                {#if isfetching}
+                <div class="loading loading-spinner self-center"></div>
+                {/if}
                 {#each answerphrase as a, i}
                 <span class={{"text-indigo-800 font-bold border-b-2 border-dashed border-gray-400 m-2":true}}>
                     <p class={{"opacity-0":!inputedphrase[i]}}>{a}</p>
                 </span>
                 {/each}
             </div>
-            <div class="w-full bg-gray-100 rounded-xl flex flex-wrap gap-1 p-5">
-                {#each buttons as b,i}
-                <button onclick={()=>checkAnswer(b,i)} class={{"text-indigo-800 bg-linear-to-br from-indigo-100 to-gray-100 p-2 my-1 px-6 text-lg font-bold rounded-3xl transition-all duration-200":true,"opacity-0 btn-disabled btn-sm":inputedphrase.includes(b,0)}}>
-                    {b}
+            <div class="w-full bg-gray-100 rounded-xl flex flex-wrap justify-center gap-1 p-5">
+                {#if isfetching}
+                <div class="loading loading-spinner self-center"></div>
+                {/if}
+                {#each buttons as b,i (b.id)}
+                <button onclick={()=>checkAnswer(b,i)} class={{"text-indigo-800 bg-linear-to-br from-indigo-100 to-gray-100 p-2 my-1 px-6 text-lg font-bold rounded-3xl transition-all duration-200":true,"opacity-0 btn btn-disabled":inputedphrase.includes(b,0)}}>
+                    {b.value}
                 </button>
                 {/each}
             </div>

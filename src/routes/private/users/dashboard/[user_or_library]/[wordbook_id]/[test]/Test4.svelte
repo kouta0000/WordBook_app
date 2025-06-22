@@ -30,8 +30,8 @@
     let answerWord = $state("");
     let showResult = $state(false);
     let isCorrect = $state(true);
-    let buttons:string[] = $state([]);
-    let inputedphrase:string[] = $state([]);
+    let buttons:{id:string, value:string}[] = $state([]);
+    let inputedphrase:{id:string,value:string}[] = $state([]);
     let answerphrase:string[] = $state([]);
     let isChecked:boolean = $state(false);
     let audio:HTMLAudioElement | undefined = $state();
@@ -120,14 +120,22 @@
             const examples:{examples:{example:string, translation:string}[]} = JSON.parse(currentWord.sentence)
             const list = examples.examples?.[0].example
             answerphrase = getCleanWords(list);
-            buttons = shuffle(answerphrase);
+            const shuffledWords = shuffle(answerphrase);
+            buttons = shuffledWords.map((word, index) => ({
+                id: `${word}-${index}-${Math.random().toString(36).substring(2, 9)}`, // より確実にユニークなキー
+                value: word
+            }));
             playAudio();
             
             } else {
                 const res = await fetchsentence();
                 const list = res.examples?.[0].example;
                 answerphrase = getCleanWords(list);
-                buttons = shuffle(answerphrase);
+                const shuffledWords = shuffle(answerphrase);
+                buttons = shuffledWords.map((word, index) => ({
+                id: `${word}-${index}-${Math.random().toString(36).substring(2, 9)}`, // より確実にユニークなキー
+                value: word
+            }));
                 main_display=res.examples?.[0].translation;
                 playAudio()
             }         
@@ -141,12 +149,13 @@
         showResult = false;
         inputedphrase=[];
         answerphrase=[];
+        buttons=[];
         main_display="";
         currentWord={id:0, meaning:"", term:"", sentence:""};
         audio=undefined;
     }
-    const checkAnswer = async (input:string,i:number) => {
-        if (answerphrase[inputedphrase.length]==input) {
+    const checkAnswer = async (input:{id:string,value:string},i:number) => {
+        if (answerphrase[inputedphrase.length]==input.value) {
             inputedphrase.push(input);
             if (inputedphrase.length==answerphrase.length) {
                 isCorrect = true;
@@ -269,16 +278,22 @@
         </div>
         <div class="w-full mt-1 p-8 flex flex-col justify-evenly gap-5 h-full">
             <div class="flex flex-wrap bg-gray-100 rounded-xl p-5 justify-evenly">
+                {#if isfetching}
+                <div class="loading loading-spinner self-center"></div>
+                {/if}
                 {#each answerphrase as a, i}
                 <span class={{"text-indigo-800 font-bold border-b-2 border-dashed border-gray-400 m-2":true}}>
-                    <p class={{"opacity-0":!inputedphrase[i]}}>{a}</p>
+                    <p class={{"opacity-0":!inputedphrase[i], "loading loading-spinner":isfetching}}>{a}</p>
                 </span>
                 {/each}
             </div>
-            <div class="w-full bg-gray-100 rounded-xl flex flex-wrap gap-3 p-5 relative">
-                {#each buttons as b,i}
-                <button onclick={()=>checkAnswer(b,i)} class={{"text-indigo-800 bg-linear-to-br from-indigo-100 to-gray-100 p-3 text-lg font-bold rounded-3xl transition-all duration-200":true,"opacity-0 btn-disabled btn-sm":inputedphrase.includes(b,0)}}>
-                    {b}
+            <div class="w-full bg-gray-100 rounded-xl flex flex-wrap justify-center gap-3 p-5 relative">
+                {#if isfetching}
+                <div class="loading loading-spinner self-center"></div>
+                {/if}
+                {#each buttons as b,i (b.id)}
+                <button onclick={()=>checkAnswer(b,i)} class={{"text-indigo-800 bg-linear-to-br from-indigo-100 to-gray-100 p-2 my-1 px-6 text-lg font-bold rounded-3xl transition-all duration-200":true,"opacity-0 btn btn-disabled":inputedphrase.includes(b,0)}}>
+                    {b.value}
                 </button>
                 {/each}
                 <div onclick={playAudio} class="absolute bottom-0 right-0 rounded-2xl mb-1 p-2">
