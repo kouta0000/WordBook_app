@@ -3,90 +3,24 @@
   import {onMount} from "svelte";
   import {supabase} from "$lib/config/supabaseClient";
   import {goto} from "$app/navigation";
-  onMount(() => {
-    // 1. GSIスクリプトを動的に作成し、onloadイベントを捕捉する
-    //    もし src/app.html ですでに読み込んでいる場合は、この部分はスキップし、
-    //    window.onGoogleScriptLoad() の部分を直接実装します。
-    if (!(window as any).google || !(window as any).google.accounts || !(window as any).google.accounts.id) {
-        const script = document.createElement('script');
-        script.src = 'https://accounts.google.com/gsi/client';
-        script.async = true;
-        script.defer = true;
-        // GSIスクリプトのロード完了を待つコールバックを設定
-        script.onload = () => {
-            if ((window as any).onGoogleScriptLoad) {
-                (window as any).onGoogleScriptLoad();
-            }
-        };
-        document.head.appendChild(script);
-    } else {
-        // スクリプトが既にロードされている場合（例：SSR後のハイドレーション時）
-        if ((window as any).onGoogleScriptLoad) {
-            (window as any).onGoogleScriptLoad();
-        }
-    }
-  });
-
-  // 2. GSIライブラリのロードが完了した後に実行される関数をグローバルに定義
-  //    この関数は、GSIのオブジェクトが利用可能になった後に、callback関数をセットアップします。
-  (window as any).onGoogleScriptLoad = () => {
-    // GSIライブラリが利用可能になったことを確認
-    if ((window as any).google && (window as any).google.accounts && (window as any).google.accounts.id) {
-
-      // この行が重要：GSIライブラリが初期化される前にグローバルコールバックを確実に定義する
-      (window as any).handleSignInWithGoogle = async (response: {credential?:string}) => {
-        if(response.credential) {
-          const {data, error} = await supabase.auth.signInWithIdToken({
-            provider:"google",
-            token:response.credential,
-          });
-          if(error) {
-            console.error("グーグル認証エラー", error.message);
-          } else {
-            console.log("ログイン完了", data.user);
-            goto("/private/users/dashboard/user");
-          } 
+  onMount(()=>{
+    (window as any).handleSignInWithGoogle = async (response:{credential?:string}) => {
+      if(response.credential) {
+        const {data, error} = await supabase.auth.signInWithIdToken({
+          provider:"google",
+          token:response.credential,
+        });
+        if(error) {
+          console.error("グーグル認証エラー", error.message);
         } else {
-            console.error("トークンエラー");
-        }
-      };
-
-      // GSI初期化は、callback関数が確実にセットされてから実行
-      (window as any).google.accounts.id.initialize({
-        client_id: "1096950464221-hi47u5r38tejjgclo91i84o9sbaa6u6m.apps.googleusercontent.com",
-        callback: (window as any).handleSignInWithGoogle, // グローバルな関数を参照
-        context: "signin",
-        ux_mode: "popup",
-        // nonce: "", // 本番ではサーバーサイドで生成
-        auto_select: true,
-        itp_support: true,
-        use_fedcm_for_prompt: true,
-      });
-
-      // HTMLにボタンを記述している場合、このレンダリングは自動で行われることが多いですが、
-      // 確実にするためにここで明示的に呼び出すことも可能です。
-      // ただし、もしHTMLのdivが既にGSIによって処理されていれば不要です。
-      const signInButton = document.getElementById("g_id_onload");
-      if (signInButton) {
-        (window as any).google.accounts.id.renderButton(
-          signInButton, // レンダリング対象のDOM要素
-          { theme: "outline", size: "large", text: "signin_with", shape: "rectangular", locale: "en-US", logo_alignment: "left" }
-        );
+          console.log("ログイン完了", data.user);
+          goto("/private/users/dashboard/user");
+        } 
+      } else {
+          console.error("トークンエラー");
       }
-    } else {
-        console.warn("Google GSI client library not loaded or initialized correctly.");
-    }
-  };
-
-  // スクリプトが既に読み込まれていて、onloadイベントが発火しない場合のフォールバック
-  // （稀に発生するSvelteKit SSR/hydrationのタイミング問題対策）
-  // 少し遅延させてからチェック
-  setTimeout(() => {
-    if ((window as any).google && !(window as any).handleSignInWithGoogle) {
-      (window as any).onGoogleScriptLoad();
-    }
-  }, 100);
-
+    };
+  });
 </script>
 <svelte:head>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
