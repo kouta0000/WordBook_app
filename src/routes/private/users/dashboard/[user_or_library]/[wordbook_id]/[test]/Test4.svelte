@@ -139,6 +139,7 @@
         answerphrase=[];
         main_display="";
         currentWord={id:0, meaning:"", term:"", sentence:""};
+        audio=undefined;
     }
     const checkAnswer = async (input:string,i:number) => {
         if (answerphrase[inputedphrase.length]==input) {
