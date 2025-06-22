@@ -23,13 +23,10 @@ async function handleSignInWithGoogle(response: {credential?:string}) {
   }
 }
 
-// Google GSIライブラリのロードが完了し、
-// グローバルな `google.accounts.id` が利用可能になった後に実行される関数
-// この関数は、`onMount` の中で `window` オブジェクトに割り当てられます。
+
 function initializeGoogleSignIn() {
   if ((window as any).google && (window as any).google.accounts && (window as any).google.accounts.id) {
-    // グローバルコールバックをセットアップ
-    // handleSignInWithGoogle は既に上記で定義されているので、それを参照
+   
     (window as any).handleSignInWithGoogle = handleSignInWithGoogle;
 
     // GSI初期化
@@ -38,7 +35,6 @@ function initializeGoogleSignIn() {
       callback: (window as any).handleSignInWithGoogle, // グローバルな関数を参照
       context: "signin",
       ux_mode: "popup",
-      // data-nonceはHTML側に記載があるので削除（またはサーバーサイドで動的に埋め込む）
       auto_select: true,
       itp_support: true,
       use_fedcm_for_prompt: true,
@@ -60,10 +56,7 @@ function initializeGoogleSignIn() {
 
 // コンポーネントがマウントされた時（クライアントサイドでのみ）実行
 onMount(() => {
-  if (browser) { // クライアントサイドでのみ実行されることを保証
-    // GSIスクリプトがまだ読み込まれていないかを確認し、動的に読み込む
-    // src/app.html に <script src="https://accounts.google.com/gsi/client" async defer></script>
-    // がある場合でも、念のためこのチェックと処理は残しておくのが安全です。
+  if (browser) { 
     if (!(window as any).google || !(window as any).google.accounts || !(window as any).google.accounts.id) {
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
