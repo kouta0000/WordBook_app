@@ -23,17 +23,26 @@
     
 <div class="bg-slate-100/80 px-4 flex justify-end items-center fixed absolute top-15 py-2  lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-11">
 {#if user_or_library == "user"}
-<a href="../../../dashboard/user" class="active:scale-80 btn bg-indigo-200 rounded-3xl w-1/3 w-min basis-0 text-black">
-   <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
+<a href="../../../dashboard/user" class="active:scale-80 btn btn-sm bg-indigo-200 rounded-3xl w-1/3 w-min basis-0 text-black">
+   <p class="whitespace-nowrap text-indigo-700 font-bold">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+      </svg>
+      
+   </p>
 </a>
 {:else}
-<a href="../../../dashboard/library" class="active:scale-80 btn bg-indigo-200 btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
-    <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
+<a href="../../../dashboard/library" class="active:scale-80 btn btn-sm bg-indigo-200 btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
+    <p class="whitespace-nowrap text-indigo-700 font-bold">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+          </svg>          
+    </p>
 </a>
 {/if}
 </div>
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center ">
-        <div class="text mt-23 mb-10 lg:mt-20 w-full flex justify-start items-center realtive h-20">
+        <div class="text mt-15 mb-10 lg:mt-20 w-full flex justify-start items-center realtive h-20">
             <h1 class="shadow-lg p-6 ml-10 mb-6 text-indigo-700 text-xl max-w-3/5 rounded-3xl bg-linear-to-br from-indigo-100 to-gray-100">{wb_name}</h1>
         </div> 
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
@@ -150,6 +159,7 @@
         </div>
         <div class="w-full h-50"></div>
     </div>
+    
     <dialog bind:this={dialog} id="my_modal2" class="modal modal-bottom md:modal-middle">
         <div class="modal-box flex flex-col items-center bg-slate-100 w-full md:w-1/2  max-w-none max-h-4/5 overflow-auto relative">
             <form method="post" use:enhance={()=>{

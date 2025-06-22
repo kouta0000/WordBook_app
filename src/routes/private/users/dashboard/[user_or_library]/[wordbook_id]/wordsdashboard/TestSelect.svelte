@@ -31,10 +31,10 @@
                         <img class="size-full" src="/images/order.svg">
                         </div>
                         
-                        <a href="./wordsdashboard" class="absolute bg-gray-200/20 inset-0 flex justify-center items-center">
+                        <a href="./order" class="absolute bg-gray-200/30 inset-0 flex justify-center items-center">
                         </a>
                     </div>
-                    <div class="w-full text-center p-1  text-gray-500 font-black">並び替え</div>
+                    <div class="w-full text-center p-1  text-gray-600 font-black">並び替え</div>
                     </div>
                     <div class="w-full">
                     <div class="w-full aspect-square  mask mask-squircle bg-white flex flex-col items-center  relative">
