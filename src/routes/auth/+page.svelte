@@ -3,88 +3,6 @@
   import {onMount} from "svelte";
   import {supabase} from "$lib/config/supabaseClient";
   import {goto} from "$app/navigation";
-  import { browser } from '$app/environment'; // browser 環境変数をインポート
-
- // Google認証後のコールバック関数
- async function handleSignInWithGoogle(response: {credential?:string}) {
-    if(response.credential) {
-      try {
-        const {data, error} = await supabase.auth.signInWithIdToken({
-          provider:"google",
-          token:response.credential,
-        });
-        if(error) {
-          console.error("グーグル認証エラー:", error.message);
-        } else {
-          console.log("ログイン完了:", data.user);
-          goto("/private/users/dashboard/user");
-        } 
-      } catch (e) {
-        console.error("認証処理中に予期せぬエラー:", e);
-      }
-    } else {
-        console.error("トークンエラー: response.credential がありません。");
-    }
-  }
-
-  onMount(() => {
-    // ブラウザ環境でのみ実行
-    if (browser) {
-      
-      if (!(window as any).google || !(window as any).google.accounts || !(window as any).google.accounts.id) {
-        const script = document.createElement('script');
-        script.src = 'https://accounts.google.com/gsi/client';
-        script.async = true;
-        script.defer = true;
-        
-        script.onload = () => {
-          // スクリプトがロードされた後にGSIを初期化
-          initializeGSI();
-        };
-        script.onerror = (e) => {
-          console.error("Failed to load GSI client script:", e);
-        };
-        document.head.appendChild(script);
-      } else {
-        // スクリプトが既に存在する場合、すぐにGSIを初期化
-        initializeGSI();
-      }
-    }
-  });
-
-  // GSIを初期化し、ボタンをレンダリングする関数
-  function initializeGSI() {
-    if ((window as any).google && (window as any).google.accounts && (window as any).google.accounts.id) {
-      console.log("GSI client library is loaded. Initializing...");
-
-      // GSIライブラリがロードされたら、ここでコールバック関数を直接指定して初期化
-      (window as any).google.accounts.id.initialize({
-        client_id: "1096950464221-hi47u5r38tejjgclo91i84o9sbaa6u6m.apps.googleusercontent.com",
-        callback: handleSignInWithGoogle, // グローバルではなく、このモジュールスコープの関数を直接渡す
-        context: "signin",
-        ux_mode: "popup",
-        // data-nonce="" はHTMLから削除し、必要であればサーバーで生成してここで渡す
-        auto_select: true,
-        itp_support: true,
-        use_fedcm_for_prompt: false,
-      });
-
-      
-      const signInDiv = document.querySelector('.g_id_signin'); // class名で取得
-      if (signInDiv) {
-        console.log("Rendering Google Sign-In button...");
-        (window as any).google.accounts.id.renderButton(
-          signInDiv, // ボタンをレンダリングするDOM要素を渡す
-          { theme: "outline", size: "large", text: "signin_with", shape: "rectangular", locale: "en-US", logo_alignment: "left" }
-        );
-      } else {
-        console.warn("Google Sign-In button container (.g_id_signin) not found in DOM.");
-      }
-    } else {
-      console.error("Google GSI client library not fully available after load event.");
-    }
-  }
-
 </script>
 
 <div class="h-screen w-full  flex flex-col justify-center items-center">
@@ -109,22 +27,5 @@
     Login with X
   </button>
   </form>
-  <div id="g_id_onload"
-  data-client_id="1096950464221-hi47u5r38tejjgclo91i84o9sbaa6u6m.apps.googleusercontent.com"
-  data-context="signin"
-  data-ux_mode="popup"
-  data-nonce="" 
-  data-auto_select="true" 
-  data-itp_support="true"
-  data-use_fedcm_for_prompt="false">
-</div>
-<div class="g_id_signin"
-  data-type="standard"
-  data-shape="rectangular"
-  data-theme="outline"
-  data-text="signin_with"
-  data-size="large"
-  data-locale="en-US"
-  data-logo_alignment="left">
-</div>
+
 </div>

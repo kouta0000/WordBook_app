@@ -21,23 +21,32 @@
 
 
     
-<div class="bg-slate-200/80 px-4 flex justify-end items-center fixed absolute top-15 py-2  lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-11">
+<div class="bg-slate-100/80 px-4 flex justify-end items-center fixed absolute top-15 py-2  lg:h-15 w-full flex flex-row flex-wrap gap-10 mb-10 z-11">
 {#if user_or_library == "user"}
-<a href="../../../dashboard/user" class="active:scale-80 btn bg-indigo-100 rounded-3xl w-1/3 w-min basis-0 text-black">
-   <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
+<a href="../../../dashboard/user" class="active:scale-80 btn btn-sm bg-indigo-200 rounded-3xl w-1/3 w-min basis-0 text-black">
+   <p class="whitespace-nowrap text-indigo-700 font-bold">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+      </svg>
+      
+   </p>
 </a>
 {:else}
-<a href="../../../dashboard/library" class="active:scale-80 btn bg-indigo-100 btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
-    <p class="whitespace-nowrap text-indigo-400 font-bold">戻る</p>
+<a href="../../../dashboard/library" class="active:scale-80 btn btn-sm bg-indigo-200 btn-success rounded-3xl w-1/3 w-min basis-0 text-black">
+    <p class="whitespace-nowrap text-indigo-700 font-bold">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+          </svg>          
+    </p>
 </a>
 {/if}
 </div>
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center ">
-        <div class="text mt-23 mb-4 lg:mt-20 w-full flex justify-center items-center realtive h-20">
-            <h1 class="border-stone-300 shadow-lg p-4 border-1 rounded-3xl bg-white">{wb_name}</h1>
+        <div class="text mt-15 mb-10 lg:mt-20 w-full flex justify-start items-center realtive h-20">
+            <h1 class="shadow-lg p-6 ml-10 mb-6 text-indigo-700 text-xl max-w-3/5 rounded-3xl bg-linear-to-br from-indigo-100 to-gray-100">{wb_name}</h1>
         </div> 
-        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-x-0 items-center place-items-center relative">
-            <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 md:bottom-22 md:right-20 z-20">
+        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
+            <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-4 justify-end items-center absolute fixed bottom-17 md:bottom-22 md:right-20 z-20">
                 {#if creating}
                 <div out:fade={{delay:800}} class="btn bg-indigo-500 rounded-3xl flex gap-1">
                     <p class="font-bold text-base text-white">追加中</p>
@@ -54,9 +63,6 @@
                     <span class="loading loading-dots loading-sm text-white"></span>
                 </div>
                 {/if}
-                <button type="button" onclick={() => {isChecked=!isChecked;updatings.fill(false)}} class={{"btn btn-lg btn-active rounded-3xl  w-min basis-0 opacity-90":true,"bg-indigo-500":!isChecked, "bg-linear-to-br from-indigo-500 to-sky-500":isChecked}}>
-                    <p class="whitespace-nowrap text-white text-base font-bold">{ !isChecked? "選択": "元に戻す"}</p>
-                </button>
                 <svg onclick={()=> dialog?.showModal()} xmlns="http://www.w3.org/2000/svg" class="active:scale-80" viewBox="0 0 64 64" width="56" height="56">
                     <!-- 楕円形の背景（空色） -->
                     <ellipse cx="32" cy="32" rx="30" ry="28" class="fill-indigo-500" />
@@ -70,7 +76,7 @@
             {#each words as word, id (word.id)}
             <dialog bind:this={dialogs[id]} class="modal w-full">
                 <div class="modal-box bg-slate-100 flex flex-col gap-4 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
-                    <p>本当に削除しますか？</p>
+                    <p>削除しますか？</p>
                     <form use:enhance={()=>{
                         deleting=true;
                         return async ({update}) => {
@@ -84,87 +90,76 @@
                     </form>
                 </div>
             </dialog>
-            <div out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-4/5 sm:grow flex flex-col justify-center items-start relative">
-                {#if updatings[id]}
-                <form method="POST" action="?/updateWord" use:enhance={() => {
-                    updatings[id]=false;
-                    updatings2[id]=true;
-                    return async ({update}) => {
-                        update();
-                        updatings2[id]=false;
-                  }
-                }} class={{"absolute inset-0 flex flex-col justifry-center items-start z-2":true}}>
-                    <span  class="pl-2 pr-2 py-1 flex border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 bg-white">
-                        <label class="input input-ghost rounded-xl">
-                        <p class="text-xs text-stone-300">変更</p>
-                        <input type="text" placeholder="変更" id="term" name="term" value={word.term} class="m-auto font-semibold font-sans text-xl">
-                        </label>
-                        <button type="button" onclick={()=>{isChecked=!isChecked;updatings[id] = false}} class="btn btn-base rounded-full my-auto btn-sm">
-                            戻る
+
+            <div out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
+                <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-xl relative">
+                    <div class="grow flex flex-col max-w-7/8 relative">
+                        {#if updatings[id]}
+                        <form method="POST" action="?/updateWord" use:enhance={() => {
+                            updatings[id]=false;
+                            updatings2[id]=true;
+                            return async ({update}) => {
+                                update();
+                                updatings2[id]=false;
+                        }
+                        }} class={{"absolute inset-0 w-full bg-white rounded-xl flex flex-col items-center gap-1 justify-center p-1  z-2":true}}>
+                        
+                            <div  class="w-full flex">
+                                <label class="input input-ghost input-sm rounded-xl">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                      </svg>                                      
+                                <input type="text" placeholder="変更" id="term" name="term" value={word.term} class="pb-1 font-semibold font-sans text-xl">
+                                </label>
+                            </div>
+                            <div class="px-2 flex w-full relative bg-white">
+                                <label class="input input-ghost input-sm rounded-xl max-w-9/10 font-sans text-sm  mx-auto">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.49 12 3.75 3.75m0 0-3.75 3.75m3.75-3.75H3.74V4.499" />
+                                      </svg>                                      
+                                <input type="text" id="meaning" name="meaning" value={word.meaning}>
+                                </label>
+                                <button type="submit" class="btn btn-base rounded-full my-auto btn-sm text-gray-900">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                                      </svg>                                      
+                                </button>
+                                <input type="hidden" id="id" name="id" value={word.id}>
+                        </div>
+                        </form>
+                        {/if}
+
+                        {#if updatings2[id]}
+                        <div out:fade={{delay:1000}} class={{"absolute inset-0 skeleton z-5":true}}>
+                        </div>
+                        {/if}
+
+                        <!--実際のコンテンツ-->
+                        <div style={parent_style} class="w-full">
+                            <p use:fit={{min_size:10, max_size:22}} class="font-sans font-semibold pl-5 pt-4 pb-1 text-2xl">{word.term}</p>
+                        </div>
+                        <p class="text-gray-500 text-right font-sans p-1 pr-2">{word.meaning}</p>
+                    </div>  
+                    <div class="flex flex-col bg-indigo-200  rounded-r-xl border-indigo-300 justify-center items-center w-1/8 z-2">
+                        <button  class="h-full aspect-ration-1/1" onclick={() => dialogs[id]?.showModal()}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                              </svg>                                               
                         </button>
-                        <button type="submit" class="btn btn-base rounded-full my-auto btn-sm">
-                            保存
+                        <button class="h-full aspect-ratio-1/1" onclick={() => {updatings[id]=!updatings[id]}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
+                              </svg>
+                                                          
                         </button>
-                    </span>
-                    <div class="px-2 flex w-full shadow-sm border-stone-300 rounded-xl relative bg-white">
-                        <label class="input input-ghost rounded-xl my-2 py-2 max-w-9/10 font-sans text-lg mx-auto">
-                        <p class="text-xs text-stone-300">変更</p>
-                        <input type="text" id="meaning" name="meaning" value={word.meaning}>
-                        </label>
-                    </div>
-                    <input type="hidden" id="id" name="id" value={word.id}>
-                </form>
-                {/if}
-                {#if updatings2[id]}
-                <div class={{"absolute inset-0 flex flex-col justifry-center items-start z-5":true}}>
-                <span out:fade={{delay:1000}} class="pl-2 pr-2 flex border-1 border-stone-300 rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1 skeleton">
-                    <p class="m-auto px-10 py-2 font-semibold font-sans text-xl opacity-0">{word.term}</p>
-                </span>
-                <div out:fade={{delay:1000}} class="px-2 flex w-full border-1 border-stone-300 rounded-xl relative skeleton">
-                    <p class="mx-auto my-4 max-w-9/10 font-sans text-lg opacity-0">Loading...</p>
+                    </div>      
                 </div>
-                </div>
-                {/if}
-                <div class="flex bg-white  border-stone-300 shadow-sm rounded-xl max-w-9/10 -translate-x-3 translate-y-1 z-1">
-                    <div style={parent_style} >
-                    <p use:fit={{min_size:10, max_size:20}} class="px-7 py-3 font-semibold font-sans text-xl">{word.term}</p>
-                    </div>
-                </div>
-                <div class="flex w-full border-stone-300 shadow-sm rounded-xl bg-white relative">
-                    <p class="mx-auto my-4 max-w-9/10 font-sans text-lg">{word.meaning}</p>
-                    {#if isChecked}
-                    <div transition:fade={{duration:150}} class="flex items-center w-1/5 absolute right-0 rounded-3xl top-1/2 -translate-y-1/2 bg-white/80 aspect-ratio-1/2 z-2">
-                    <button  class="h-full aspect-ration-1/1" onclick={() => dialogs[id]?.showModal()}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" class="w-full h-full m-auto fill-none rounded-3xl">
-                            <rect x="7" y="9" width="10" height="12" fill="none" stroke="gray" stroke-width="1"/>
-                            <rect x="8" y="7" width="8" height="2" fill="none" stroke="gray" stroke-width="1"/>
-                            <line x1="9" y1="11" x2="9" y2="19" stroke="gray" stroke-width="1"/>
-                            <line x1="12" y1="11" x2="12" y2="19" stroke="gray" stroke-width="1"/>
-                            <line x1="15" y1="11" x2="15" y2="19" stroke="gray" stroke-width="1"/>
-                        </svg>
-                    </button>
-                    <button class="h-full aspect-ratio-1/1" onclick={() => {updatings[id]=true;isChecked=!isChecked}}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67 67" class="w-4/5 h-4/5 m-auto fill-none rounded-3xl">
-                            <g transform="translate(32,32) scale(1.6) rotate(-45) translate(-32,-32)">
-                              <!-- 鉛筆の先端（尖った部分） -->
-                              <polygon points="18,28 12,32 18,36" fill="#808080" />
-                              <!-- 鉛筆の本体（太めで角を丸く） -->
-                              <rect x="18" y="28" width="28" height="8" rx="3" ry="3" fill="#808080" />
-                              <!-- 消しゴム部分（可愛らしい丸みをプラス） -->
-                              <rect x="46" y="28" width="6" height="8" rx="1.5" ry="1.5" fill="#808080" />
-                            </g>
-                          </svg>
-                        </button>
-                    </div>
-                    {/if}         
-                </div>
-                <hr class="w-full scale-70 h-2 mt-4 bg-indigo-200 border-0 rounded-sm md:mb-1 dark:bg-gray-700">
             </div>
-            
             {/each}
         </div>
         <div class="w-full h-50"></div>
     </div>
+    
     <dialog bind:this={dialog} id="my_modal2" class="modal modal-bottom md:modal-middle">
         <div class="modal-box flex flex-col items-center bg-slate-100 w-full md:w-1/2  max-w-none max-h-4/5 overflow-auto relative">
             <form method="post" use:enhance={()=>{

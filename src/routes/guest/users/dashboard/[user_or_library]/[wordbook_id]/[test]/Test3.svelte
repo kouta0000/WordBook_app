@@ -29,6 +29,9 @@
     let answerWord = $state("");
     let showResult = $state(false);
     let isCorrect = $state(true);
+    let buttons:{id:string, value:string}[] = $state([]);
+    let inputedphrase:{id:string,value:string}[] = $state([]);
+    let answerphrase:string[] = $state([]);
 
 
     let beforeInput:string[] = $state([]);
@@ -56,6 +59,11 @@
         const result = words[randomIndex];
         return result
     }
+    const getCleanWords = (sentence: string): string[] => {
+ 
+    const words = sentence.match(/[\p{L}\p{N}']+/gu);
+    return words ? words : []; // Return an empty array if no matches
+};
     const createQuestions = (words:Array<Word>) => {
         for (let i=0;i<length;i++) {
             questions.push(getRandomWord(words));
@@ -63,30 +71,34 @@
     }
     const fetchsentence = async (delay=500, retries=5):Promise<{examples:{example:string, translation:string}[]}> => {
         isfetching=true;
-        try {
-        const res = await fetch(`/api/text?language=${language}&type=${"sentence"}&id=${currentWord.id}&regenerate=""`, {
-            method:"POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body:JSON.stringify({text: currentWord.term})
-        });
-        isfetching=false;
-        const response = await res.json();
-        return response
-    } catch (error) {
+        try{
+            const res = await fetch(`/api/text?language=${language}&type=${"sentence"}&id=${currentWord.id}&regenerate=""`, {
+                method:"POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body:JSON.stringify({text: currentWord.term})
+            });
+            isfetching=false;
+            const response = await res.json();
+            return response
+        } catch (error) {
         if (retries<=0) {
-            throw new Error('通信環境が不安定です。時間を置いて再度ロードしてください。' + error.message);
+            throw new Error('通信環境が不安定です。時間を置いて再度ロードしてください。'+error.message);
         }
         await new Promise(resolve => setTimeout(resolve, delay));
         return fetchsentence(delay,retries-1);
     };
+}
+    const shuffle = (input: Array<string>) => {
+        const length: number = input.length-1;
+        let words:string[] = [...input];
+        for (let i = length; i > 0; i--) {
+            const random: number = Math.floor(Math.random()*(i+1));
+            [words[i], words[random]] = [words[random], words[i]];
+        }
+        return words
     }
-    const getCleanWords = (sentence: string): string[] => {
- 
- const words = sentence.match(/[\p{L}\p{N}']+/gu);
- return words ? words : []; // Return an empty array if no matches
-};
     const showQuestion = async () => {
         questionIndex++;
         if (questionIndex<length) {
@@ -94,44 +106,24 @@
             if (currentWord.sentence) {
             const examples:{examples:{example:string, translation:string}[]} = JSON.parse(currentWord.sentence)
             const list = examples.examples?.[0].example;
-            const baf = getCleanWords(list);
-            const options = {// 検索対象のキーを指定
-                keys:[""],
-                threshold: 1.0,           // 類似度の閾値を設定
-                shouldSort: true,
-                includeScore:true          // スコア順に結果を並べ替える
-            };
-            const fuse = new Fuse(baf, options);
-            const result = fuse.search(currentWord.term);
-            const answerword=result[0].item;
-            const parts = examples.examples?.[0].example.split(answerword,2);
-            answerWord = answerword;
-            beforeInput = parts[0].split(" ");
-            afterInput = parts[1].split(" ");
-            main_display = examples.examples?.[0].translation;
+            answerphrase = getCleanWords(list);
+            const shuffledWords = shuffle(answerphrase);
+            buttons = shuffledWords.map((word, index) => ({
+                id: `${word}-${index}-${Math.random().toString(36).substring(2, 9)}`, // より確実にユニークなキー
+                value: word
+            }));
+            main_display=examples.examples?.[0].translation;
             } else {
                 const res = await fetchsentence();
                 const list = res.examples?.[0].example;
-                const baf = getCleanWords(list);
-                const options = {// 検索対象のキーを指定
-                keys:[""],
-                threshold: 1.0,           // 類似度の閾値を設定
-                shouldSort: true,
-                includeScore:true          // スコア順に結果を並べ替える
-            };
-                const fuse = new Fuse(baf, options);
-               
-                const result = fuse.search(currentWord.term);
-                const answerword=result[0].item;
-                const parts = res.examples?.[0].example.split(answerword,2);
-                answerWord = answerword;
-                beforeInput=getCleanWords(parts[0]);
-                afterInput=getCleanWords(parts[1]);
+                answerphrase = getCleanWords(list);
+                const shuffledWords = shuffle(answerphrase);
+                buttons = shuffledWords.map((word, index) => ({
+                id: `${word}-${index}-${Math.random().toString(36).substring(2, 9)}`, // より確実にユニークなキー
+                value: word
+            }));
                 main_display=res.examples?.[0].translation;
-            }
-
-            await tick();
-            setTimeout(()=> main_input?.focus(), 50);            
+            }         
         } else {
             isQuizComplete = true;
         }
@@ -140,30 +132,27 @@
     const clearInfo = () => {
         count=0;
         showResult = false;
-        answerWord = "";
-        inputedAnswer=""
-        beforeInput=[];
-        afterInput=[];
+        inputedphrase=[];
+        answerphrase=[];
+        buttons=[];
         main_display="";
         currentWord={id:0, meaning:"", term:"", sentence:""};
     }
-    const checkAnswer = async () => {
-        if (inputedAnswer.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() == answerWord.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() ) {
-            isCorrect = true;
-            if(!count) score++;
-            count++
-            showResult = true;
-            setTimeout(()=>{nextQuestion()}, 1500);
+    const checkAnswer = async (input:{id:string,value:string},i:number) => {
+        if (answerphrase[inputedphrase.length]==input.value) {
+            inputedphrase.push(input);
+            if (inputedphrase.length==answerphrase.length) {
+                isCorrect = true;
+                if(!count) score++;
+                count++
+                showResult = true;
+                setTimeout(()=>{nextQuestion()}, 1500);
+            };
         } else {
             count++;
-            inputedAnswer="";
             isCorrect = false;
             showResult = true;
-            await tick();
-            setTimeout(()=> main_input?.focus(),50);
-            setTimeout(()=>showResult=false, 1500);
-            
-            
+            setTimeout(()=>showResult=false, 500);
         }
     }
     
@@ -176,6 +165,7 @@
 
 
 <div id="displays" class="w-full  bg-linear-to-br from-slate-100 to-slate-200 h-screen p-4 flex gap-4 overflow-auto absolute z-20 relative">
+    
     {#if !testStarted}
     <div class="absolute inset-0 bg-slate-100 flex justify-center items-center z-21">
     <div class="flex flex-col  gap-3 justify-between bg-white w-9/10 md:w-3/5 lg:w-3/10  p-8 rounded-2xl shadow-lg">
@@ -199,6 +189,7 @@
     </div>
     </div>
     {/if}
+
     {#if isQuizComplete}
     <div class="absolute inset-0 bg-slate-100 flex justify-center items-center z-21">
         <div class="flex flex-col  gap-3 justify-between bg-white w-9/10 md:w-3/5 lg:w-1/5  p-8 rounded-2xl shadow-lg">
@@ -228,8 +219,11 @@
         </div>
     </div>
     {/if}
+
+
+    <!--実際のテスト画面-->
     {#if !isQuizComplete}
-    <div class="w-full md:w-4/5 lg:w-3/10 mx-auto  lg:h-full flex flex-col bg-slate-100 rounded-2xl shadow-xl">
+    <div class="w-full md:w-4/5 lg:w-2/5 mx-auto  lg:h-full flex flex-col bg-white rounded-2xl shadow-xl relative">
         <div class="border-5 border-double border-indigo-300/50 shadow-lg shadow-slate-100 bg-white rounded-2xl text-gray-600 font-bold px-2 flex flex-col items-center">
             <div class="w-4/5">
                 <progress class="progress progress-primary h-3 bg-slate-200 my-3" value={questionIndex*(100/length)} max="100"></progress>
@@ -246,51 +240,57 @@
                 
             </div>
             <hr class="h-1 bg-gray-200 mt-1 mb-1 mx-auto">
-            <div class="w-full mt-1 px-4">
-                <form class="flex flex-wrap gap-1 items-center justify-center text-indigo-800/80 ">
-                    {#if isfetching}
-                    <span class="loading loading-spinner"></span>
-                    {:else}
-                    {#each beforeInput as b}
-                    <span class="py-2 text-xl">{b}</span>
-                    {/each}
-                    <span>
-                    <span style={parent_style}>
-                        <input use:fit={{min_size:10, max_size:20}} bind:this={main_input} class="text-center focus:outline-none border-none p-1 py-2 w-40 text-2xl rounded-lg bg-gray-100 text-gray-900" type="text" bind:value={inputedAnswer} placeholder={!isCorrect? answerWord:""}>
-                    </span>
-                    </span>
-                    {#each afterInput as a}
-                    <span class="text-xl py-2">{a}</span>
-                    {/each}
-                    {/if}
-                <button onclick={checkAnswer} class="hidden" type="submit"></button>
-                </form>
-            </div>
-            
-            <div class={{"transition-all duration-200 w-full flex justify-end":true,"opacity-0":!showResult}}>
-                <div class={{
-                    "text-center w-1/2 gap-2 px-6 py-1 lg:mb-2 rounded-full font-bold mb-1":true,
-                    "bg-green-100 text-green-800":isCorrect,
-                    "bg-red-100 text-red-800":!isCorrect}}>
-                    {isCorrect? "✔正解":"✗不正解"}    
-                </div>
-            </div>
-            
-        </div>
-        
-        <div class="p-8 grow flex flex-col">
-            <div class="text-center">
-                <div class="bg-indigo-100 rounded-2xl mb-4">
-                    <div style={parent_style}>
-                        <div use:fit={{min_size:5, max_size:20}} class="p-8 lg:p-5 text-wrap font-[650] text-gray-800/95">
-                            {main_display}
+           
+            <div class="p-1 grow flex flex-col justify-center items-center">
+                <div class="text-center self-center">
+                    <div class="bg-indigo-50 rounded-2xl mb-1 p-2 flex justify-center items-center">
+                        {#if isfetching}
+                            <div class="loading loading-spinner text-center"></div>
+                        {/if}
+                        <div style={parent_style}>
+                            <div use:fit={{min_size:5, max_size:18}} class="p-8 lg:p-5 text-wrap font-[650] text-lg text-gray-800/95">
+                                {main_display}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+            <div class={{"transition-all duration-200 w-full flex justify-end":true,"opacity-0":!showResult}}>
+                <div class={{
+                    "text-center gap-2 px-6 py-1 lg:mb-2 rounded-full font-bold mb-1":true,
+                    "bg-green-100 text-green-800":isCorrect,
+                    "bg-red-100 text-red-800":!isCorrect}}>
+                    {isCorrect? "✔正解":"✗"}    
+                </div>
+            </div>
+            
         </div>
+        <div class="w-full mt-1 p-4 flex flex-col justify-evenly gap-5 h-full">
+            <div class="flex flex-wrap bg-gray-100 rounded-xl p-5 justify-evenly">
+                {#if isfetching}
+                <div class="loading loading-spinner self-center"></div>
+                {/if}
+                {#each answerphrase as a, i}
+                <span class={{"text-indigo-800 font-bold border-b-2 border-dashed border-gray-400 m-2":true}}>
+                    <p class={{"opacity-0":!inputedphrase[i]}}>{a}</p>
+                </span>
+                {/each}
+            </div>
+            <div class="w-full bg-gray-100 rounded-xl flex flex-wrap justify-center gap-1 p-5">
+                {#if isfetching}
+                <div class="loading loading-spinner self-center"></div>
+                {/if}
+                {#each buttons as b,i (b.id)}
+                <button onclick={()=>checkAnswer(b,i)} class={{"text-indigo-800 bg-linear-to-br from-indigo-100 to-gray-100 p-2 my-1 px-6 text-lg font-bold rounded-3xl transition-all duration-200":true,"opacity-0 btn btn-disabled":inputedphrase.includes(b,0)}}>
+                    {b.value}
+                </button>
+                {/each}
+            </div>
+        </div>
+        
     </div>
     {/if}
 </div>
    
-

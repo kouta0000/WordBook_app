@@ -10,6 +10,7 @@
     import { goto } from '$app/navigation';
     import {tick} from "svelte";
     import { stringFromBase64URL } from '@supabase/ssr';
+    import AudioButton from './AudioButton.svelte';
 
     //変数宣言
     let { wordslist, wb_name, language, user_or_library } = $props();
@@ -29,6 +30,11 @@
     let answerWord = $state("");
     let showResult = $state(false);
     let isCorrect = $state(true);
+    let buttons:{id:string, value:string}[] = $state([]);
+    let inputedphrase:{id:string,value:string}[] = $state([]);
+    let answerphrase:string[] = $state([]);
+    let isChecked:boolean = $state(false);
+    let audio:HTMLAudioElement | undefined = $state();
 
 
     let beforeInput:string[] = $state([]);
@@ -82,10 +88,37 @@
         return fetchsentence(delay,retries-1);
     };
     }
+    const shuffle = (input: Array<string>) => {
+        const length: number = input.length-1;
+        let words:string[] = [...input];
+        for (let i = length; i > 0; i--) {
+            const random: number = Math.floor(Math.random()*(i+1));
+            [words[i], words[random]] = [words[random], words[i]];
+        }
+        return words
+    }
+    const playAudio = async () => {
+        if (!audio) {
+        const res = await fetch(`/api/speak?language=${language}`, {
+            method:"POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body:JSON.stringify({text: answerphrase.join(" ")})
+        });
+        const audioBlob = await res.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+        audio = new Audio(audioUrl);
+    }
+        await audio.play();
+        await new Promise<void>((resolve) => {
+            if(audio) audio.onended = () => resolve();
+        });
+        isChecked = false;
+    }
     const getCleanWords = (sentence: string): string[] => {
- 
- const words = sentence.match(/[\p{L}\p{N}']+/gu);
- return words ? words : []; // Return an empty array if no matches
+    const words = sentence.match(/[\p{L}\p{N}']+/gu);
+    return words ? words : []; // Return an empty array if no matches
 };
     const showQuestion = async () => {
         questionIndex++;
@@ -93,45 +126,27 @@
             currentWord = questions[questionIndex];
             if (currentWord.sentence) {
             const examples:{examples:{example:string, translation:string}[]} = JSON.parse(currentWord.sentence)
-            const list = examples.examples?.[0].example;
-            const baf = getCleanWords(list);
-            const options = {// 検索対象のキーを指定
-                keys:[""],
-                threshold: 1.0,           // 類似度の閾値を設定
-                shouldSort: true,
-                includeScore:true          // スコア順に結果を並べ替える
-            };
-            const fuse = new Fuse(baf, options);
-            const result = fuse.search(currentWord.term);
-            const answerword=result[0].item;
-            const parts = examples.examples?.[0].example.split(answerword,2);
-            answerWord = answerword;
-            beforeInput = parts[0].split(" ");
-            afterInput = parts[1].split(" ");
-            main_display = examples.examples?.[0].translation;
+            const list = examples.examples?.[0].example
+            answerphrase = getCleanWords(list);
+            const shuffledWords = shuffle(answerphrase);
+            buttons = shuffledWords.map((word, index) => ({
+                id: `${word}-${index}-${Math.random().toString(36).substring(2, 9)}`, // より確実にユニークなキー
+                value: word
+            }));
+            playAudio();
+            
             } else {
                 const res = await fetchsentence();
                 const list = res.examples?.[0].example;
-                const baf = getCleanWords(list);
-                const options = {// 検索対象のキーを指定
-                keys:[""],
-                threshold: 1.0,           // 類似度の閾値を設定
-                shouldSort: true,
-                includeScore:true          // スコア順に結果を並べ替える
-            };
-                const fuse = new Fuse(baf, options);
-               
-                const result = fuse.search(currentWord.term);
-                const answerword=result[0].item;
-                const parts = res.examples?.[0].example.split(answerword,2);
-                answerWord = answerword;
-                beforeInput=getCleanWords(parts[0]);
-                afterInput=getCleanWords(parts[1]);
+                answerphrase = getCleanWords(list);
+                const shuffledWords = shuffle(answerphrase);
+                buttons = shuffledWords.map((word, index) => ({
+                id: `${word}-${index}-${Math.random().toString(36).substring(2, 9)}`, // より確実にユニークなキー
+                value: word
+            }));
                 main_display=res.examples?.[0].translation;
-            }
-
-            await tick();
-            setTimeout(()=> main_input?.focus(), 50);            
+                playAudio()
+            }         
         } else {
             isQuizComplete = true;
         }
@@ -140,30 +155,28 @@
     const clearInfo = () => {
         count=0;
         showResult = false;
-        answerWord = "";
-        inputedAnswer=""
-        beforeInput=[];
-        afterInput=[];
+        inputedphrase=[];
+        answerphrase=[];
+        buttons=[];
         main_display="";
         currentWord={id:0, meaning:"", term:"", sentence:""};
+        audio=undefined;
     }
-    const checkAnswer = async () => {
-        if (inputedAnswer.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() == answerWord.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() ) {
-            isCorrect = true;
-            if(!count) score++;
-            count++
-            showResult = true;
-            setTimeout(()=>{nextQuestion()}, 1500);
+    const checkAnswer = async (input:{id:string,value:string},i:number) => {
+        if (answerphrase[inputedphrase.length]==input.value) {
+            inputedphrase.push(input);
+            if (inputedphrase.length==answerphrase.length) {
+                isCorrect = true;
+                if(!count) score++;
+                count++
+                showResult = true;
+                setTimeout(()=>{nextQuestion()}, 1500);
+            };
         } else {
             count++;
-            inputedAnswer="";
             isCorrect = false;
             showResult = true;
-            await tick();
-            setTimeout(()=> main_input?.focus(),50);
-            setTimeout(()=>showResult=false, 1500);
-            
-            
+            setTimeout(()=>showResult=false, 500);
         }
     }
     
@@ -176,6 +189,7 @@
 
 
 <div id="displays" class="w-full  bg-linear-to-br from-slate-100 to-slate-200 h-screen p-4 flex gap-4 overflow-auto absolute z-20 relative">
+    
     {#if !testStarted}
     <div class="absolute inset-0 bg-slate-100 flex justify-center items-center z-21">
     <div class="flex flex-col  gap-3 justify-between bg-white w-9/10 md:w-3/5 lg:w-3/10  p-8 rounded-2xl shadow-lg">
@@ -199,6 +213,7 @@
     </div>
     </div>
     {/if}
+
     {#if isQuizComplete}
     <div class="absolute inset-0 bg-slate-100 flex justify-center items-center z-21">
         <div class="flex flex-col  gap-3 justify-between bg-white w-9/10 md:w-3/5 lg:w-1/5  p-8 rounded-2xl shadow-lg">
@@ -228,8 +243,11 @@
         </div>
     </div>
     {/if}
+
+
+    <!--実際のテスト画面-->
     {#if !isQuizComplete}
-    <div class="w-full md:w-4/5 lg:w-3/10 mx-auto  lg:h-full flex flex-col bg-slate-100 rounded-2xl shadow-xl">
+    <div class="w-full md:w-4/5 lg:w-2/5 mx-auto  lg:h-full flex flex-col bg-white rounded-2xl shadow-xl relative">
         <div class="border-5 border-double border-indigo-300/50 shadow-lg shadow-slate-100 bg-white rounded-2xl text-gray-600 font-bold px-2 flex flex-col items-center">
             <div class="w-4/5">
                 <progress class="progress progress-primary h-3 bg-slate-200 my-3" value={questionIndex*(100/length)} max="100"></progress>
@@ -246,51 +264,56 @@
                 
             </div>
             <hr class="h-1 bg-gray-200 mt-1 mb-1 mx-auto">
-            <div class="w-full mt-1 px-4">
-                <form class="flex flex-wrap gap-1 items-center justify-center text-indigo-800/80 ">
-                    {#if isfetching}
-                    <span class="loading loading-spinner"></span>
-                    {:else}
-                    {#each beforeInput as b}
-                    <span class="py-2 text-xl">{b}</span>
-                    {/each}
-                    <span>
-                    <span style={parent_style}>
-                        <input use:fit={{min_size:10, max_size:20}} bind:this={main_input} class="text-center focus:outline-none border-none p-1 py-2 w-40 text-2xl rounded-lg bg-gray-100 text-gray-900" type="text" bind:value={inputedAnswer} placeholder={!isCorrect? answerWord:""}>
-                    </span>
-                    </span>
-                    {#each afterInput as a}
-                    <span class="text-xl py-2">{a}</span>
-                    {/each}
-                    {/if}
-                <button onclick={checkAnswer} class="hidden" type="submit"></button>
-                </form>
+            <div class="flex justify-center text-indigo-700 w-full px-10">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-10">
+                <path fill-rule="evenodd" d="M19.952 1.651a.75.75 0 0 1 .298.599V16.303a3 3 0 0 1-2.176 2.884l-1.32.377a2.553 2.553 0 1 1-1.403-4.909l2.311-.66a1.5 1.5 0 0 0 1.088-1.442V6.994l-9 2.572v9.737a3 3 0 0 1-2.176 2.884l-1.32.377a2.553 2.553 0 1 1-1.402-4.909l2.31-.66a1.5 1.5 0 0 0 1.088-1.442V5.25a.75.75 0 0 1 .544-.721l10.5-3a.75.75 0 0 1 .658.122Z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m9 9 10.5-3m0 6.553v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 1 1-.99-3.467l2.31-.66a2.25 2.25 0 0 0 1.632-2.163Zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 0 1-.99-3.467l2.31-.66A2.25 2.25 0 0 0 9 15.553Z" />
+              </svg>
+              
             </div>
-            
+
             <div class={{"transition-all duration-200 w-full flex justify-end":true,"opacity-0":!showResult}}>
                 <div class={{
-                    "text-center w-1/2 gap-2 px-6 py-1 lg:mb-2 rounded-full font-bold mb-1":true,
+                    "text-center gap-2 px-6 py-1 lg:mb-2 rounded-full font-bold mb-1":true,
                     "bg-green-100 text-green-800":isCorrect,
                     "bg-red-100 text-red-800":!isCorrect}}>
-                    {isCorrect? "✔正解":"✗不正解"}    
+                    {isCorrect? "✔正解":"✗"}    
                 </div>
             </div>
             
         </div>
-        
-        <div class="p-8 grow flex flex-col">
-            <div class="text-center">
-                <div class="bg-indigo-100 rounded-2xl mb-4">
-                    <div style={parent_style}>
-                        <div use:fit={{min_size:5, max_size:20}} class="p-8 lg:p-5 text-wrap font-[650] text-gray-800/95">
-                            {main_display}
-                        </div>
-                    </div>
+        <div class="w-full mt-1 p-8 flex flex-col justify-evenly gap-5 h-full">
+            <div class="flex flex-wrap bg-gray-100 rounded-xl p-5 justify-evenly">
+                {#if isfetching}
+                <div class="loading loading-spinner self-center"></div>
+                {/if}
+                {#each answerphrase as a, i}
+                <span class={{"text-indigo-800 font-bold border-b-2 border-dashed border-gray-400 m-2":true}}>
+                    <p class={{"opacity-0":!inputedphrase[i], "loading loading-spinner":isfetching}}>{a}</p>
+                </span>
+                {/each}
+            </div>
+            <div class="w-full bg-gray-100 rounded-xl flex flex-wrap justify-center gap-3 p-5 relative">
+                {#if isfetching}
+                <div class="loading loading-spinner self-center"></div>
+                {/if}
+                {#each buttons as b,i (b.id)}
+                <button onclick={()=>checkAnswer(b,i)} class={{"text-indigo-800 bg-linear-to-br from-indigo-100 to-gray-100 p-2 my-1 px-6 text-lg font-bold rounded-3xl transition-all duration-200":true,"opacity-0 btn btn-disabled":inputedphrase.includes(b,0)}}>
+                    {b.value}
+                </button>
+                {/each}
+                <div onclick={playAudio} class="absolute bottom-0 right-0 rounded-2xl mb-1 p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
+                        <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM18.584 5.106a.75.75 0 0 1 1.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 0 1-1.06-1.06 8.25 8.25 0 0 0 0-11.668.75.75 0 0 1 0-1.06Z" />
+                        <path d="M15.932 7.757a.75.75 0 0 1 1.061 0 6 6 0 0 1 0 8.486.75.75 0 0 1-1.06-1.061 4.5 4.5 0 0 0 0-6.364.75.75 0 0 1 0-1.06Z" />
+                      </svg>                          
                 </div>
             </div>
         </div>
+        
     </div>
     {/if}
 </div>
    
-

@@ -27,7 +27,7 @@
     <div class="flex flex-wrap gap-4 justify-center">
         {#each languages as language (language.id)}
         <label class="flex items-center space-x-1 p-1 rounded-lg border-1 cursor-pointer transition-all duration-200 min-w-8 border-indigo-500 bg-indigo-50 shadow-md">
-            <input type="radio" id={language.id} name="language" value={language.name} class="w-4 h-4 text-blue-600 focus:ring-blue-500 focus:ring-2">
+            <input required type="radio" id={language.id} name="language" value={language.name} class="w-4 h-4 text-blue-600 focus:ring-blue-500 focus:ring-2">
             <div class="flex flex-col">
                 <span class="text-sm font-semibold text-gray-800">{language.nativeName}</span>
             </div>

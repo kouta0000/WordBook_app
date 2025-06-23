@@ -9,7 +9,7 @@
 </div>
 {:else}
 <div transition:fade={{duration:150}} class={{
-    "inset-0 rounded-xl absolute z-8 flex transition-all duration-300 bg-slate-300":true, "opacity-0":isClicked}}  onclick={() => {isClicked = !isClicked; setTimeout(()=>isClicked = !isClicked, 2000)}}>
+    "inset-0 rounded-xl absolute z-8 flex transition-all duration-300":true,"bg-indigo-400":(i%2==0), "bg-indigo-300":(i%2==1), "opacity-0":isClicked}}  onclick={() => {isClicked = !isClicked; setTimeout(()=>isClicked = !isClicked, 2000)}}>
 {#if i == 0}
 <p class="m-auto text-white font-black blink opacity-0">タッチ</p>
 {/if}

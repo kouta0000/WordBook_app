@@ -54,7 +54,7 @@ onMount(()=>{
                             名前を決めよう！
                         </h2>
                         <input type="text" id="wb_name" name="wb_name" placeholder="名前" class="input shadow-lg border-indigo-500 rounded-xl w-3/5" required>
-                        <button class="btn bg-indigo-500 rounded-xl text-white font-bold w-3/5" type="submit" onclick={()=>dialog?.close()}>作成</button>          
+                        <button class="btn bg-indigo-500 rounded-xl text-white font-bold w-3/5" type="submit">作成</button>          
                 </div>
               </div>
               <div class="flex w-full justify-center gap-2 py-2">
