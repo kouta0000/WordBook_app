@@ -40,7 +40,7 @@ export const POST: RequestHandler = async ({url, request}) => {
                 }
             })
         }
-        prompt = `${language}の${text}の類語の例を4つ、日本語の翻訳付きで教えてください。`;
+        prompt = `${language}の${text}の類語の例を${language}で４つ。日本語の翻訳付きで。原文と訳文混在不可。`;
         
     } else if (type == "collocation") {
         const res = await supabase.from("Words").select("collocation").eq("id",id);
@@ -51,7 +51,7 @@ export const POST: RequestHandler = async ({url, request}) => {
                 }
             })
         }
-        prompt = `${language}の${text}の2~4語からなるコロケーション表現の例を日本語の翻訳付きで4つ教えてください。返答は以下のjson形式で。`;
+        prompt = `${language}の${text}を用いた共起表現の例を4つ（各4語以内）。日本語の翻訳付きで。原文と訳文混在不可。`;
     } else if (type == "sentence" ) {
         const res = await supabase.from("Words").select("sentence").eq("id",id);
         if (res.data?.[0].sentence && !regenerate) {
