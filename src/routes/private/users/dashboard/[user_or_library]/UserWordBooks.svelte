@@ -1,8 +1,6 @@
 <script lang="ts">
 import {fly, fade} from "svelte/transition";
 import {enhance} from "$app/forms";
-import Gabyo from "./Gabyo.svelte";
-import Gabyo2 from "./Gabyo2.svelte";
 import LanguageRadioGroup from "./LanguageRadioGroup.svelte";
 import {onMount} from "svelte";
 

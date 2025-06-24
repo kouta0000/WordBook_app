@@ -11,8 +11,11 @@ export const load: PageServerLoad = async ({cookies, params, locals}) => {
     if (user_or_library == "user") {
         words = await supabase.from("Words").select("term, meaning, id,checked").eq("wb_id", wordbook_id).eq("user_id", user_id).order("created_at", {ascending:false});
         const {error} = await supabase.from("WordBooks").update({word_number:words.data?.length, updated_at: new Date()}).eq("id",wordbook_id)
-    } else {
+    } else if (user_or_library=="library") {
         words = await supabase.from("Words").select("term, meaning, id,checked").eq("wb_id", wordbook_id).eq("user_id", library_id).order("created_at",{ascending:false});
+        const {error} = await supabase.from("WordBooks").update({word_number:words.data?.length, updated_at: new Date()}).eq("id",wordbook_id)
+    } else {
+        words = await supabase.from("Words").select("term, meaning, id,checked").eq("wb_id", wordbook_id).order("created_at",{ascending:false});
         const {error} = await supabase.from("WordBooks").update({word_number:words.data?.length, updated_at: new Date()}).eq("id",wordbook_id)
     }
     return {

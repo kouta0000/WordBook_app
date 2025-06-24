@@ -83,7 +83,7 @@
                   </svg>
                 </p>
             </a>
-        {:else}
+        {:else if user_or_library=="library"}
             <a href="../../../dashboard/library" class="active:scale-80 shadow-sm btn btn-sm bg-indigo-200 rounded-full w-min basis-0 text-black">
                 <p class="whitespace-nowrap text-indigo-700 font-extrabold">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
@@ -91,6 +91,14 @@
                       </svg>
                 </p>
             </a>
+        {:else}
+        <a href="../../../dashboard/quest/quests/1" class="active:scale-80 shadow-sm btn btn-sm bg-indigo-200 rounded-full w-min basis-0 text-black">
+            <p class="whitespace-nowrap text-indigo-700 font-extrabold">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                  </svg>
+            </p>
+        </a>
         {/if}
     </div>
     

@@ -1,6 +1,5 @@
 
 <script lang="ts">
-import Gabyo2 from "./Gabyo2.svelte";
 interface Props {
 	wordbooks: Wordbook[];
 }
