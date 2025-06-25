@@ -247,7 +247,7 @@
 
     <!--実際のテスト画面-->
     {#if !isQuizComplete}
-    <div class="w-full md:w-4/5 lg:w-2/5 mx-auto  lg:h-full flex flex-col bg-white rounded-2xl shadow-xl relative">
+    <div class="w-full md:w-4/5 lg:w-3/10 mx-auto  lg:h-full flex flex-col bg-white rounded-2xl shadow-xl relative">
         <div class="border-5 border-double border-indigo-300/50 shadow-lg shadow-slate-100 bg-white rounded-2xl text-gray-600 font-bold px-2 flex flex-col items-center">
             <div class="w-4/5">
                 <progress class="progress progress-primary h-3 bg-slate-200 my-3" value={questionIndex*(100/length)} max="100"></progress>
@@ -295,12 +295,12 @@
                 </span>
                 {/each}
             </div>
-            <div class="w-full bg-gray-100 rounded-xl flex flex-wrap justify-center gap-3 p-5 relative">
+            <div class="w-full bg-gray-100 rounded-xl flex flex-wrap justify-start gap-1 p-5 relative">
                 {#if isfetching}
                 <div class="loading loading-spinner self-center"></div>
                 {/if}
                 {#each buttons as b,i (b.id)}
-                <button onclick={()=>checkAnswer(b,i)} class={{"text-indigo-800 bg-linear-to-br from-indigo-100 to-gray-100 p-2 my-1 px-6 text-lg font-bold rounded-3xl transition-all duration-200":true,"opacity-0 btn btn-disabled":inputedphrase.includes(b,0)}}>
+                <button onclick={()=>checkAnswer(b,i)} class={{"text-indigo-800 bg-linear-to-br from-indigo-100 to-gray-100 p-2 my-1 px-3 text-lg font-bold rounded-xl transition-all duration-200":true,"opacity-0 btn btn-disabled":inputedphrase.includes(b,0)}}>
                     {b.value}
                 </button>
                 {/each}

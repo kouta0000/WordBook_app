@@ -155,7 +155,7 @@
             count++
             showResult = true;
             audio = undefined;
-            await playAudio(beforeInput.join(" ")+answerWord+afterInput.join(" "));
+            await playAudio(beforeInput.join(" ")+" " + answerWord+ " " + afterInput.join(" "));
             setTimeout(()=>{nextQuestion()}, 1500);
         } else {
             count++;

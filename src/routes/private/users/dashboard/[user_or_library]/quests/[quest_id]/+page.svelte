@@ -7,6 +7,7 @@
     import {player} from "$lib/utilities/player";
     let { data }: PageProps = $props();
     const ids = data.loaddata.wordbook_ids.data;
+    const quest_id = data.loaddata.quest_id;
     const sugorokuTiles = [
     "🏁 Start", // 最初の要素は「Start」
     "➡️",
@@ -31,7 +32,7 @@
     "🎯 Goal"  // 最後の要素は「Goal」
 ];
     let position:number = $state(0);
-    let level:number = $state(21);
+    let level:number = $state(49);
     let current_id:number =$state(level);
     let stages= $state(Array(50).fill(""));
     let isactives = $state(Array(50).fill(false));
@@ -47,128 +48,28 @@
     }
 
 // PhaserのSceneクラスを定義
-class UIScene extends Phaser.Scene {
-  player!: Phaser.GameObjects.Sprite;
-  constructor() {
-    super('UIScene');
-  }
-
- 
-  preload() {
-    this.load.image('level1_background', '/quest_assets/background.png');
-    this.load.image('player','/quest_assets/player.png');
-    this.load.image('ice', '/quest_assets/ice.png');
-    
-  }
-  create() {
-    const centerX:number = this.game.config.width as number / 2;
-    const centerY:number = this.game.config.height as number / 2;
-    this.add.image(centerX, centerY, 'level1_background');
-    spaces.forEach(space => {
-    this.add.image(space.x+space.width/2,space.y-space.height/2, 'ice');
-    });
-    sugorokuTiles.forEach((tile,i)=>{
-      this.add.text(spaces[i].x+spaces[i].width/4, spaces[i].y-spaces[i].height/1.5, tile, {
-                    fontFamily: 'Arial',    // フォントファミリー（絵文字表示に影響する可能性あり）
-                    fontSize: '32px',       // フォントサイズ
-                    color: '#ffffff',       // 文字色（白）
-                    align: 'center'         // 中央揃え
-                });
-    })
-    this.player = this.add.sprite(player.x+player.width/2, player.y-player.height/2, 'player');
-    }
-          
-    update() {
-      if (dice) {
-        
-        if (position == spaces.length-1) {
-          position=0;
-          const x = spaces[0].x+spaces[0].width/2;
-          const y = spaces[0].y+spaces[0].height/2;
-          this.tweens.add({
-            targets:this.player,
-            x:x,
-            y:y,
-            duration:1000,
-            ease:'Power1'
-          })
-          dice = 0;
-        } else {
-        let parts;
-        if (position+dice<spaces.length-1) {
-          const baf = position+dice;
-          parts = spaces.slice(position+1, baf+1);
-          position = baf;
-        } else {
-          const baf = spaces.length-1;
-          parts = spaces.slice(position+1, baf+1);
-          position = baf;
-        };
-        const tweenchain = parts.map(v=>{return {x:v.x+v.width/2, y:v.y-v.height/2,duration:500, ease:"Power2"}})
-        const tweenChain = this.tweens.chain({
-          targets:this.player,
-          tweens: tweenchain,
-          onComplete: () => {
-            if (position == spaces.length-1){
-               level++;
-               isactives[level-1] = true;
-               isnows[level-2] = false;
-               isnows[level-1] = true;
-               current_id = level;
-            }
-          }
+function repeatAnimation(node:HTMLElement) {
+      const interval1 = setInterval(() => {
+        node.classList.add("animate__animated", "animate__headShake");
+        node.addEventListener("animationend", () => {
+          node.classList.remove("animate__animated", "animate__headShake");
         });
-        tweenChain.play();
-        dice = 0;
-      }
-    }
-  }
-}
-
-  onMount(() => {
-    const config: Phaser.Types.Core.GameConfig = {
-      type: Phaser.AUTO,
-      width: 1280,
-      height: 960,
-      parent: gameContainer,
-      backgroundColor: '#333333',
-      scene: [UIScene],
-      scale: {
-            mode: Phaser.Scale.FIT, // ここが重要！
-            autoCenter: Phaser.Scale.CENTER_BOTH,
-        }
-    };
-    game = new Phaser.Game(config);
-  });
-
-  onDestroy(() => {
-    if (game) {
-      game.destroy(true);
-    }
-  });
+      }, 10000);
+      const interval2 = setInterval(() => {
+        node.classList.add("animate__animated", "animate__bounce");
+        node.addEventListener("animationend", () => {
+          node.classList.remove("animate__animated", "animate__bounce");
+        });
+      }, 15000);
   
-    function repeatAnimation(node:HTMLElement) {
-    const interval1 = setInterval(() => {
-      node.classList.add("animate__animated", "animate__headShake");
-      node.addEventListener("animationend", () => {
-        node.classList.remove("animate__animated", "animate__headShake");
-      });
-    }, 10000);
-    const interval2 = setInterval(() => {
-      node.classList.add("animate__animated", "animate__bounce");
-      node.addEventListener("animationend", () => {
-        node.classList.remove("animate__animated", "animate__bounce");
-      });
-    }, 15000);
-
-    // 必ず破棄処理を返す
-    return {
-      destroy() {
-        clearInterval(interval1);
-        clearInterval(interval2); // インターバルをクリア
-      }
-    };
-  }
+      // 必ず破棄処理を返す
+      return {
+        destroy() {
+          clearInterval(interval1);
+          clearInterval(interval2); // インターバルをクリア
+        }
+      };
+    }
 </script>
 <button class="rounded-full absolute fixed bottom-1 right-1 btn btn-primary btn-active btn-lg z-10" onclick={() => dice = throwDice()}>
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="size-6">
@@ -179,9 +80,11 @@ class UIScene extends Phaser.Scene {
 
 <h1 class="text-xl font-sans my-3 text-center">フランス語頻度準　1500</h1>
 <a href="../../quest" class="btn btn-base">戻る{dice}</a>
+<!--
 <div class="p-5 w-full lg:w-1/2">
 <div bind:this={gameContainer}></div>
 </div>
+!-->
 <div class="w-9/10 md:w-3/5 lg:w-1/5 flex justify-center items-center mt-5">
 <div class="flex justify-center items-center rounded-3xl h-10 grow bg-linear-to-br from-teal-200 to-sky-600 self-end text-white font-bold p-2">
   <p>Lv. {current_id}</p>
@@ -202,7 +105,9 @@ class UIScene extends Phaser.Scene {
     {#each stages as s,i}
     {#if isnows[i]}
     <div use:repeatAnimation class={{"w-full rounded-3xl shadow-lg aspect-square relative overflow-hidden":true, "bg-linear-to-br from-yellow-300 to-red-500":isactives[i], "translate-z-10":isnows[i]}} >
-        <button onclick={()=>{current_id=i+1}} class="absolute inset-0 z-5"></button>
+        
+      <a class="absolute inset-0 z-5" href={`./${quest_id}/${ids?.[i]?.wb_id}`}>
+      </a>  
         <div style="animation-delay:${(i%5)*50}ms;" class={{"absolute rounded-3xl bg-white inset-0 z-1 transition-all duration-200":true, "opacity-0":current_id==i+1, "element":isactives[i] && !isnows[i]}}></div>
         <div class={{"absolute z-2 inset-[2px] bg-white rounded-3xl text-gray-500 text-xl flex justify-center items-center":true}}>
         <span class={{
@@ -212,7 +117,8 @@ class UIScene extends Phaser.Scene {
     {:else}
     <div class={{"w-full rounded-3xl shadow-lg aspect-square relative overflow-hidden":true, "bg-linear-to-br from-teal-400 to-indigo-400":isactives[i], "scale-110 translate-z-1":isnows[i]}} >
         {#if isactives[i]}
-        <button onclick={()=>{current_id=i+1}} class="absolute inset-0 z-5"></button>
+        <a class="absolute inset-0 z-5" href={`./${quest_id}/${ids?.[i].wb_id}`}>
+        </a>  
         {/if}
         <div style={`animation-delay:${i*50}ms;`} class={{"absolute rounded-3xl bg-white inset-0 z-1 transition-all duration-200":true, "opacity-0":current_id==i+1, "element":isactives[i] && !isnows[i]}}></div>
         <div class={{"absolute z-2 inset-[2px] bg-white rounded-3xl text-gray-500 text-xl flex justify-center items-center":true}}>
