@@ -30,7 +30,7 @@
     let showResult = $state(false);
     let isCorrect = $state(true);
 
-
+    let audio: HTMLAudioElement | undefined = $state();
     let beforeInput:string[] = $state([]);
     let afterInput:string[]= $state([]);
     let isfetching:boolean = $state(false);
@@ -108,7 +108,7 @@
             answerWord = answerword;
             beforeInput = parts[0].split(" ");
             afterInput = parts[1].split(" ");
-            main_display = examples.examples?.[0].translation;
+            main_display = currentWord.meaning
             } else {
                 const res = await fetchsentence();
                 const list = res.examples?.[0].example;
@@ -127,9 +127,9 @@
                 answerWord = answerword;
                 beforeInput=getCleanWords(parts[0]);
                 afterInput=getCleanWords(parts[1]);
-                main_display=res.examples?.[0].translation;
+                main_display=currentWord.meaning;
             }
-
+            playAudio(answerWord);
             await tick();
             setTimeout(()=> main_input?.focus(), 50);            
         } else {
@@ -142,6 +142,7 @@
         showResult = false;
         answerWord = "";
         inputedAnswer=""
+        audio = undefined;
         beforeInput=[];
         afterInput=[];
         main_display="";
@@ -153,6 +154,8 @@
             if(!count) score++;
             count++
             showResult = true;
+            audio = undefined;
+            await playAudio(beforeInput.join(" ")+answerWord+afterInput.join(" "));
             setTimeout(()=>{nextQuestion()}, 1500);
         } else {
             count++;
@@ -171,7 +174,24 @@
         clearInfo();
         showQuestion();
     }
-
+    const playAudio = async (word:string) => {
+        if (!audio) {
+        const res = await fetch(`/api/speak?language=${language}`, {
+            method:"POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body:JSON.stringify({text:word})
+        });
+        const audioBlob = await res.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+        audio = new Audio(audioUrl);
+    }
+        await audio.play();
+        await new Promise<void>((resolve) => {
+            if(audio) audio.onended = () => resolve();
+        });
+    }
 </script>
 
 
@@ -280,11 +300,17 @@
         
         <div class="p-8 grow flex flex-col">
             <div class="text-center">
-                <div class="bg-indigo-100 rounded-2xl mb-4">
+                <div class="bg-indigo-100 rounded-2xl mb-4 relative">
                     <div style={parent_style}>
                         <div use:fit={{min_size:5, max_size:20}} class="p-8 lg:p-5 text-wrap font-[650] text-gray-800/95">
                             {main_display}
                         </div>
+                    </div>
+                    <div onclick={()=>playAudio(currentWord.term)} class="mask mask-circle bg-white mb-1 p-2 absolute right-0 bottom-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                            <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM18.584 5.106a.75.75 0 0 1 1.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 0 1-1.06-1.06 8.25 8.25 0 0 0 0-11.668.75.75 0 0 1 0-1.06Z" />
+                            <path d="M15.932 7.757a.75.75 0 0 1 1.061 0 6 6 0 0 1 0 8.486.75.75 0 0 1-1.06-1.061 4.5 4.5 0 0 0 0-6.364.75.75 0 0 1 0-1.06Z" />
+                          </svg>                          
                     </div>
                 </div>
             </div>

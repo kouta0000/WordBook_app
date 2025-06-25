@@ -278,12 +278,12 @@
                 </span>
                 {/each}
             </div>
-            <div class="w-full bg-gray-100 rounded-xl flex flex-wrap justify-center gap-1 p-5">
+            <div class="w-full bg-gray-100 rounded-xl flex flex-wrap justify-start gap-1 p-5">
                 {#if isfetching}
                 <div class="loading loading-spinner self-center"></div>
                 {/if}
                 {#each buttons as b,i (b.id)}
-                <button onclick={()=>checkAnswer(b,i)} class={{"text-indigo-800 bg-linear-to-br from-indigo-100 to-gray-100 p-2 my-1 px-6 text-lg font-bold rounded-3xl transition-all duration-200":true,"opacity-0 btn btn-disabled":inputedphrase.includes(b,0)}}>
+                <button onclick={()=>checkAnswer(b,i)} class={{"text-indigo-800 bg-linear-to-br from-indigo-100 to-gray-100 p-2 px-3 my-1 text-lg font-bold rounded-xl transition-all duration-200":true,"opacity-0 btn btn-disabled":inputedphrase.includes(b,0)}}>
                     {b.value}
                 </button>
                 {/each}

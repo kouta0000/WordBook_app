@@ -7,7 +7,7 @@
     import {onMount} from "svelte";
     import { goto } from '$app/navigation';
     //変数宣言
-    let { wordslist, wb_name, user_or_library } = $props();
+    let { wordslist, wb_name, language, user_or_library } = $props();
     let questions:Word[][] = $state([]);
     let questionIndex:number=$state(-1);
     let lengthdeciding =$state(true);
@@ -22,7 +22,8 @@
     let answer = $state("");
     let isQuizComplete = $state(false);
     let showResult:boolean = $state(false);
-    let showsubdisplays = $state(false)
+    let showsubdisplays = $state(false);
+    let audio:HTMLAudioElement | undefined = $state();
     interface Word {
         "term": string;
         "meaning": string;
@@ -66,7 +67,7 @@
             for (let i=0;i<4;i++) {
                 subdisplays[i] = questionwords[i];
             };
-            
+            playAudio(main_word.term);
         } else {
             isQuizComplete = true;
         }
@@ -105,8 +106,27 @@
     }
     const clearInfo = () => {
         showResult = false;
+        audio = undefined;
         answerInfo = Array(4).fill(false);
         answer = "";
+    }
+    const playAudio = async (word:string) => {
+        if (!audio) {
+        const res = await fetch(`/api/speak?language=${language}`, {
+            method:"POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body:JSON.stringify({text:word})
+        });
+        const audioBlob = await res.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+        audio = new Audio(audioUrl);
+    }
+        await audio.play();
+        await new Promise<void>((resolve) => {
+            if(audio) audio.onended = () => resolve();
+        });
     }
 </script>
 <div id="displays" class="w-full bg-linear-to-br from-slate-100 to-slate-200 h-screen p-4 flex gap-4 overflow-auto absolute z-20 relative">
@@ -136,11 +156,7 @@
     <div class="w-full md:w-4/5 lg:w-3/10 mx-auto flex flex-col bg-slate-50 rounded-2xl shadow-xl">
         <div class="border-5 border-double border-indigo-300 bg-gray-100 rounded-2xl text-gray-700 p-8">
             <div class="flex items-center justify-between">
-                <div class="flex items-center gap-1">
-                    <h1 class="text-lg font-bold">{wb_name}</h1>
-                </div>
                 <div class="text-right">
-                    <div class="text-sm opacity-90">進行度</div>
                     <div class="text-lg font-bold">
                         {`${questionIndex}/${length}`}
                     </div>
@@ -153,11 +169,17 @@
         <div class="p-8 grow flex flex-col">
             {#if !isQuizComplete}
             <div class="text-center flex flex-col">
-                <div class="bg-linear-to-r from-indigo-100 to-gray-200 rounded-2xl ">
+                <div class="bg-linear-to-r from-indigo-100 to-gray-200 rounded-2xl p-1 relative">
                     <div style={parent_style}>
-                    <div use:fit={{min_size:10, max_size:35}} class="px-5 py-8 max-h-40 lg:max-h-20 lg:py-3 text-wrap font-bold text-indigo-700">
+                    <div use:fit={{min_size:10, max_size:35}} class="px-5 py-8 max-h-40 lg:max-h-30 lg:py-5 text-wrap font-bold text-indigo-700">
                         {main_display.term}
                     </div>
+                    </div>
+                    <div onclick={()=>playAudio(main_display.term)} class="mask mask-circle bg-white mb-1 p-2 absolute right-0 bottom-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                            <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM18.584 5.106a.75.75 0 0 1 1.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 0 1-1.06-1.06 8.25 8.25 0 0 0 0-11.668.75.75 0 0 1 0-1.06Z" />
+                            <path d="M15.932 7.757a.75.75 0 0 1 1.061 0 6 6 0 0 1 0 8.486.75.75 0 0 1-1.06-1.061 4.5 4.5 0 0 0 0-6.364.75.75 0 0 1 0-1.06Z" />
+                          </svg>                          
                     </div>
                 </div>
                     <div class={{"text-center self-end w-1/2 m-2":true,"opacity-0":!showResult}}>
@@ -169,17 +191,18 @@
                         </div>
                     </div>
             </div>
-            <div class="flex flex-col items-center grow gap-4 mb-8">
+            <div class="grid grid-cols-2 lg:flex flex-col items-center w-full gap-4 mb-8">
                 {#each subdisplays as subdisplay, i (i)}
-                <button disabled={showResult} onclick={() => {postAnswer(subdisplay.meaning).then(() => {nextQuestion()});}} class={{
-                    "w-full px-3 py-1 text-left rounded-xl border-2 transition-all duration-300 font-medium":true,
+                <div style={parent_style}>
+                <button use:fit={{min_size:5, max_size:20}} disabled={showResult} onclick={() => {postAnswer(subdisplay.meaning).then(() => {nextQuestion()});}} class={{
+                    "text-center w-full aspect-square lg:aspect-7/1 px-3 py-1 rounded-xl border-2 transition-all duration-300 font-medium":true,
                     "border-slate-200 hover:border-blue-300 hober:bg-blue-50 bg-linear-to-r from-blue-50 to-gray-100 hover:shadow-md cursor-pointer":!showResult,
                     "border-green-500 bg-green-100 text-green-800":showResult && answerInfo[i],
                     "border-red-500 bg-red-100 text-red-800": showResult && !answerInfo[i] && answer==subdisplay.meaning,
                     "border-slate-200 bg-linear-to-r from-blue-50 to-gray-100":showResult && !answerInfo[i] && !(answer==subdisplay.meaning)}}>
-                <span class="mask mask-circle bg-white p-3 mr-4">{i+1}</span>
                 {subdisplay.meaning}
                 </button>
+                </div>
                 {/each}
             </div>
             

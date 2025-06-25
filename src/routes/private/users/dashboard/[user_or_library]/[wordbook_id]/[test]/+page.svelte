@@ -20,7 +20,7 @@
 </div>
 {/if}
 {#if test == "4taku"}
-<Test wordslist={words} wb_name={wb_name} user_or_library={user_or_library} />
+<Test wordslist={words} wb_name={wb_name} language={language} user_or_library={user_or_library} />
 {:else if test =="input"}
 <Test2 wordslist={words} wb_name={wb_name} language={language} user_or_library={user_or_library} />
 {:else if test=="order"}
