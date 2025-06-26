@@ -331,7 +331,7 @@
         </div>
     {:else if currentView == 1}
     <div class="w-full md:w-4/5 lg:w-3/10 mx-auto  lg:h-full flex flex-col bg-slate-100 rounded-2xl shadow-xl">
-    <div class="text-center flex flex-col w-full p-10 bg-white rounded-xl">
+    <div class="text-center flex flex-col w-full p-10 bg-white rounded-xl gap-5">
         <div class="bg-linear-to-r from-indigo-100 to-gray-200 rounded-2xl p-1 relative">
             <div style={parent_style}>
             <div use:fit={{min_size:10, max_size:35}} class="px-5 py-8 max-h-40 lg:max-h-30 lg:py-5 text-wrap font-bold text-indigo-700">
@@ -370,7 +370,7 @@
     </div>
     </div>
     {:else if currentView == 2}
-    <div class="w-full md:w-4/5 lg:w-3/10 mx-auto  lg:h-full flex flex-col bg-slate-100 rounded-2xl shadow-xl">
+    <div class="w-full h-full md:w-4/5 lg:w-3/10 mx-auto  lg:h-full flex flex-col bg-white rounded-2xl shadow-xl p-8">
         <div class="border-5 border-double border-indigo-300/50 shadow-lg shadow-slate-100 bg-white rounded-2xl text-gray-600 font-bold px-2 flex flex-col items-center">
             <div class="w-4/5">
                 <progress class="progress progress-primary h-3 bg-slate-200 my-3" value={questionIndex*(100/length)} max="100"></progress>
@@ -405,7 +405,7 @@
                 </form>
             </div>
             
-            <div class={{"transition-all duration-200 w-full flex justify-end":true,"opacity-0":!showResult}}>
+            <div class={{"mt-1 transition-all duration-200 w-full flex justify-end ":true,"opacity-0":!showResult}}>
                 <div class={{
                     "text-center w-1/2 gap-2 px-6 py-1 lg:mb-2 rounded-full font-bold mb-1":true,
                     "bg-green-100 text-green-800":isCorrect,
@@ -465,7 +465,7 @@
             </div>
             
         </div>
-        <div class="w-full mt-1 p-8 flex flex-col justify-evenly gap-5 h-full">
+        <div class="w-full mt-1 p-8 flex flex-col justify-start gap-5 h-full">
             <div class="flex flex-wrap bg-gray-100 rounded-xl p-5 justify-evenly">
                 {#if isfetching}
                 <div class="loading loading-spinner self-center"></div>
