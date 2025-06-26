@@ -189,7 +189,9 @@
                     value: word
                 }));
                 main_display=res.examples?.[0].translation;
-                playAudio(answerphrase.join(" "))
+                playAudio(answerphrase.join(" "));
+                await tick();
+                setTimeout(()=> main_input?.focus(), 50);
             } else {
                 const questionwords = qcm_questions[questionIndex];
                 const main_word = getRandomWord(questionwords);
