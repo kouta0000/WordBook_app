@@ -94,7 +94,7 @@
     <div transition:scale class="flex flex-col items-center justify-between absolute top-15 bottom-15 bg-slate-100 w-full p-10 z-2">
         {#if step == 1}
         <div class="bg-indigo-900 rounded-3xl p-[{istaken? 0:2}px] mt-10">
-            <EasyCamera bind:width  style="border-radius:{45}px;" bind:this={camera} autoOpen bind:mirrorDisplay />
+            <EasyCamera bind:width  style="border-radius:{45}px;" bind:this={camera} useFrontCamera={false} autoOpen bind:mirrorDisplay />
         </div>
         <div class="flex gap-1">
         <button class="btn btn-primary btn-active" type="button" onclick={() =>{if (image)ImagetoWords(image)}}>生成</button>
