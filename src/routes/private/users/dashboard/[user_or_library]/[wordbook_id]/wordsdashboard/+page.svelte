@@ -1,5 +1,6 @@
 <script lang="ts">
     import Memo from "./Memo.svelte";
+    import Add from "./Add.svelte"
     import type { PageProps } from "./$types";
     import {enhance} from "$app/forms";
     import {fly} from "svelte/transition";
@@ -29,6 +30,8 @@
 <Edit words={data.loaddata.words.data} wb_name={wb_name} wordbook_id={wordbook_id} user_or_library={user_or_library}/>
 {:else if currentView == "test"}
 <TestSelect/>
+{:else if currentView == "add"}
+<Add />
 {/if}
 
 <div class="dock z-20">
@@ -69,6 +72,12 @@
           stroke-linejoin="round"
         />
       </svg>
+    </button>
+    <button onclick={() => currentView = "add"} class={{"dock-active text-indigo-900":currentView=="quest","text-gray-500":currentView!="quest"}}>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+      </svg>
+      
     </button>
 </div>
 
