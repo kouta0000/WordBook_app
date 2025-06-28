@@ -69,17 +69,7 @@ onMount(()=>{
     </div>
 </dialog>
 
-    <div class="w-full min-h-screen pt-20 flex flex-col items-center">
-        <div class="flex mb-10 justify-start w-full p-1 px-5 gap-5">
-        <div class="gap-2 text-sm text-indigo-900 mask mask-squircle bg-linear-to-r from-indigo-100 to-pink-50 size-20 flex flex-col justify-center items-center">
-            <p>単語帳数</p>
-            <p>{wordbooks.length}</p>
-        </div>
-        <div class="gap-2 text-sm text-indigo-900 mask mask-squircle bg-linear-to-r from-indigo-100 to-pink-50 size-20 flex flex-col justify-center items-center">
-            <p>総単語数</p>
-            <p>{sum}</p>
-        </div>
-        </div>
+    <div class="w-full min-h-screen pt-30 flex flex-col items-center">
         <h1 class="text-3xl mb-10 font-bold bg-gradient-to-r from-sky-500 to-indigo-500 inline-block text-transparent bg-clip-text">単語帳</h1>
         <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-3 justify-end items-center absolute fixed bottom-17 lg:bottom-22 lg:right-5 z-20">
             <svg onclick={()=> dialog?.showModal()} xmlns="http://www.w3.org/2000/svg" class="active:scale-80" viewBox="0 0 64 64" width="56" height="56">
@@ -91,7 +81,7 @@ onMount(()=>{
                 <rect x="30" y="22" width="4" height="20" ry="2" fill="#FFFFFF" />
             </svg>  
         </div>
-        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-13 sm:gap-x-0 items-center place-items-center">
+        <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center">
             
             {#each wordbooks as wordbook, id (wordbook.id)}
             <!--削除だいあろぐ-->
