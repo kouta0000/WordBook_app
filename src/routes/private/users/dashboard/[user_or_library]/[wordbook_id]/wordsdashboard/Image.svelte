@@ -2,14 +2,17 @@
     import {scale, fade} from "svelte/transition";
     import EasyCamera from "@cloudparker/easy-camera-svelte";
     import {createWorker} from "tesseract.js";
-    import {createEventDispatcher} from 'svelte';
+    import {onMount} from 'svelte';
+    let cameras: MediaDeviceInfo[] = $state([]);
+
     let {language, onend}:{language:string,onend:()=>void} = $props();
     let innerWidth:number = $state(0);
     let width = $derived(innerWidth<1000? Math.floor(innerWidth*0.99):300);
+    let currentCameraDeviceId: string =$state("");
     let istaken:boolean = $state(false)
 	let camera: EasyCamera | undefined = $state();
 	let mirrorDisplay = $state(false);
-    let image:string |ImageData|null = $state("");
+    let image:string = $state("");
     let text:string = $state("");
     const getCleanWords = (sentence: string): string[] => {
         const words = sentence.match(/[\p{L}\p{N}']+/gu);
@@ -88,17 +91,54 @@
         console.log(textarray)
         step=3;
     }
+    const handleSwitchCamera = async() => {
+        if (!camera) return;
+        cameras = await camera.getCameraDevices();
+        if (cameras.length <= 1) {
+			console.log('切り替え可能なカメラが他にありません。');
+			return;
+		}
+
+		// 現在のカメラのインデックスを見つける
+		const currentIndex = cameras.findIndex(
+			(dev) => dev.deviceId === currentCameraDeviceId
+		);
+
+		let nextCameraIndex = 0;
+		if (currentIndex !== -1) {
+			// 次のカメラのインデックスを計算（ループバック）
+			nextCameraIndex = (currentIndex + 1) % cameras.length;
+		}
+
+		const nextCamera = cameras[nextCameraIndex];
+
+		if (nextCamera) {
+			try {
+				await camera.switchCamera(nextCamera.deviceId);
+				currentCameraDeviceId = nextCamera.deviceId;
+				console.log(`カメラを ${nextCamera.label || '不明なカメラ'} に切り替えました。`);
+			} catch (error) {
+				console.error('カメラの切り替えに失敗しました:', error);
+			}
+		}
+    }
         
     </script>
     <svelte:window bind:innerWidth={innerWidth} />
     <div transition:scale class="flex flex-col items-center justify-between absolute top-15 bottom-15 bg-slate-100 w-full p-10 z-2">
         {#if step == 1}
         <div class="bg-indigo-900 rounded-3xl p-[{istaken? 0:2}px] mt-10">
-            <EasyCamera bind:width  style="border-radius:{45}px;" bind:this={camera} useFrontCamera={false} autoOpen bind:mirrorDisplay />
+            <EasyCamera bind:width  style="border-radius:{45}px;" bind:this={camera}  autoOpen bind:mirrorDisplay />
         </div>
         <div class="flex gap-1">
         <button class="btn btn-primary btn-active" type="button" onclick={() =>{if (image)ImagetoWords(image)}}>生成</button>
         <button class="btn btn-primary btn-active" type="button" onclick={() => camera?.open()}>再撮影</button>
+        <button class="btn btn-primary btn-active" type="button" onclick={handleSwitchCamera}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+              </svg>
+              
+        </button>
         <button class="btn btn-primary btn-active" type="button" onclick={()=>handleImage()}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 3.75H6A2.25 2.25 0 0 0 3.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0 1 20.25 6v1.5m0 9V18A2.25 2.25 0 0 1 18 20.25h-1.5m-9 0H6A2.25 2.25 0 0 1 3.75 18v-1.5M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
