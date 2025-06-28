@@ -31,7 +31,7 @@
 {:else if currentView == "test"}
 <TestSelect/>
 {:else if currentView == "add"}
-<Add />
+<Add language={language}/>
 {/if}
 
 <div class="dock z-20">
