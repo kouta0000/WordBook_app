@@ -138,7 +138,7 @@
                         <div style={parent_style} class="w-full">
                             <p use:fit={{min_size:10, max_size:22}} class="font-sans font-semibold pl-5 pt-4 pb-1 text-2xl">{word.term}</p>
                         </div>
-                        <p class="text-gray-500 text-right font-sans p-1 pr-2">{word.meaning}</p>
+                        <p class="text-gray-500 text-right text-sm font-sans p-1 pr-2">{word.meaning}</p>
                     </div>  
                     <div class="flex flex-col bg-indigo-200  rounded-r-xl border-indigo-300 justify-center items-center w-1/8 z-2">
                         <button  class="h-full aspect-ration-1/1" onclick={() => dialogs[id]?.showModal()}>
