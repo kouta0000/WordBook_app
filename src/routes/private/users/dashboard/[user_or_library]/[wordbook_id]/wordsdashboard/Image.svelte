@@ -181,6 +181,7 @@
       console.error('ファイルの読み込み中にエラーが発生しました:', e);
       alert('ファイルの読み込みに失敗しました。');
     };
+    reader.readAsDataURL(file);
     }
     const CanvastoWords = async(canvas:HTMLCanvasElement) => {
         step = 2;
