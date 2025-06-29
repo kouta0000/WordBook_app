@@ -14,6 +14,7 @@
 	let mirrorDisplay = $state(false);
     let image:string = $state("");
     let text:string = $state("");
+    let canvas:HTMLCanvasElement|undefined=$state();
     const getCleanWords = (sentence: string): string[] => {
         const words = sentence.match(/[\p{L}\p{N}']+/gu);
         return words ? words : []; // Return an empty array if no matche
@@ -61,7 +62,7 @@
         }
 	};
 
-    let currentView = $state("");
+    let currentView = $state("file");
     let resIndex:number = $state(0);
     let scroll:HTMLDivElement | undefined = $state();
     let step=$state(1);
@@ -80,6 +81,37 @@
         ["10","20","30","40","50"],
         [],
     ];
+    const drawImageOnCanvas= (img:any) => {
+    if (!canvas) {
+      console.error('キャンバス要素が見つかりません。');
+      return;
+    }
+    const ctx = canvas.getContext('2d');
+
+    const maxWidth = width;
+    const maxHeight = 600;
+
+    let w = img.width;
+    let h = img.height;
+
+    // 比率を維持しながらリサイズ
+    if (w > maxWidth) {
+      h = h * (maxWidth / width);
+      w = maxWidth;
+    }
+    if (h > maxHeight) {
+      width = width * (maxHeight / h);
+      h = maxHeight;
+    }
+
+    canvas.width = w;
+    canvas.height = h;
+
+    ctx?.clearRect(0, 0, canvas.width, canvas.height);
+    ctx?.drawImage(img, 0, 0, w, h);
+
+    console.log(`画像をキャンバスに描画しました。サイズ: ${w}x${h}`);
+  }
     const ImagetoWords = async(image:string) => {
         step = 2;
         const language_code = getLanguageCode(language as string);
@@ -122,15 +154,63 @@
 			}
 		}
     }
-        
+    const handleChange = async(event:any) => {
+        const file = event.target.files[0]; // 選択された最初のファイルを取得
+
+    if (!file) {
+      console.log("ファイルが選択されていません。")
+      return;
+    }
+
+    // 画像ファイル以外が選択された場合の簡易チェック
+    if (!file.type.startsWith('image/')) {
+      console.log("画像ファイルではありません。")
+      return;
+    }
+   
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image(); 
+      img.onload = () => {
+        drawImageOnCanvas(img); 
+      };
+      img.src = event.target.result; // FileReaderで読み込んだData URLを画像のソースに設定
+    };
+
+    reader.onerror = (e) => {
+      console.error('ファイルの読み込み中にエラーが発生しました:', e);
+      alert('ファイルの読み込みに失敗しました。');
+    };
+    }
+    const CanvastoWords = async(canvas:HTMLCanvasElement) => {
+        step = 2;
+        const language_code = getLanguageCode(language as string);
+        const worker = await createWorker(language_code);
+        const res = await worker.recognize(canvas);
+        await worker.terminate();
+        text = res.data.text;
+        textarray=getCleanWords(text);
+        console.log(textarray)
+        step=3;
+    }
     </script>
     <svelte:window bind:innerWidth={innerWidth} />
     <div transition:scale class="flex flex-col items-center justify-between absolute top-15 bottom-15 bg-slate-100 w-full p-10 z-2">
         {#if step == 1}
+        {#if currentView=="file"}
+        <div class="bg-indigo-900 rounded-3xl p-[{istaken? 0:2}px] mt-10">
+            <canvas  style="border-radius:{45}px;" bind:this={canvas} />
+        </div>
+        {:else if currentView=="image"}
         <div class="bg-indigo-900 rounded-3xl p-[{istaken? 0:2}px] mt-10">
             <EasyCamera bind:width  style="border-radius:{45}px;" bind:this={camera}  autoOpen bind:mirrorDisplay />
         </div>
+        {/if}
         <div class="flex gap-1">
+        {#if currentView=="file"}
+        <input onchange={handleChange} type="file" class="file-input file-input-primary rounded-xl" />
+        <button class="btn btn-primary btn-active" type="button" onclick={() =>{if (canvas)CanvastoWords(canvas)}}>生成</button>
+        {:else if currentView=="image"}
         <button class="btn btn-primary btn-active" type="button" onclick={() =>{if (image)ImagetoWords(image)}}>生成</button>
         <button class="btn btn-primary btn-active" type="button" onclick={() => camera?.open()}>再撮影</button>
         <button class="btn btn-primary btn-active" type="button" onclick={handleSwitchCamera}>
@@ -144,6 +224,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 3.75H6A2.25 2.25 0 0 0 3.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0 1 20.25 6v1.5m0 9V18A2.25 2.25 0 0 1 18 20.25h-1.5m-9 0H6A2.25 2.25 0 0 1 3.75 18v-1.5M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
               </svg>
         </button>
+        {/if}
+       
         </div>
         {:else if step==2}
         <div class="text-center self-center mt-50">
