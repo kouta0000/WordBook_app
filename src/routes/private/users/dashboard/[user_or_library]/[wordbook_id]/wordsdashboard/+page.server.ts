@@ -1,6 +1,43 @@
 import {supabase} from "$lib/config/supabaseClient";
 import type {PageServerLoad} from "./$types";
-
+import { OCR_SPACE_KEY } from "$env/static/private";
+interface Word {
+    WordText: string;
+    Left: number;
+    Top: number;
+    Height: number;
+    Width: number;
+  }
+  
+  interface Line {
+    Words: Word[];
+    MaxHeight: number;
+    MinTop: number;
+  }
+  
+  interface TextOverlay {
+    Lines: Line[];
+    HasOverlay: boolean;
+    Message: string | null;
+  }
+  
+  interface ParsedResult {
+    TextOverlay: TextOverlay | null;
+    FileParseExitCode: string | number; // Assuming it can be a string or a number based on your example
+    ParsedText: string | null;
+    ErrorMessage: string | null;
+    ErrorDetails: string | null;
+  }
+  
+  interface OCRResponse {
+    ParsedResults: ParsedResult[];
+    OCRExitCode: string;
+    IsErroredOnProcessing: boolean;
+    ErrorMessage: string | null;
+    ErrorDetails: string | null;
+    SearchablePDFURL: string | null;
+    ProcessingTimeInMilliseconds: string; // Assuming it's a string based on your example
+  }
 export const load: PageServerLoad = async ({cookies, params, locals}) => {
     const user_or_library = params.user_or_library;
     const user_id = locals.user?.id;
@@ -63,5 +100,30 @@ export const actions = {
         const word_id = data.get("id");
         const bool = checked==="false";
         const {error} = await supabase.from("Words").update({checked:bool}).eq("id",word_id);
+    },
+    ocr_space: async({request})=> {
+        const data:FormData = await request.formData();
+        const res = await fetch('https://api.ocr.space/parse/image', {
+            method:'POST',
+            headers: {
+                apikey: OCR_SPACE_KEY
+            },
+            body: data
+        });
+        const result:OCRResponse = await res.json();
+        if(result.IsErroredOnProcessing) {
+            throw error(500, result.ErrorMessage?.join(',') ?? 'OCR error');
+        };
+        let words: Word[]=[];
+        for (const parsedResult of result.ParsedResults) {
+            if (parsedResult.TextOverlay && parsedResult.TextOverlay.Lines) {
+              for (const line of parsedResult.TextOverlay.Lines) {
+                if (line.Words) {
+                  words.push(...line.Words); // 各行の単語をallWords配列に追加
+                }
+              }
+            }
+          }
+          return words;
     }
 };

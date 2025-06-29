@@ -3,6 +3,14 @@
     import EasyCamera from "@cloudparker/easy-camera-svelte";
     import {createWorker} from "tesseract.js";
     import {onMount} from 'svelte';
+    import {enhance} from "$app/forms";
+    interface Word {
+    WordText: string;
+    Left: number;
+    Top: number;
+    Height: number;
+    Width: number;
+  }
     let cameras: MediaDeviceInfo[] = $state([]);
 
     let {language, onend}:{language:string,onend:()=>void} = $props();
@@ -112,17 +120,7 @@
 
     console.log(`画像をキャンバスに描画しました。サイズ: ${w}x${h}`);
   }
-    const ImagetoWords = async(image:string) => {
-        step = 2;
-        const language_code = getLanguageCode(language as string);
-        const worker = await createWorker(language_code);
-        const res = await worker.recognize(image);
-        await worker.terminate();
-        text = res.data.text;
-        textarray=getCleanWords(text);
-        console.log(textarray)
-        step=3;
-    }
+    
     const handleSwitchCamera = async() => {
         if (!camera) return;
         cameras = await camera.getCameraDevices();
@@ -172,18 +170,22 @@
     reader.onload = (e) => {
       const img = new Image(); 
       img.onload = () => {
+        
         drawImageOnCanvas(img); 
       };
       img.src = event.target.result; // FileReaderで読み込んだData URLを画像のソースに設定
+      console.log(event.target.result)
     };
 
     reader.onerror = (e) => {
       console.error('ファイルの読み込み中にエラーが発生しました:', e);
       alert('ファイルの読み込みに失敗しました。');
     };
+    reader.readAsDataURL(file);
     }
     const CanvastoWords = async(canvas:HTMLCanvasElement) => {
         step = 2;
+        console.log(canvas)
         const language_code = getLanguageCode(language as string);
         const worker = await createWorker(language_code);
         const res = await worker.recognize(canvas);
@@ -199,33 +201,45 @@
         {#if step == 1}
         {#if currentView=="file"}
         <div class="bg-indigo-900 rounded-3xl p-[{istaken? 0:2}px] mt-10">
-            <canvas  style="border-radius:{45}px;" bind:this={canvas} />
+            <canvas  style="border-radius:{45}px;" bind:this={canvas} ></canvas>
         </div>
         {:else if currentView=="image"}
         <div class="bg-indigo-900 rounded-3xl p-[{istaken? 0:2}px] mt-10">
             <EasyCamera bind:width  style="border-radius:{45}px;" bind:this={camera}  autoOpen bind:mirrorDisplay />
         </div>
         {/if}
-        <div class="flex gap-1">
+        <div class="flex w-full flex-col items-center gap-5">
         {#if currentView=="file"}
+        <form class="flex flex-col items-center  gap-3 w-full" enctype="multipart/form-data" method="post" action="?/ocr_space" use:enhance>
         <input onchange={handleChange} type="file" class="file-input file-input-primary rounded-xl" />
-        <button class="btn btn-primary btn-active" type="button" onclick={() =>{if (canvas)CanvastoWords(canvas)}}>生成</button>
+        <input type="hidden" name="language" value={getLanguageCode(language)} />
+        <button type="submit" class="btn btn-primary btn-active w-full">文字抽出</button>
+        </form>
         {:else if currentView=="image"}
-        <button class="btn btn-primary btn-active" type="button" onclick={() =>{if (image)ImagetoWords(image)}}>生成</button>
+        <form enctype="multipart/form-data" method="post" action="?/ocr_space" use:enhance>
+            <input type="hidden" value={image} class="file-input file-input-primary rounded-xl" />
+            <input type="hidden" name="language" value={getLanguageCode(language)} />
+            <button type="submit" class="btn btn-primary btn-active">文字抽出</button>
+        </form>
+        <div class="flex gap-1">
         <button class="btn btn-primary btn-active" type="button" onclick={() => camera?.open()}>再撮影</button>
         <button class="btn btn-primary btn-active" type="button" onclick={handleSwitchCamera}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-              </svg>
-              
+            </svg>
         </button>
         <button class="btn btn-primary btn-active" type="button" onclick={()=>handleImage()}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 3.75H6A2.25 2.25 0 0 0 3.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0 1 20.25 6v1.5m0 9V18A2.25 2.25 0 0 1 18 20.25h-1.5m-9 0H6A2.25 2.25 0 0 1 3.75 18v-1.5M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
               </svg>
         </button>
+        </div>
+        
         {/if}
-       
+        <div class="flex gap-1 w-9/10">
+            <button class="btn btn-info grow {currentView=="file"? "btn-active": "btn-outline"}" type="button" onclick={() => currentView='file'}>アップロード</button>
+            <button class="btn btn-info grow {currentView=="image"? "btn-active": "btn-outline"}" type="button" onclick={() => currentView='image'}>撮影</button>
+        </div>
         </div>
         {:else if step==2}
         <div class="text-center self-center mt-50">
@@ -234,18 +248,17 @@
         {:else if step==3}
         <div class="w-full lg:w-2/5 h-full flex flex-col items-center gap-10">
         <div class="bg-indigo-200 rounded-xl overflow-y-auto h-9/10 w-full p-2 pt-4">
-            <div class="flex flex-col justify-center gap-2">
+            <div class="flex flex-wrap">
                 {#each textarray as t,i}
-                <div class="w-full p-3 rounded-xl flex items-center justify-center gap-1 items-center">
-                <div class="text-center grow bg-white rounded-xl p-2">
-                    {t}
-                </div>
-                <div class="aspect-square" onclick={()=>textarray.splice(i,1)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                      </svg>
-                      
-                </div>
+                <div class="p-3 rounded-xl flex items-center justify-center gap-1 items-center">
+                    <button class="text-center grow bg-white rounded-xl p-2">
+                        {t}
+                    </button>
+                    <div class="aspect-square" onclick={()=>textarray.splice(i,1)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </div>
                 </div>
                 {/each}
             </div>
