@@ -4,7 +4,7 @@ import EasyCamera from "@cloudparker/easy-camera-svelte";
 import File from "./File.svelte";
 import Generate from "./Generate.svelte";
 import Image from "./Image.svelte";
-let {language}:{language:string }=$props();
+let {language, wordbook_id}:{language:string, wordbook_id:string}=$props();
 let currentView = $state("");
 let resIndex:number = $state(0);
 let scroll:HTMLDivElement | undefined = $state();
@@ -31,7 +31,7 @@ const res_choices:string[][] = [
 <File/>
 <!--画像追加-->
 {:else if currentView=="image"}
-<Image onend={()=>currentView=""} language={language} />
+<Image wordbook_id={wordbook_id} onend={()=>currentView=""} language={language} />
 
 <!--生成追加-->
 {:else if currentView=="generate"}

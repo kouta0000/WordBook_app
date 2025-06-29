@@ -5,6 +5,7 @@
     import {onMount} from 'svelte';
     import {enhance} from "$app/forms";
     import type { SubmitFunction } from '@sveltejs/kit';
+    import { goto } from "$app/navigation";
     interface Word {
     WordText: string;
     Left: number;
@@ -14,8 +15,9 @@
   }
     let cameras: MediaDeviceInfo[] = $state([]);
     let errorMessage:string=$state("");
+    let inputedWords:string[] = $state([]);
     let isClickeds:boolean[] =$state([])
-    let {language, onend}:{language:string,onend:()=>void} = $props();
+    let {language,wordbook_id, onend}:{language:string,wordbook_id:string,onend:()=>void} = $props();
     let innerWidth:number = $state(0);
     let width = $derived(innerWidth<1000? Math.floor(innerWidth*0.99):300);
     let currentCameraDeviceId: string =$state("");
@@ -290,8 +292,22 @@
             </div>
         </div>
         
-        <div class="flex justify-end w-full lg:w-2/5 gap-2 items-center">
-        <button class="btn btn-primary btn-active rounded-xl grow">
+        <form method="post" action="?/createWordWithTranslation" use:enhance={() => {
+            step = 4
+            return async({update}) =>{
+                update();
+                step=1;
+                
+            }
+        }} class="flex justify-end w-full lg:w-2/5 gap-2 items-center">
+        {#each textarray as w,i}
+        {#if isClickeds[i]}
+        <input type="hidden" name="term" value={w} />
+        {/if}
+        {/each}
+        <input type="hidden" name="language" value={language} />
+        <input type="hidden" name="wordbook_id" value={wordbook_id} />
+        <button type="submit" class="btn btn-primary btn-active rounded-xl grow">
             送信
         </button>
         <button class="p-1 rounded-xl bg-indigo-200 self-end text-indigo-800" onclick={()=>{console.log("llll");onend();}}>
@@ -299,7 +315,11 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
               </svg>
         </button>
+        </form>
         </div>
+        {:else if step==4}
+        <div class="text-center self-center mt-50">
+            追加中<span class="loading loading-spinner"></span>
         </div>
         {/if}
     </div>

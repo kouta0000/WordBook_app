@@ -79,6 +79,25 @@ export const actions = {
             const {error} = await supabase.from("Words").insert({"user_id": user_id, "wb_id": wordbook_id, "term": term, "meaning": meaning})
         }
     },
+    createWordWithTranslation: async({request,locals, fetch}) => {
+        const data = await request.formData();
+        const language = data.get("language")
+        const terms: string[] = data.getAll("term");
+        const wordbook_id = data.get("wordbook_id");
+        const user_id = locals.user?.id;
+        const res = await fetch(`/api/translation?language=${language}`, {
+            method:"POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body:JSON.stringify({terms:terms})
+        });
+        const buf:{words:{term:string,meaning:string}[]} = await res.json();
+        const words = buf.words;
+        console.log(words);
+        const insertdata = words.map((v:{term:string,meaning:string})=>{return {term:v.term, meaning:v.meaning, user_id:user_id, wb_id:wordbook_id}});
+        const {error} = await supabase.from("Words").insert(insertdata)
+    },
     deleteWords: async ({ request, locals, params }) => {
         const data: FormData = await request.formData();
         const erros = [];
