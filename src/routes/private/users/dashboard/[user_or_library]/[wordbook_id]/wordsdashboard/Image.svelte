@@ -100,7 +100,7 @@
       w = maxWidth;
     }
     if (h > maxHeight) {
-      width = width * (maxHeight / h);
+      width = w * (maxHeight / h);
       h = maxHeight;
     }
 
