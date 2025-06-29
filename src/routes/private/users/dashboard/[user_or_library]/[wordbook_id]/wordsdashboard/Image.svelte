@@ -96,7 +96,7 @@
 
     // 比率を維持しながらリサイズ
     if (w > maxWidth) {
-      h = h * (maxWidth / width);
+      h = h * (maxWidth / w);
       w = maxWidth;
     }
     if (h > maxHeight) {
