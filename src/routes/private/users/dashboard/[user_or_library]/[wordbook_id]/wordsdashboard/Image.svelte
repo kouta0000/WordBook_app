@@ -16,9 +16,13 @@
     let text:string = $state("");
     let canvas:HTMLCanvasElement|undefined=$state();
     const getCleanWords = (sentence: string): string[] => {
-        const words = sentence.match(/[\p{L}\p{N}']+/gu);
-        return words ? words : []; // Return an empty array if no matche
-    };
+    const words = sentence.match(/[\p{L}\p{N}]+/gu);
+    if (!words) {
+        return [];
+    }
+    const filteredWords = words.filter(word => word.length >= 4);
+    return filteredWords;
+};
     let textarray:string[] = $state([])
     const getLanguageCode= (language:string) => {
   const languageMap = [
