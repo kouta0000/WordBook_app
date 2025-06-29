@@ -174,7 +174,7 @@
       img.onload = () => {
         drawImageOnCanvas(img); 
       };
-      img.src = event.target.result; // FileReaderで読み込んだData URLを画像のソースに設定
+      img.src = e.target.result; // FileReaderで読み込んだData URLを画像のソースに設定
     };
 
     reader.onerror = (e) => {
