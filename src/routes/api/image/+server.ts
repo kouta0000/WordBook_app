@@ -23,7 +23,7 @@ const words = detections.slice(1).map(text => ({
     WordText: text.description || '',
 }));
 
-console.log(words);
+
 return json({ fullText, words }, { status: 200 });
 
 }
