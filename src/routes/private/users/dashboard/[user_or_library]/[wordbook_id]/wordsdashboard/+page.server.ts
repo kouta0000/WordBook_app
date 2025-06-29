@@ -1,6 +1,7 @@
 import {supabase} from "$lib/config/supabaseClient";
 import type {PageServerLoad} from "./$types";
 import { OCR_SPACE_KEY } from "$env/static/private";
+import { json, fail } from "@sveltejs/kit";
 interface Word {
     WordText: string;
     Left: number;
@@ -101,29 +102,39 @@ export const actions = {
         const bool = checked==="false";
         const {error} = await supabase.from("Words").update({checked:bool}).eq("id",word_id);
     },
-    ocr_space: async({request})=> {
+    ocr: async({request, fetch})=> {
         const data:FormData = await request.formData();
-        const res = await fetch('https://api.ocr.space/parse/image', {
-            method:'POST',
+        const file = data.get('file'); // 'file' という名前で送信された画像ファイル
+        let base64Image:string = '';
+        if (!(file instanceof File || typeof file === 'string')) {
+            return json({ error: 'ファイルが提供されていません。' }, { status: 400 });
+        }
+
+        if(typeof file === 'string') {
+            base64Image = file.startsWith('data:') ? file.split(',')[1] : file;
+        } else {
+        const arrayBuffer = await file.arrayBuffer();
+        base64Image = Buffer.from(arrayBuffer).toString('base64');
+        }
+        const res = await fetch(`/api/image`, {
+            method:"POST",
             headers: {
-                apikey: OCR_SPACE_KEY
+                "Content-type": "application/json"
             },
-            body: data
+            body:JSON.stringify({image:base64Image})
         });
-        const result:OCRResponse = await res.json();
-        if(result.IsErroredOnProcessing) {
-            throw error(500, result.ErrorMessage?.join(',') ?? 'OCR error');
-        };
-        let words: Word[]=[];
-        for (const parsedResult of result.ParsedResults) {
-            if (parsedResult.TextOverlay && parsedResult.TextOverlay.Lines) {
-              for (const line of parsedResult.TextOverlay.Lines) {
-                if (line.Words) {
-                  words.push(...line.Words); // 各行の単語をallWords配列に追加
-                }
-              }
-            }
-          }
-          return words;
+        if (!res.ok) {
+            const errorBody = await res.json(); // APIからのエラーレスポンスをパース
+            console.error('Error from /api/image:', errorBody);
+            return fail(res.status, {
+                error: errorBody.error || '画像処理APIからエラーが返されました。',
+                details: errorBody.details // 必要に応じて詳細も渡す
+            });
+        }
+
+        const apiResponse = await res.json(); // /api/image からの成功レスポンスをパース
+        // console.log("Response from /api/image API:", apiResponse); // ログで確認
+
+        return apiResponse; 
     }
 };
