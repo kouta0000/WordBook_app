@@ -172,11 +172,14 @@
                     </div>
                 </div>
             </div>
+            <div class="w-full p-2 text-indigo-800">
+                <p class="text-lg text-center">{currentword.meaning}</p>
+            </div>
             <div class="w-full">
                 <progress class="bg-slate-200 progress progress-primary h-2 bg-slate-50" value={questionIndex*(100/length)} max="100"></progress>
             </div>
         </div>
-        <div class="p-8 grow flex flex-col">
+        <div class="px-12 flex flex-col">
             {#if !isQuizComplete}
             <div class="text-center flex flex-col">
                 
@@ -189,18 +192,18 @@
                         </div>
                     </div>
             </div>
-            <div class="grid grid-cols-2 items-center w-full gap-4 mb-8">
+            <div class="grid grid-cols-2 items-center w-full gap-4 mb-8 lg:mb-2">
                 {#each shuffledwords as w, i (i)}
                
                 <button disabled={showResult} onclick={() => {playAudio(w.term,i);inputedanswer=w.term;isCheckeds[i]=true;isCheckeds.forEach((v,j)=>{{if(j!=i)isCheckeds[j]=false}})}} class={{
-                    "flex justify-center items-center text-center w-full aspect-square  p-5 mask mask-circle transition-all duration-300 font-medium":true,
+                    "flex justify-center items-center text-center w-full aspect-square  p-5 lg:p-1 mask mask-circle transition-all duration-300 font-medium":true,
                     "text-teal-500":i==0,
                     "text-pink-500":i==1 ,
                     "text-amber-500":i==2 ,
                     "text-indigo-500":i==3,
-                    "translate-z-5 -rotate-25 scale-1.1 -translate-y-1 bg-indigo-200": isCheckeds[i] && !showResult,
+                    "translate-z-5 -rotate-20 scale-1.1 -translate-y-1 bg-indigo-200": isCheckeds[i] && !showResult,
                     "border-slate-200  bg-linear-to-r from-blue-50 to-gray-100 hover:shadow-md cursor-pointer":!showResult && !isCheckeds[i],
-                    "border-green-500 bg-green-200 text-green-800 -rotate-25":showResult && w.isAnswer,
+                    "border-green-500 bg-green-200 text-green-800 -rotate-20":showResult && w.isAnswer,
                     "border-red-500 bg-red-200 text-red-800": showResult && !w.isAnswer && (inputedanswer==w.meaning),
                     "border-slate-200 bg-linear-to-r from-blue-50 to-gray-100":showResult && !w.isAnswer && !(inputedanswer==w.meaning)}}>
                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-10">
