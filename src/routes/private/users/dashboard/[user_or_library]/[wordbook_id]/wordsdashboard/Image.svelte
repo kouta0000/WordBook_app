@@ -338,6 +338,7 @@
         <button type="submit" class="btn btn-primary btn-active rounded-xl grow">
             送信
         </button>
+        <span onclick={()=>step=1} class="btn btn-accent">やり直す</span>
         </form>
         {:else}
         <div onclick={()=>step=1} class="text-center self-center mt-50">
