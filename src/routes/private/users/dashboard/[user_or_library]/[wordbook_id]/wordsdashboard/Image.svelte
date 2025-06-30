@@ -35,6 +35,7 @@
     const filteredWords = words.filter(word => word.length >= 4);
     return filteredWords;
 };
+
     let textarray:string[] = $state([])
     const getLanguageCode= (language:string) => {
         const languageMap = [
@@ -234,45 +235,69 @@
     <div transition:scale class="flex flex-col items-center justify-between absolute top-15 bottom-15 bg-slate-100 w-full p-10 z-2">
         {#if step == 1}
         {#if currentView=="file"}
-        <div class="max-w-[90vw] rounded-xl p-[{istaken? 0:2}px] mt-10 mx-auto">
-            <canvas class="w-full"  style="border-radius:{45}px;" bind:this={canvas} ></canvas>
+        <div class="w-[95vw]  h-3/5 lg:w-1/5 rounded-xl flex justify-center items-center  mt-10 bg-white relative">
+            <div class="absolute inset-0 flex justify-center items-center text-gray-400">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+              </svg>      
+            </div>        
+            <canvas class="absolute size-full z-2" style="border-radius:{10}px;" bind:this={canvas} >
+            </canvas>
         </div>
         {:else if currentView=="image"}
-        <div class="rounded-3xl p-[{istaken? 0:2}px] mt-10">
-            <EasyCamera bind:width  style="border-radius:{45}px;" bind:this={camera}  autoOpen bind:mirrorDisplay />
+        <div class="rounded-3xl w-[99vw] lg:w-1/5 h-2/3 lg:h-1/2 p-[{istaken? 0:2}px] mt-10">
+            <EasyCamera bind:width style="border-radius:{10}px;width:100%;height:100%;" bind:this={camera}  autoOpen bind:mirrorDisplay />
         </div>
         {/if}
-        <div class="flex w-full lg:w-2/5 flex-col items-center gap-5">
+        <div class="flex w-full lg:w-2/5 flex-col items-center gap-5 absolute bottom-15 fixed p-3">
         {#if currentView=="file"}
-        <form class="flex flex-col items-center  gap-3 w-full" enctype="multipart/form-data" method="post" action="?/ocr" use:enhance={handleSubmit}>
-        <input accept="image/*" onchange={handleChange} type="file" name="file" class="file-input file-input-primary rounded-xl" />
+        <form class="flex flex-row items-center  gap-3 w-full" enctype="multipart/form-data" method="post" action="?/ocr" use:enhance={handleSubmit}>
+        <input accept="image/*" onchange={handleChange} type="file" name="file" class="grow file-input file-input-primary rounded-xl" />
         <input type="hidden" name="language" value={getLanguageCode(language)} />
-        <button type="submit" class="btn btn-primary btn-active w-full">文字抽出</button>
+        <button type="submit" class="btn btn-accent btn-active rounded-xl">文字抽出</button>
         </form>
         {:else if currentView=="image"}
-        <form enctype="multipart/form-data"  method="post" action="?/ocr" use:enhance={handleSubmit}>
-            <input type="hidden" value={image} name="file" class="file-input file-input-primary rounded-xl" />
-            <input type="hidden" name="language" value={getLanguageCode(language)} />
-            <button type="submit" class="btn btn-primary btn-active">文字抽出</button>
-        </form>
-        <div class="flex gap-1">
-        <button class="btn btn-primary btn-active" type="button" onclick={() => camera?.open()}>再撮影</button>
-        <button class="btn btn-primary btn-active" type="button" onclick={handleSwitchCamera}>
+        <div class="flex justify-center gap-1 w-full">
+        <div class="flex gap-1 grow">
+        <button class="btn btn-primary btn-active rounded-xl grow" type="button" onclick={() => camera?.open()}>再撮影</button>
+        <button class="btn btn-primary btn-active rounded-xl grow" type="button" onclick={handleSwitchCamera}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
             </svg>
         </button>
-        <button class="btn btn-primary btn-active" type="button" onclick={()=>handleImage()}>
+        <button class="btn btn-primary btn-active rounded-xl grow" type="button" onclick={()=>handleImage()}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 3.75H6A2.25 2.25 0 0 0 3.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0 1 20.25 6v1.5m0 9V18A2.25 2.25 0 0 1 18 20.25h-1.5m-9 0H6A2.25 2.25 0 0 1 3.75 18v-1.5M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
               </svg>
         </button>
+        
+        </div>
+        <form class="flex flex-row justify-center" enctype="multipart/form-data"  method="post" action="?/ocr" use:enhance={handleSubmit}>
+            <input type="hidden" value={image} name="file" class="file-input file-input-primary rounded-xl" />
+            <input type="hidden" name="language" value={getLanguageCode(language)} />
+            <button type="submit" class="btn btn-accent btn-active rounded-xl">文字抽出</button>
+        </form>
         </div>
         
         {/if}
-        <div class="flex gap-1 w-9/10 lg:w-3/5">
-            <button class="btn btn-info grow {currentView=="file"? "btn-active": "btn-outline"}" type="button" onclick={() => currentView='file'}>アップロード</button>
-            <button class="btn btn-info grow {currentView=="image"? "btn-active": "btn-outline"}" type="button" onclick={() => currentView='image'}>撮影</button>
+        <div class="flex gap-1 w-9/10 lg:w-3/5 justify-center relative">
+           
+            <button class="btn btn-accent rounded-full {currentView=="file"? "btn-active": "btn-outline"}" type="button" onclick={() => currentView='file'}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                  </svg>                  
+            </button>
+            <button class="btn btn-accent rounded-full {currentView=="image"? "btn-active": "btn-outline"}" type="button" onclick={() => currentView='image'}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+                  </svg>                  
+            </button>
+            <button class="p-1 rounded-xl bg-indigo-200 absolute right-2 text-indigo-800 " onclick={()=>{console.log("llll");onend();}}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                  </svg>
+            </button>
         </div>
         </div>
         {:else if step==2}
@@ -280,10 +305,13 @@
             抽出中<span class="loading loading-spinner"></span>
         </div>
         {:else if step==3}
-        <div class="w-full lg:w-2/5 h-full flex flex-col items-center gap-10">
-        <div class="bg-indigo-200 rounded-xl overflow-y-auto h-9/10 w-full p-4">
-            <h1 class="text-center text-teal-400 text-xl font-bold mb-5">追加したい単語をタッチ</h1>
-            <div class="flex flex-wrap justify-between bg-white p-1">
+        <div class="w-[95vw] lg:w-2/5 h-full flex flex-col items-center gap-10">
+        <div class=" w-full p-1">
+            <h1 class="text-center text-teal-700 text-xl font-bold mb-5">追加したい単語をタッチ</h1>
+            <div class="flex flex-wrap justify-between bg-white rounded-xl p-2 w-full">
+                {#if !textarray[0]}
+                    <p class="text-center w-full">単語が検出されませんでした</p>
+                {/if}
                 {#each textarray as t,i}
                     <button transition:fade={{delay:i*20, duration:50}} onclick={()=> isClickeds[i]=!isClickeds[i]} class="text-center {isClickeds[i]? "border-1 border-indigo-700 bg-indigo-300 rounded-xl":""} p-1">
                         {t}
@@ -291,15 +319,15 @@
                 {/each}
             </div>
         </div>
-        
-        <form method="post" action="?/createWordWithTranslation" use:enhance={() => {
+        {#if textarray[0]}
+        <form  method="post" action="?/createWordWithTranslation" use:enhance={() => {
             step = 4
             return async({update}) =>{
                 update();
-                step=1;
+                step=5;
                 
             }
-        }} class="flex justify-end w-full lg:w-2/5 gap-2 items-center">
+        }} class="flex justify-center w-full lg:w-2/5 gap-2 items-center absolute bottom-15 p-3 fixed">
         {#each textarray as w,i}
         {#if isClickeds[i]}
         <input type="hidden" name="term" value={w} />
@@ -310,16 +338,22 @@
         <button type="submit" class="btn btn-primary btn-active rounded-xl grow">
             送信
         </button>
-        <button class="p-1 rounded-xl bg-indigo-200 self-end text-indigo-800" onclick={()=>{console.log("llll");onend();}}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-              </svg>
-        </button>
         </form>
+        {:else}
+        <div onclick={()=>step=1} class="text-center self-center mt-50">
+            <span class="btn btn-base p-2">最初に戻る</span>
+        </div>
+        {/if}
         </div>
         {:else if step==4}
         <div class="text-center self-center mt-50">
             追加中<span class="loading loading-spinner"></span>
         </div>
+        {:else if step==5}
+        <div class="text-center self-center mt-50">
+            <span class="">追加完了！</span>
+            <span onclick={()=>step=1} class="btn btn-base p-3">最初に戻る</span>
+        </div>
         {/if}
+
     </div>
