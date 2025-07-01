@@ -171,7 +171,7 @@
                 </div>
                 
                     <div class="w-full relative transition-all duration-200 rounded-b-3xl">
-                        <div transition:slide class=" w-9/10 rounded-b-3xl bg-linear-to-r {i%2==0? "from-gray-200 to-indigo-200":"from-teal-50 to-teal-200"} overflow-hidden flex self-start">
+                        <div transition:slide class=" w-9/10 rounded-b-3xl bg-linear-to-r {i%2==0? "from-indigo-50 to-indigo-200":"from-teal-50 to-teal-200"} overflow-hidden flex self-start">
                             <button onclick={() => {showPhrases[i]=true;showPhrases.forEach((v,id)=>{if(id!=i)showPhrases[id]=false});currentviews[i]="synonym"; displays[i] = fetchtext(word.term,"synonym",word.id,false)}} class="btn  btn-sm bg-white/10 text-indigo-800 font-black w-1/3">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
@@ -189,7 +189,7 @@
                             </button>
                         </div>
                 {#if showPhrases[i]}
-                <div transition:slide class={{"absolute top-[100%] left-[50%] -translate-x-[50%] z-3 w-[95vw] md:w-[33vw] bg-linear-to-br overflow-hidden rounded-3xl flex flex-col transition-all duration-200":true, "from-gray-200 to-indigo-200":i%2==0,"from-gray-200 to-teal-200":i%2==1,}}>
+                <div transition:slide class={{"absolute top-[100%] left-[50%] -translate-x-[50%] z-3 w-[95vw] md:w-[33vw] bg-linear-to-br overflow-hidden rounded-3xl flex flex-col transition-all duration-200":true, "from-indigo-50 to-indigo-200":i%2==0,"from-gray-200 to-teal-200":i%2==1,}}>
                     <div class="w-full p-5 flex flex-col gap-3">
                         <button class={{"self-end btn btn-sm  rounded-3xl btn-primary text-xs font-bold btn-active":true}} onclick={()=> displays[i]=fetchtext(word.term, currentviews[i],word.id,true)}>
                             再生成
