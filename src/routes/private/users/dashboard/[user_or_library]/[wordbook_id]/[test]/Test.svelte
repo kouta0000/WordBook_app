@@ -43,7 +43,7 @@
         const result = words[randomIndex];
         return result
     }
-    const getRandom3Words = (words: Array<Word>) => {
+    const getRandom3Words = (words: Array<Word>, wordtoexclude:Word) => {
         const al: number = words.length;
         const indices: Set<number> = new Set();
         const result: Array<Word> = [];
@@ -55,7 +55,7 @@
             indices.add(n);
         }
         for (const i of indices) {
-            result.push(words[i]);
+            if(words[i] != wordtoexclude) result.push(words[i]);
         }
         return result;
     };
@@ -69,7 +69,7 @@
         if (questionIndex<length) {
             currentword = questions[questionIndex];
             selectedwords.push({...currentword, isAnswer:true});
-            const threewords = getRandom3Words(wordslist);
+            const threewords = getRandom3Words(wordslist, currentword);
             threewords.forEach(v=>{selectedwords.push({...v,isAnswer:false})});
             shuffledwords = shuffle(selectedwords);
             playAudio(currentword.term);
