@@ -39,7 +39,7 @@
     
     //単語のランダム選択ロジック。
     const getRandomWord = (words:Word[]):Word => {
-        const randomIndex = Math.floor(Math.random()*4);
+        const randomIndex = Math.floor(Math.random()*words.length);
         const result = words[randomIndex];
         return result
     }
