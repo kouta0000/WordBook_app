@@ -138,7 +138,7 @@ onMount(()=>{
                    
                 </div>
                 <div class="flex items-center">
-                    <div class="w-2/13  mask mask-squircle p-4 flex justify-center items-center bg-radial from-indigo-600 to-sky-400/70 text-white font-black text-3xl aspect-square text-center">{wordbook.wb_name[0]}</div>
+                    <div class={{"w-2/13  mask mask-squircle p-4 flex justify-center items-center text-white font-black text-3xl aspect-square text-center":true,"bg-sky-400":id%4==0,"bg-pink-400":id%4==1,"bg-teal-400":id%4==2,"bg-amber-400":id%4==3}} >{wordbook.wb_name[0]}</div>
                     <div class="w-8/13 flex flex-col justify-center items-center">
                     <h1 class="text-xl text-center">{wordbook.wb_name}</h1>
                     </div>

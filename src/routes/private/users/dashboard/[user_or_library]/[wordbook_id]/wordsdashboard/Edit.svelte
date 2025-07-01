@@ -140,7 +140,7 @@
                         </div>
                         <p class="text-gray-500 text-right text-sm font-sans p-1 pr-2">{word.meaning}</p>
                     </div>  
-                    <div class="flex flex-col bg-indigo-200  rounded-r-xl border-indigo-300 justify-center items-center w-1/8 z-2">
+                    <div class="flex flex-col {id%2==0? "bg-indigo-100":"bg-teal-100"}  rounded-r-xl border-indigo-300 justify-center items-center w-1/8 z-2">
                         <button  class="h-full aspect-ration-1/1" onclick={() => dialogs[id]?.showModal()}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
