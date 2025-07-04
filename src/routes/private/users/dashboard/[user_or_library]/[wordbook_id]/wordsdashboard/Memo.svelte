@@ -127,7 +127,8 @@
             {#each wordsc as word,i (word.id)}
             <IntersectionObserver element={cards[i]} on:observe={(e) => {shows[i] = false;showPhrases[i]=false}}>
             <div bind:this={cards[i]} class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
-                <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-t-xl rounded-r-xl relative">
+                 {#if cards[i]}
+                 <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-t-xl rounded-r-xl relative">
                     <div class="grow flex flex-col max-w-9/10 relative">
                         <!--
                         <div class="absolute top-0 right-0 w-1/7">
@@ -223,6 +224,7 @@
                 </div>
                 {/if}
                 </div>
+                {/if}
             </div>
             </IntersectionObserver>
             {/each}
