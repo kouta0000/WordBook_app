@@ -91,7 +91,7 @@
                 </div>
             </dialog>
 
-            <div out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
+            <div class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
                 <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-xl relative">
                     <div class="grow flex flex-col max-w-7/8 relative">
                         {#if updatings[id]}
