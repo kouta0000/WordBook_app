@@ -2,10 +2,8 @@
     import {fly, slide, fade} from "svelte/transition";
     import {fit, parent_style} from "@leveluptuts/svelte-fit";
     import {enhance} from"$app/forms";
-    import Overlay from "./Overlay.svelte";
     import IntersectionObserver from "svelte-intersection-observer";
     import AudioButton from "./AudioButton.svelte";
-    import { Transition } from "svelte-transition";
     let { words,wb_id, wb_name, user_or_library, language} = $props();
     let wordsc = $state(words);
     let hide:boolean = $state(false)
@@ -128,7 +126,7 @@
             
             {#each wordsc as word,i (word.id)}
             <IntersectionObserver element={cards[i]} on:observe={(e) => {shows[i] = false;showPhrases[i]=false}}>
-            <div bind:this={cards[i]} out:slide={{duration:300}} in:fly={{duration:300, y:20}} class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
+            <div bind:this={cards[i]} class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
                 <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-t-xl rounded-r-xl relative">
                     <div class="grow flex flex-col max-w-9/10 relative">
                         <!--
