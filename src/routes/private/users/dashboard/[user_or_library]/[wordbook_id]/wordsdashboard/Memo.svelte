@@ -127,7 +127,7 @@
             
             {#each wordsc as word,i (word.id)}
             <IntersectionObserver element={cards[i]} on:observe={(e) => {showContents[i]=!showContents[i];shows[i] = false;showPhrases[i]=false}}>
-            <div bind:this={cards[i]} class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
+            <div bind:this={cards[i]} class="w-9/10 h-[20vh] sm:grow flex flex-col justify-center items-start relative">
                  {#if showContents[i]}
                  <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-t-xl rounded-r-xl relative">
                     <div class="grow flex flex-col max-w-9/10 relative">
