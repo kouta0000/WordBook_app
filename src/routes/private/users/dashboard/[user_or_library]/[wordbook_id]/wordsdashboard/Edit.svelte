@@ -140,8 +140,9 @@
                     <form use:enhance={()=>{
                         deleting=true;
                         return async ({update}) => {
+                            
+                            await update();
                             wordsc=words;
-                            update();
                             deleting=false;
                         }
                     }} transition:fade={{duration:150}}  method="POST" action="?/deleteWords" class="w-1/3 flex flex-col gap-3">
