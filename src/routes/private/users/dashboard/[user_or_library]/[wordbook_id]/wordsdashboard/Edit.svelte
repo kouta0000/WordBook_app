@@ -133,13 +133,14 @@
                 </svg>  
             </div>
 
-            {#each words as word, id (word.id)}
+            {#each wordsc as word, id (word.id)}
             <dialog bind:this={dialogs[id]} class="modal w-full">
                 <div class="modal-box bg-slate-100 flex flex-col gap-4 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
                     <p>削除しますか？</p>
                     <form use:enhance={()=>{
                         deleting=true;
                         return async ({update}) => {
+                            wordsc=words;
                             update();
                             deleting=false;
                         }
