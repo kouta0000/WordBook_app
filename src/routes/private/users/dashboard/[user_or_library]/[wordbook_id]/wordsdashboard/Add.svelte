@@ -28,7 +28,7 @@ const res_choices:string[][] = [
 </script>
 <!--ファイル追加-->
 {#if currentView=="file"}
-<File/>
+<File wordbook_id={wordbook_id} onend={()=>currentView=""}/>
 <!--画像追加-->
 {:else if currentView=="image"}
 <Image wordbook_id={wordbook_id} onend={()=>currentView=""} language={language} />

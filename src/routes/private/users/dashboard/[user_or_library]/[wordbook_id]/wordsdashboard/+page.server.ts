@@ -70,14 +70,10 @@ export const actions = {
         const data = await request.formData();
         const terms: string[] = data.getAll("term");
         const meanings: string[] = data.getAll("meaning");
-        const wordbook_ids: string[] = data.getAll("wordbook_id")
+        const wordbook_id = data.get("wordbook_id")
         const user_id = locals.user?.id;
-        for (let i = 0; i < terms.length; i++) {
-            const term: string = terms[i];
-            const meaning: string = meanings[i];
-            const wordbook_id: string = wordbook_ids[i];
-            const {error} = await supabase.from("Words").insert({"user_id": user_id, "wb_id": wordbook_id, "term": term, "meaning": meaning})
-        }
+        const words = terms.map((v,i)=>{return{user_id:user_id, wb_id:wordbook_id, term:terms[i], meaning:meanings[i]}})
+        const {error} = await supabase.from("Words").insert(words);
     },
     createWordWithTranslation: async({request,locals, fetch}) => {
         const data = await request.formData();
