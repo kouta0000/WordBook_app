@@ -15,7 +15,7 @@
     let searchinput = $state("");
     let updatings: boolean[] = $state([]);
     let updatings2: boolean[] =$state([]);
-    let showContents = $state(Array(words.length).fill(false));
+    let showContents = $derived(Array(words.length).fill(false));
     let deleting:boolean =$state(false);
     let creating:boolean = $state(false);
     interface Word {
@@ -133,7 +133,7 @@
                 </svg>  
             </div>
 
-            {#each wordsc as word, id (word.id)}
+            {#each words as word, id (word.id)}
             <dialog bind:this={dialogs[id]} class="modal w-full">
                 <div class="modal-box bg-slate-100 flex flex-col gap-4 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
                     <p>削除しますか？</p>
