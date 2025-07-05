@@ -1,13 +1,21 @@
 <script lang="ts">
     import {fly, slide, fade} from "svelte/transition";
     import {fit, parent_style} from "@leveluptuts/svelte-fit";
+    import Fuse from "fuse.js";
     import {enhance} from"$app/forms";
+    import IntersectionObserver from "svelte-intersection-observer";
     let { words, wb_name, wordbook_id, user_or_library} = $props();
     let dialog: HTMLDialogElement | undefined = $state();
     let dialogs: Array<HTMLDialogElement> = $state([]);
     let isChecked: boolean = $state(false);
+    const terms:string[] = words.map(v=>v.term);
+    let wordsc = $state(words);
+    let cards:HTMLDivElement[] = $state([]);
+    let searchresults:string[] = $state(["","","","","",""]);
+    let searchinput = $state("");
     let updatings: boolean[] = $state([]);
     let updatings2: boolean[] =$state([]);
+    let showContents = $state(Array(words.length).fill(false));
     let deleting:boolean =$state(false);
     let creating:boolean = $state(false);
     interface Word {
@@ -17,6 +25,29 @@
     }
     let wordidstoadd: Array<number> = $state([0]);
     let index:number = $state(1);
+    const handleSearchInput = () => {
+        const options = {// 検索対象のキーを指定
+                keys:[""],
+                threshold: 1.0,           // 類似度の閾値を設定
+                shouldSort: true,
+                includeScore:true          // スコア順に結果を並べ替える
+            };
+            const fuse = new Fuse(terms, options);
+            const result = fuse.search(searchinput);
+            searchresults = result.slice(0,5).map(v=>v.item);
+    }
+    const resultToTop = (result:string) =>{
+        const index = wordsc.map(v=>v.term).indexOf(result);
+
+        if (index !== -1) {
+            // 配列からその要素を削除
+            const [element] = wordsc.splice(index, 1);
+            // 削除した要素を先頭に追加
+            wordsc.unshift(element);
+        }
+        searchinput="";
+        searchresults=["","","","","",""];
+    }
     </script>
 
 
@@ -41,10 +72,39 @@
 </a>
 {/if}
 </div>
-    <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center ">
-        <div class="text mt-15 mb-10 lg:mt-20 w-full flex justify-start items-center realtive h-20">
-            <h1 class="shadow-lg p-6 ml-10 mb-6 text-indigo-700 text-xl max-w-3/5 rounded-3xl bg-linear-to-br from-indigo-100 to-gray-100">{wb_name}</h1>
-        </div> 
+    <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center">
+        <div class="flex flex-col mt-23 mb-10 lg:mt-20 gap-5 w-9/10 lg:w-1/3 p-5">
+            <div class="flex gap-5 justify-center items-center realtive h-20">
+                <h1 class=" shadow-lg p-6 text-indigo-700 text-xl max-w-3/5 rounded-3xl bg-linear-to-br from-indigo-100 to-gray-100">{wb_name}</h1>    
+            </div>
+            <div class="w-full text-center relative w-9/10">
+            <label class="input w-full">
+                <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <g
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-width="2.5"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                  </g>
+                </svg>
+                <input onblur={()=>{setTimeout(()=>{searchinput="";searchresults=["","","","","",""]},300)}} oninput={handleSearchInput} bind:value={searchinput} type="search" placeholder="Search" />
+              </label>
+              
+              {#if searchinput}
+              <div transition:slide class="absolute top-[100%] w-full rounded-xl z-10">
+              {#each searchresults as r}
+              <div onclick={()=>resultToTop(r)} class="min-h-7 border-1 border-gray-200 text-gray-500 text-sm text-center p-2 bg-white hover:bg-slate-200 cursor-pointer">
+                {r}
+              </div>
+              {/each}
+              </div>
+              {/if}
+              </div>
+            </div>
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
             <div class="w-full px-4 w-4/5 lg:w-1/2 flex gap-4 justify-end items-center absolute fixed bottom-17 md:bottom-22 md:right-20 z-20">
                 {#if creating}
@@ -73,7 +133,7 @@
                 </svg>  
             </div>
 
-            {#each words as word, id (word.id)}
+            {#each wordsc as word, id (word.id)}
             <dialog bind:this={dialogs[id]} class="modal w-full">
                 <div class="modal-box bg-slate-100 flex flex-col gap-4 items-center w-4/5 sm:w-1/2 md:w-3/10 max-w-none">
                     <p>削除しますか？</p>
@@ -90,9 +150,10 @@
                     </form>
                 </div>
             </dialog>
-
-            <div class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
+            <IntersectionObserver element={cards[id]} on:intersect={(e) => {showContents[id]=true}}>
+            <div bind:this={cards[id]} class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
                 <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-xl relative">
+                    {#if showContents[id]}
                     <div class="grow flex flex-col max-w-7/8 relative">
                         {#if updatings[id]}
                         <form method="POST" action="?/updateWord" use:enhance={() => {
@@ -133,7 +194,6 @@
                         <div out:fade={{delay:1000}} class={{"absolute inset-0 skeleton z-5":true}}>
                         </div>
                         {/if}
-
                         <!--実際のコンテンツ-->
                         <div style={parent_style} class="w-full">
                             <p use:fit={{min_size:10, max_size:22}} class="font-sans font-semibold pl-5 pt-4 pb-1 text-2xl">{word.term}</p>
@@ -152,9 +212,11 @@
                               </svg>
                                                           
                         </button>
-                    </div>      
+                    </div>
+                {/if}     
                 </div>
             </div>
+            </IntersectionObserver>
             {/each}
         </div>
         <div class="w-full h-50"></div>
@@ -163,7 +225,7 @@
     <dialog bind:this={dialog} id="my_modal2" class="modal modal-bottom md:modal-middle">
         <div class="modal-box flex flex-col items-center bg-slate-100 w-full md:w-1/2  max-w-none max-h-4/5 overflow-auto relative">
             <form method="post" use:enhance={()=>{
-                dialog.close();
+                dialog?.close();
                 creating=true;
                 return async ({update}) => {
                     update();

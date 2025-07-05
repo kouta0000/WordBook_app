@@ -1,5 +1,5 @@
 
-<div class="min-h-screen w-full pt-20 pb-15 flex flex-col items-center justify-center bg-slate-100">
+<div class="min-h-screen w-full pt-20 pb-15 flex flex-col gap-5  items-center justify-center bg-slate-100">
                 <div class="bg-white text-indigo-500 rounded-3xl flex justify-center items-center p-10 relative mb-3">
                     <a href="./random" class="absolute rounded-3xl hover:bg-indigo-200/40 inset-0 flex justify-center items-center">
                     </a>
@@ -14,13 +14,13 @@
                           stroke-linejoin="round"
                         />
                       </svg>
-                      <p class="w-full text-center p-1  text-gray-700 font-black">チェックテスト</p>
+                      <p class="w-full text-center p-1   text-gray-700 font-black">チェックテスト</p>
                 </div>
-                <div class="bg-white rounded-3xl grid grid-cols-2 lg:grid-cols-3 gap-4 w-9/10 lg:w-1/3 px-15 py-5">
+                <div class="bg-white rounded-3xl grid grid-cols-2 lg:grid-cols-2 gap-8 w-9/10 lg:w-1/4 px-15 py-5">
                     <div class="w-full">
                     <div class="w-full aspect-square  mask mask-squircle bg-white flex flex-col items-center  relative">
                         <div class="w-full aspect-square p-7 relative">
-                        <img class="size-full" src="/images/4taku.svg">
+                        <img class="size-full" src="/images/4taku.webp">
                         </div>
                         <a href="./4taku" class="absolute bg-gray-200/30 hover:bg-indigo-200/40 inset-0 flex justify-center items-center">
                         </a>
@@ -30,7 +30,7 @@
                     <div class="w-full">
                     <div class="w-full aspect-square  mask mask-squircle bg-white flex flex-col items-center  relative">
                         <div class="w-full p-6 aspect-square flex flex-col justify-start items-center">
-                        <img class="size-9/10" src="/images/input.svg">
+                        <img class="size-9/10" src="/images/input.webp">
                         </div>
                         
                         <a href="./input" class="absolute bg-gray-200/30 hover:bg-indigo-200/40 inset-0 flex justify-center items-center">
@@ -41,7 +41,7 @@
                     <div class="w-full">
                     <div class="w-full aspect-square  mask mask-squircle bg-white flex flex-col items-center  relative">
                         <div class="w-full p-6 aspect-square relative">
-                        <img class="size-full" src="/images/order.svg">
+                        <img class="size-full" src="/images/order.webp">
                         </div>
                         
                         <a href="./order" class="absolute bg-gray-200/30 inset-0 flex justify-center items-center">

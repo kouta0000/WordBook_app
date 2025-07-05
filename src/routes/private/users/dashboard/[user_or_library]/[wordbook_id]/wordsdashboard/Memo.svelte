@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Fuse from "fuse.js";
     import {fly, slide, fade} from "svelte/transition";
     import {fit, parent_style} from "@leveluptuts/svelte-fit";
     import {enhance} from"$app/forms";
@@ -6,13 +7,17 @@
     import AudioButton from "./AudioButton.svelte";
     let { words,wb_id, wb_name, user_or_library, language} = $props();
     let wordsc = $state(words);
-    let hide:boolean = $state(false)
+    const terms:string[] = words.map(v=>v.term);
+    let hide:boolean = $state(false);
     let shows: boolean[] = $state(Array(words.length).fill(false));
+    let searchresults:string[] = $state([]);
+    let searchinput = $state("");
     let cards:HTMLDivElement[] = $state([]);
     let isChecked: boolean = $state(false);
     let isFlipped: boolean = $state(false);
     let soundmode: boolean = $state(false);
     let regenerate:boolean = $state(false);
+    
     let showPhrases: boolean[] = $state([]);
     let showContents = $state(Array(words.length).fill(false));
     let formToChecks:HTMLButtonElement[] =$state([])
@@ -41,7 +46,29 @@
         const response = await res.json();
         return response
     }
-    
+    const handleSearchInput = () => {
+        const options = {// 検索対象のキーを指定
+                keys:[""],
+                threshold: 1.0,           // 類似度の閾値を設定
+                shouldSort: true,
+                includeScore:true          // スコア順に結果を並べ替える
+            };
+            const fuse = new Fuse(terms, options);
+            const result = fuse.search(searchinput);
+            searchresults = result.slice(0,5).map(v=>v.item);
+    }
+    const resultToTop = (result:string) =>{
+        const index = wordsc.map(v=>v.term).indexOf(result);
+
+        if (index !== -1) {
+            // 配列からその要素を削除
+            const [element] = wordsc.splice(index, 1);
+            // 削除した要素を先頭に追加
+            wordsc.unshift(element);
+        }
+        searchinput="";
+        searchresults=["","","","","",""];
+    }
     </script>
     
 <div class="bg-slate-100/80 px-2 flex justify-end items-center fixed absolute top-15 py-2 lg:h-15 w-full flex flex-row flex-wrap gap-1 mb-10 z-11">
@@ -102,7 +129,8 @@
     </div>
     
     <div class="w-full pt-16 pb-15 md:pb-20 flex flex-col min-h-screen gap-2 items-center">
-        <div class="mt-23 mb-10 lg:mt-20  w-full flex gap-5 justify-center items-center realtive h-20">
+        <div class="flex flex-col mt-23 mb-10 lg:mt-20 gap-5">
+        <div class="  w-full flex gap-5 justify-center items-center realtive h-20">
             <h1 class="shadow-lg p-6 text-indigo-700 text-xl max-w-3/5 rounded-3xl bg-linear-to-br from-indigo-100 to-gray-100">{wb_name}</h1>
             <div class="flex flex-col gap-2 justify-center">
             <a href="./4taku" class="btn btn-base border-none shadow-sm rounded-3xl">
@@ -119,15 +147,45 @@
                   入力テスト
                 </a>
             </div>
-        </div> 
+            
+        </div>
+        <div class="w-full text-center relative w-9/10 ">
+        <label class="input w-full">
+            <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <g
+                stroke-linejoin="round"
+                stroke-linecap="round"
+                stroke-width="2.5"
+                fill="none"
+                stroke="currentColor"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </g>
+            </svg>
+            <input onblur={()=>{setTimeout(()=>{searchinput="";searchresults=["","","","","",""]},300)}} oninput={handleSearchInput} bind:value={searchinput} type="search" placeholder="Search" />
+          </label>
+          
+          {#if searchinput}
+          <div transition:slide class="absolute top-[100%] w-full rounded-xl z-10">
+          {#each searchresults as r}
+          <div onclick={()=>resultToTop(r)} class="min-h-8 border-1 border-gray-200 text-gray-500 text-sm text-center p-2 bg-white hover:bg-slate-200 cursor-pointer">
+            {r}
+          </div>
+          {/each}
+          </div>
+          {/if}
+          </div>
+        </div>
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
             <button onclick={() => isChecked = false} class={{"w-4/5 md:w-2/5 lg:w-1/5 lg:h-20 absolute fixed opacity-95 z-11 bottom-24 lg:bottom-25 lg:right-5 btn btn-info rounded-2xl grow opacity-80":true, "hidden":!isChecked, "block":isChecked}}>
                 <p class="text-white">削除</p>
             </button>
             
             {#each wordsc as word,i (word.id)}
-            <IntersectionObserver element={cards[i]} on:observe={(e) => {showContents[i]=true;shows[i] = false;showPhrases[i]=false}}>
+            <IntersectionObserver element={cards[i]} on:intersect={(e) => {showContents[i]=true;}} on:observe={(e)=>{shows[i] = false;showPhrases[i]=false}}>
             <div bind:this={cards[i]} class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
+                
                  {#if showContents[i]}
                  <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-t-xl rounded-r-xl relative">
                     <div class="grow flex flex-col max-w-9/10 relative">
@@ -216,9 +274,6 @@
                     </div>
                     {/if}
                 </div>
-                {:else}
-                <div class="h-20 w-full rounded-t-xl skeleton"></div>
-                <div class="h-8 w-9/10 rounded-b-xl skeleton mt-1"></div>
                 {/if}
             </div>
             </IntersectionObserver>
