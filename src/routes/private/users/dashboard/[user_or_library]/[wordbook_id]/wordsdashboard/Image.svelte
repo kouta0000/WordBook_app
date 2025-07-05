@@ -293,7 +293,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
                   </svg>                  
             </button>
-            <button class="p-1 rounded-xl bg-indigo-200 absolute right-2 text-indigo-800 " onclick={()=>{onend();}}>
+            <button class="p-1 rounded-xl bg-indigo-200 absolute right-2 text-indigo-800 " onclick={()=>{console.log("llll");onend();}}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                   </svg>

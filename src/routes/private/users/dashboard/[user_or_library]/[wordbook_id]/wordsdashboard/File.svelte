@@ -47,9 +47,9 @@
                 inputedWords=data;
     }
     </script>
-    <div transition:scale class="flex flex-col items-center absolute top-15 bottom-15 bg-slate-100 w-full p-10 z-2">
+    <div transition:scale class="flex flex-col items-center absolute top-15 bottom-15 bg-slate-100 w-full p-5 z-2">
         {#if step==1}
-        <div class="w-full lg:w-4/5 h-full flex flex-col lg:flex-row items-center gap-10">
+        <div class="w-full lg:w-4/5 h-full flex flex-col lg:flex-row items-center gap-7">
         <div class="bg-indigo-200 rounded-xl overflow-y-auto h-9/10 w-full p-2 pt-4">
             <div class="flex flex-col gap-2">
                 {#each inputedWords as w}
@@ -64,10 +64,10 @@
                 {/each}
             </div>
         </div>
-        <div class="flex flex-col gap-1">
-        <input accept=".xlsx, .xls, .csv" onchange={handleSheet} type="file" class="file-input file-input-primary rounded-xl" />
+        <div class="w-full flex flex-col gap-2">
+        <input accept=".xlsx, .xls, .csv" onchange={handleSheet} type="file" class="w-full file-input file-input-primary rounded-xl" />
         <p class="text-center">or</p>
-        <textarea oninput={handlePaste} class="textarea max-h-15" placeholder="paste csv"></textarea>
+        <textarea oninput={handlePaste} class="w-full textarea h-10" placeholder="paste csv"></textarea>
         <form action="?/createWord" method="post" use:enhance={() => {
             step = 2;
             return async({update}) => {
@@ -82,7 +82,7 @@
         
         {/each}
         <input type="hidden" name="wordbook_id" value={wordbook_id}/>
-        <button class="btn btn-primary btn-active rounded-xl grow mt-1">
+        <button class="btn btn-primary btn-active rounded-xl grow mt-3 self-end">
             追加
         </button>
         <button onclick={()=>onend()} type="button" class="p-1 rounded-xl bg-indigo-200 self-end text-indigo-800">
@@ -100,7 +100,7 @@
         {:else if step==3}
         <div class="text-center self-center mt-50">
             <span class="">追加完了！</span>
-            <span onclick={()=>step=1} class="btn btn-base p-3">最初に戻る</span>
+            <span onclick={()=>{step=1;inputedWords=[]}} class="btn btn-base p-3">最初に戻る</span>
         </div>
         {/if}
     </div>
