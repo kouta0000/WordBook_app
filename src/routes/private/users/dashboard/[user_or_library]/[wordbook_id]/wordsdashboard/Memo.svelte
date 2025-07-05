@@ -187,41 +187,42 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
                                     <path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" />
                                 </svg>  
-                                </button>
-                        <div class={{"rounded-xl w-full gap-4":true, "flex flex-col":currentviews[i] == "sentence", "grid grid-cols-2":currentviews[i] != "sentence"}}>
+                            </button>
+                            <div class={{"rounded-xl w-full gap-4":true, "flex flex-col":currentviews[i] == "sentence", "grid grid-cols-2":currentviews[i] != "sentence"}}>
                         
                         
-                            {#await displays[i]}
-                            <p class="loading loading-dots"></p>
-                            {:then value}
-                            {#each value.examples as ex,index (index)}
-                                <div class="bg-white rounded-xl w-full p-5 pt-6 flex flex-col relative">
-                                    <p>{ex.example}</p>
-                                    <p>({ex.translation})</p>
-                                    <div class={{"absolute bottom-0 right-0":true, "w-1/11":currentviews[i]=="sentence", "w-1/5":currentviews[i] != "sentence"}}>
-                                        <AudioButton word={ex.example} language={language}/>
+                                {#await displays[i]}
+                                <p class="loading loading-dots"></p>
+                                {:then value}
+                                {#each value.examples as ex,index (index)}
+                                    <div class="bg-white rounded-xl w-full p-5 pt-6 flex flex-col relative">
+                                        <p>{ex.example}</p>
+                                        <p>({ex.translation})</p>
+                                        <div class={{"absolute bottom-0 right-0":true, "w-1/11":currentviews[i]=="sentence", "w-1/5":currentviews[i] != "sentence"}}>
+                                            <AudioButton word={ex.example} language={language}/>
+                                        </div>
                                     </div>
-                                </div>
-                            {/each}
-                            {:catch error}
-                            <p>通信エラー：もう一度試してください</p>
-                            {/await}
+                                {/each}
+                                {:catch error}
+                                <p>通信エラー：もう一度試してください</p>
+                                {/await}
+                            </div>
+                            <button onclick={() => showPhrases[i] = false} class="self-end aspect-square mt-3 text-indigo-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75 14.25 12m0 0 2.25 2.25M14.25 12l2.25-2.25M14.25 12 12 14.25m-2.58 4.92-6.374-6.375a1.125 1.125 0 0 1 0-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33Z" />
+                                </svg>
+                            </button>
                         </div>
-                        <button onclick={() => showPhrases[i] = false} class="self-end aspect-square mt-3 text-indigo-800">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75 14.25 12m0 0 2.25 2.25M14.25 12l2.25-2.25M14.25 12 12 14.25m-2.58 4.92-6.374-6.375a1.125 1.125 0 0 1 0-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33Z" />
-                            </svg>
-                        </button>
                     </div>
                     {/if}
                 </div>
-                
+                {:else}
+                <div class="h-20 w-full rounded-t-xl skeleton"></div>
+                <div class="h-8 w-9/10 rounded-b-xl skeleton mt-1"></div>
+                {/if}
             </div>
-            {/if}
-        </div>
             </IntersectionObserver>
             {/each}
-            
         </div>
         <div class="w-full h-50"></div>
     </div>
