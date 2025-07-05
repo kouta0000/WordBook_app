@@ -15,7 +15,7 @@
     let searchinput = $state("");
     let updatings: boolean[] = $state([]);
     let updatings2: boolean[] =$state([]);
-    let showContents = $derived(Array(words.length).fill(false));
+    let showContents = $state(Array(words.length).fill(false));
     let deleting:boolean =$state(false);
     let creating:boolean = $state(false);
     interface Word {
