@@ -2,10 +2,8 @@
     import {fly, slide, fade} from "svelte/transition";
     import {fit, parent_style} from "@leveluptuts/svelte-fit";
     import {enhance} from"$app/forms";
-    import Overlay from "./Overlay.svelte";
     import IntersectionObserver from "svelte-intersection-observer";
     import AudioButton from "./AudioButton.svelte";
-    import { Transition } from "svelte-transition";
     let { words,wb_id, wb_name, user_or_library, language} = $props();
     let wordsc = $state(words);
     let hide:boolean = $state(false)
@@ -16,6 +14,7 @@
     let soundmode: boolean = $state(false);
     let regenerate:boolean = $state(false);
     let showPhrases: boolean[] = $state([]);
+    let showContents = $state(Array(words.length).fill(false));
     let formToChecks:HTMLButtonElement[] =$state([])
     let displays:Promise<{examples:Array<{example:string,translation:string}>}>[] = $state([]);
     let currentviews:string[] = $state(Array(words.length).fill(false));
@@ -127,20 +126,11 @@
             </button>
             
             {#each wordsc as word,i (word.id)}
-            <IntersectionObserver element={cards[i]} on:observe={(e) => {showContents[i]=!showContents[i];shows[i] = false;showPhrases[i]=false}}>
+            <IntersectionObserver element={cards[i]} on:observe={(e) => {showContents[i]=true;shows[i] = false;showPhrases[i]=false}}>
             <div bind:this={cards[i]} class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
                  {#if showContents[i]}
                  <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-t-xl rounded-r-xl relative">
                     <div class="grow flex flex-col max-w-9/10 relative">
-                        <!--
-                        <div class="absolute top-0 right-0 w-1/7">
-                        <form method="POST"class="p-3" use:enhance action="?/checked">
-                            <input name="checked" value={word.checked} type="hidden">
-                            <input type="hidden" value={word.id} name="id">
-                            <button type="submit" class={{"btn aspect-square btn-warning btn-xs":true, "btn-outline":!word.checked, "btn-active":word.checked}}>{word.checked?"✔":" "}</button>
-                        </form>
-                        </div>
-                    -->
                         <div style={parent_style} class="w-full">
                             <p use:fit={{min_size:5, max_size:22}} class="font-sans font-semibold pl-5 pr-1 pt-4 pb-1 text-2xl">{!soundmode? (isFlipped? word.meaning: word.term) : `${word.term[0]}${Array(word.term.length-1).fill("_").join("")}`}</p>
                         </div>
@@ -226,6 +216,7 @@
                 </div>
                 {/if}
                 </div>
+                {/if}
             </div>
             </IntersectionObserver>
             {/each}
