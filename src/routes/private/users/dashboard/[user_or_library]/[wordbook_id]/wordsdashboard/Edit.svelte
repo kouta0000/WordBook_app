@@ -230,7 +230,8 @@
                 dialog?.close();
                 creating=true;
                 return async ({update}) => {
-                    update();
+                    await update();
+                    wordsc=words;
                     creating=false;
                 }
             }} action="?/createWord" class="w-full flex flex-col items-center gap-4">
