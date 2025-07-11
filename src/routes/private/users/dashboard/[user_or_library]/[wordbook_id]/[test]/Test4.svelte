@@ -7,7 +7,7 @@
     import {onMount} from "svelte";
     import { goto } from '$app/navigation';
     //変数宣言
-    let { wordslist, wb_name, language, user_or_library } = $props();
+    let { wordslist, wb_name, language, user_or_library, user_info } = $props();
     let questions:Word[] = $state([]);
     let questionIndex:number=$state(-1);
     let lengthdeciding =$state(true);

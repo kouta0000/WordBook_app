@@ -6,6 +6,9 @@
     
     interface Props {
         wordbooks: Wordbook[];
+        level:any,
+        xp:any,
+        last_xp:any
     }
     interface Wordbook {
         wb_name: any;
@@ -14,7 +17,7 @@
         word_number:any;
     }
     
-        let { wordbooks }: Props = $props();
+        let { wordbooks, level, xp, last_xp }: Props = $props();
         let isChecked: boolean = $state(false);
         let dialogs: Array<HTMLDialogElement> = $state([]);
         let dialogs2:Array<HTMLDialogElement> = $state([]);
@@ -49,11 +52,12 @@
                     <h1 class="text-left text-3xl mb-10 font-bold bg-gradient-to-r from-sky-500 to-indigo-500 inline-block text-transparent bg-clip-text">
                         User1
                     </h1>
-                    <p>Level 100</p>
-                    <img src="/images/kurage.jpg" class="size-20 absolute top-5 right-5">
+                    <p>Level.{level??0} </p>
+                    <img src="/images/kurage.jpg" class="size-20 absolute top-2 right-2">
                     </div>
-                <div class="w-full">
-                    <progress class="bg-amber-500 h-2 bg-slate-50" value={50} max="100"></progress>
+                <div class="w-full md:w-1/4 flex flex-col gap-2">
+                    <span class="ml-2 text-xs text-gray-700 self-end">{xp}/{Math.floor(xp/1000)+1}000</span>
+                    <progress class="progress progress-secondary h-2 w-full" value={(xp ?? 0) % 1000} max="1000"></progress>
                 </div>
             </div>
             <div class="bg-slate-100 w-full min-h-screen rounded-t-3xl flex flex-col gap-10 p-5">

@@ -12,7 +12,7 @@
     import { stringFromBase64URL } from '@supabase/ssr';
 
     //変数宣言
-    let { wordslist, wb_name, language, user_or_library } = $props();
+    let { wordslist, wb_name, language, user_or_library, user_info } = $props();
     let main_input:HTMLInputElement | null = $state(null);
     let wordslength = $state(wordslist.length);
     let count = $state(0)

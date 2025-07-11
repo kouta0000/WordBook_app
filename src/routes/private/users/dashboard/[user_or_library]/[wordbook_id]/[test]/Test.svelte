@@ -1,13 +1,15 @@
 <script lang="ts">
     import { fly, fade, scale } from 'svelte/transition';
-    import TestBackground1 from './TestBackground1.svelte';
-    import TestBackground2 from './TestBackground2.svelte';
     import {fit, parent_style} from "@leveluptuts/svelte-fit";
+    import {enhance} from "$app/forms";
     import type { Action } from 'svelte/action';
     import {onMount} from "svelte";
     import { goto } from '$app/navigation';
+    import {Tween} from "svelte/motion";
+    import {cubicOut} from "svelte/easing";
+    import {invalidate} from "$app/navigation";
     //変数宣言
-    let { wordslist, wb_name, language, user_or_library } = $props();
+    let { wordslist, wb_name, language, user_or_library, user_info } = $props();
     let questions:Word[] = $state([]);
     let questionIndex:number=$state(-1);
     let lengthdeciding =$state(true);
@@ -19,6 +21,21 @@
     let selectedwords:WordWithAnswer[] =$state([])
     let length:number = $state(20);
     let score:number = $state(0);
+    let level:number = $state(user_info.level);
+    let xp:number = $state(user_info.xp);
+    let result:number = $state(0);
+    let button:HTMLButtonElement | undefined = $state();
+   
+    let progress = new Tween(0, {
+        duration:1500,
+        easing:cubicOut
+    });
+    let progress2 = new Tween(0,{
+        delay:1500,
+        duration:1500,
+        easing:cubicOut
+    })
+    let formatted = $derived(Math.floor(xp+progress2.current)%1000);
     
     
     let inputedanswer = $state("");
@@ -103,14 +120,23 @@
         showResult = true;
         setTimeout(nextQuestion,2000);
     }
-    const clearInfo = () => {
+    const clearInfo =  () => {
         showResult = false;
         audio = undefined;
         selectedwords=[];
+        progress.set(0);
+        progress2.set(0);
+        level = user_info.level;
+        xp = user_info.xp;;
         currentword={term:"", meaning:""};
         isCorrect=false;
         shuffledwords=[];
         inputedanswer = "";
+        if (button) {
+            questions=[];
+            button = undefined;
+        }
+        
     }
     const shuffle = (input: WordWithAnswer[]) => {
         const length: number = input.length-1;
@@ -219,8 +245,6 @@
             
             {:else}
             <div class="text-center">
-                <div class="text-6xl mb-6">🎉</div>
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">お疲れ様です！</h2>
                 <div class="bg-linear-to-r from-blue-100 to-indigo-100 rounded-2xl p-8 mb-8">
                     <div class="text-5xl font-bold text-blue-600 mb-2">
                         {score}/{length}
@@ -228,6 +252,25 @@
                     <div class="text-xl text-gray-600">
                         正答率：{Math.round((score / length)*100)}%
                     </div>
+                    <form method="post" action="?/updateXp_Level" use:enhance={()=>{
+                        return async ({update}) => {
+                            await update();
+                        } 
+                    }} class="text-xl text-gray-600">
+                        <p>スコア：{progress.current.toFixed()}</p>
+                        <p>経験値:</p>
+                        <p class="text-xs">{(xp+progress2.current).toFixed()}/{Math.floor(xp/1000)+1}000</p>
+                        <progress class="progress progress-primary h-2" value={formatted} max="1000"></progress>
+                        <input type="hidden" name="last_xp" value={xp} />
+                        <input type="hidden" name="xp" value={xp+Math.floor(300*Math.round((score)/(length)))} />
+                        {#if Math.floor(xp/1000) != Math.floor(Math.floor(xp+300*Math.round((score)/(length)))/1000)}
+                        <input type="hidden" name="level" value={level+1} />
+                        <p>Level up!</p>
+                        {:else}
+                        <input type="hidden" name="level" value={level} />
+                        {/if}
+                        <button bind:this={button} transition:fade onintroend={()=>{setTimeout(()=>{button?.click()},500);result=Math.floor(300*Math.round((score)/(length)));progress.set(result);progress2.set(result)}} type="submit" class="opacity-0"></button>
+                    </form>
                 </div>
                 <div class="w-full flex gap-1 justify-center p-5">
                 <button onclick={()=> goto("./wordsdashboard")} class="btn btn-lg btn-active font-bold rounded-2xl btn-primary">

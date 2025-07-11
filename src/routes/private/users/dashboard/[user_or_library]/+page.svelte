@@ -12,9 +12,10 @@
     id: any;
 }
     let { data }: PageProps = $props();
-    let user_or_library = data.user_or_library;
-    let currentView: string = $state(user_or_library);
-    let quests = $state(data.loaddata.quests.data)
+    let currentView: string = $state("home");
+    const level = data.loaddata.user_info.data?.[0].level;
+    const last_xp = data.loaddata.user_info.data?.[0].last_xp;
+    const xp = data.loaddata.user_info.data?.[0].xp;
 </script>
 {#if navigating.to || navigating.from}
 <div class="w-full h-screen bg-slate-100 flex justify-center items-center">
@@ -25,10 +26,8 @@
 {/if}
 {#if currentView == "user"}
 <UserWordBooks wordbooks={data.loaddata.user_wordbooks.data ?? []}/>
-{:else if currentView == "library"}
-<LibraryWordBooks wordbooks={data.loaddata.library_wordbooks.data?? []}/>
 {:else if currentView=="home"}
-<Home wordbooks={data.loaddata.user_wordbooks.data ?? []} />
+<Home level={level} xp={xp} last_xp={last_xp} wordbooks={data.loaddata.user_wordbooks.data ?? []} />
 {/if}
 
 <div class="dock z-5">

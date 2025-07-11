@@ -12,6 +12,7 @@
      const language = data.loaddata.language;
      let user_or_library = $state(data.loaddata.user_or_library);
      const test = data.loaddata.test;
+     let user_info = $state(data.loaddata.user_info);
 </script>
 {#if navigating.to}
 <div class="w-full h-screen bg-slate-100 flex justify-center items-center">
@@ -20,11 +21,11 @@
 </div>
 {/if}
 {#if test == "4taku"}
-<Test wordslist={words} wb_name={wb_name} language={language} user_or_library={user_or_library} />
+<Test wordslist={words} user_info={user_info.data?.[0]} wb_name={wb_name} language={language} user_or_library={user_or_library} />
 {:else if test =="input"}
-<Test2 wordslist={words} wb_name={wb_name} language={language} user_or_library={user_or_library} />
+<Test2 wordslist={words} user_info={user_info} wb_name={wb_name} language={language} user_or_library={user_or_library} />
 {:else if test=="order"}
-<Test3 wordslist={words} wb_name={wb_name} language={language} user_or_library={user_or_library} />
+<Test3 wordslist={words}  user_info={user_info} wb_name={wb_name} language={language} user_or_library={user_or_library} />
 {:else if test=="sound"}
-<Test4 wordslist={words} wb_name={wb_name} language={language} user_or_library={user_or_library} />
+<Test4 wordslist={words} user_info={user_info} wb_name={wb_name} language={language} user_or_library={user_or_library} />
 {/if}
