@@ -121,7 +121,7 @@ onMount(()=>{
                 </div>
             </dialog>
            
-            <div class="shadow-sm active:bg-indigo-100 transition-all duration-200 w-9/10 sm:grow p-7 flex flex-col gap-2 rounded-xl bg-white relative">
+            <div class="shadow-sm active:bg-indigo-100 transition-all duration-200 w-9/10 sm:grow p-4 flex flex-col gap-2 rounded-xl bg-white relative">
                 <a href="./user/{wordbook.id}/wordsdashboard" class="absolute inset-0 z-1"></a>
                 <div class={{"absolute z-2 top-0 right-0 w-full py-1 px-2 flex gap-2  justify-end":true}}>
                     <button onclick={()=>dialogs[id]?.showModal()} class="text-gray-500 hover:text-indigo-700">
@@ -138,7 +138,7 @@ onMount(()=>{
                    
                 </div>
                 <div class="flex items-center">
-                    <div class={{"w-2/13  mask mask-squircle p-4 flex justify-center items-center text-white font-black text-3xl aspect-square text-center":true,"bg-sky-400":id%4==0,"bg-pink-400":id%4==1,"bg-teal-400":id%4==2,"bg-amber-400":id%4==3}} >{wordbook.wb_name[0]}</div>
+                    <div class={{"w-2/13  mask mask-squircle p-4 flex justify-center items-center text-white font-black text-3xl aspect-square text-center":true,"bg-sky-300":id%4==0,"bg-pink-300":id%4==1,"bg-teal-300":id%4==2,"bg-amber-300":id%4==3}} >{wordbook.wb_name[0]}</div>
                     <div class="w-8/13 flex flex-col justify-center items-center">
                     <h1 class="text-xl text-center">{wordbook.wb_name}</h1>
                     </div>

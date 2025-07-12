@@ -38,9 +38,9 @@ const res_choices:string[][] = [
 <Generate/>
 
 {/if}
-    <div class="w-full h-screen mt-15 flex flex-col items-center relative">
+    <div class="w-full h-screen mt-15 flex flex-col items-center relative pt-20">
         
-        <h1 class="text-3xl mb-10 mt-10 font-bold bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">追加</h1>
+        <h1 class="text-3xl mb-10 mt-10 font-bold bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text mt-10">追加</h1>
         
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-13 sm:gap-x-0 items-center place-items-center">
             <div onclick={()=>currentView="file"} class="bg-indigo-200 w-9/10 rounded-xl p-5 cursor-pointer">

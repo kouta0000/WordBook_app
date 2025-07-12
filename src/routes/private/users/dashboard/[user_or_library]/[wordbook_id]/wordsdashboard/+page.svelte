@@ -14,7 +14,7 @@
      
      const wb_name = data.loaddata.wb.data?.[0].wb_name;
      const language = data.loaddata.wb.data?.[0].language;
-     let currentView: string = $state(user_or_library=="user"? "edit": "memo");
+     let currentView: string = $state("memo");
      const wordbook_id = data.loaddata.wordbook_id; 
      
 </script>
@@ -26,8 +26,6 @@
 {/if}
 {#if currentView == "memo"}
 <Memo wordbook_id={wordbook_id} words={data.loaddata.words.data} wb_name={wb_name} language={language}/> 
-{:else if currentView == "edit"}
-<Edit words={data.loaddata.words.data} wb_name={wb_name} wordbook_id={wordbook_id} user_or_library={user_or_library}/>
 {:else if currentView == "test"}
 <TestSelect/>
 {:else if currentView == "add"}

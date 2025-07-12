@@ -172,24 +172,24 @@
         <div class="w-full flex sm:grid flex-col grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-x-0 items-center place-items-center relative">
             
             {#each wordsc as word,i (word.id)}
-            <IntersectionObserver element={cards[i]} on:intersect={(e) => {showContents[i]=true;}} on:observe={(e)=>{shows[i] = true;showPhrases[i]=false}}>
+            <IntersectionObserver element={cards[i]} on:intersect={(e) => {showContents[i]=true;}} on:observe={(e)=>{shows[i] = true;showPhrases[i]=false;showbuttons[i]=false}}>
             <div transition:slide bind:this={cards[i]} class="w-9/10 sm:grow flex flex-col justify-center items-start relative">
                 {#if showbuttons[i]}
-                <div class="w-full absolute bottom-[100%]  transition-all duration-200">
-                    <div transition:fade class="w-9/10 overflow-hidden flex self-start rounded-full">
-                        <button onclick={() => {showPhrases[i]=true;showPhrases.forEach((v,id)=>{if(id!=i)showPhrases[id]=false});currentviews[i]="synonym"; displays[i] = fetchtext(word.term,"synonym",word.id,false)}} class="btn  btn-sm bg-white text-indigo-900 font-semibold w-1/3">
+                <div class="w-full absolute bottom-[103%]  transition-all duration-200">
+                    <div transition:fade class="w-9/10 overflow-hidden flex self-start rounded-t-full rounded-r-full shadow-lg">
+                        <button onclick={() => {showPhrases[i]=true;showPhrases.forEach((v,id)=>{if(id!=i)showPhrases[id]=false});currentviews[i]="synonym"; displays[i] = fetchtext(word.term,"synonym",word.id,false)}} class="btn btn-sm border-none bg-slate-100 text-indigo-900 font-semibold w-1/3">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-3">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                             </svg>
                             <p>類語</p>                                  
                         </button>
-                        <button onclick={() => {showPhrases[i]=true;showPhrases.forEach((v,id)=>{if(id!=i)showPhrases[id]=false});currentviews[i]="collocation";displays[i] = fetchtext(word.term,"collocation",word.id,false)}} class="btn btn-sm bg-white text-indigo-900 font-semibold w-1/3">
+                        <button onclick={() => {showPhrases[i]=true;showPhrases.forEach((v,id)=>{if(id!=i)showPhrases[id]=false});currentviews[i]="collocation";displays[i] = fetchtext(word.term,"collocation",word.id,false)}} class="btn btn-sm border-none bg-slate-100 text-indigo-900 font-semibold w-1/3">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-3">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
                             </svg> 
                             <p>フレーズ</p>                                     
                         </button>
-                        <button onclick={() => {showPhrases[i]=true;showPhrases.forEach((v,id)=>{if(id!=i)showPhrases[id]=false});currentviews[i]="sentence";displays[i] = fetchtext(word.term, "sentence", word.id,false)}} class="btn btn-sm bg-white text-indigo-900 font-semibold w-1/3">
+                        <button onclick={() => {showPhrases[i]=true;showPhrases.forEach((v,id)=>{if(id!=i)showPhrases[id]=false});currentviews[i]="sentence";displays[i] = fetchtext(word.term, "sentence", word.id,false)}} class="btn btn-sm border-none bg-slate-100 text-indigo-900 font-semibold w-1/3">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-3">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
                             </svg> 
@@ -197,7 +197,7 @@
                         </button>
                     </div>
                     {#if showPhrases[i]}
-                    <div transition:slide class={{"absolute top-[100%] left-[50%] -translate-x-[50%] z-3 w-[95vw] md:w-[33vw] bg-linear-to-br overflow-hidden rounded-3xl flex flex-col transition-all duration-200":true, "from-indigo-50 to-indigo-200":i%2==0,"from-gray-200 to-teal-200":i%2==1,}}>
+                    <div transition:slide class={{"shadow-xl absolute top-[100%] left-[50%] -translate-x-[50%] z-3 w-[95vw] md:w-[33vw] bg-slate-50 overflow-hidden rounded-3xl flex flex-col transition-all duration-200":true}}>
                         <div class="w-full p-5 flex flex-col gap-3">
                             <button class={{"self-end btn btn-sm  rounded-3xl btn-primary text-xs font-bold btn-active":true}} onclick={()=> displays[i]=fetchtext(word.term, currentviews[i],word.id,true)}>
                                 再生成
@@ -205,14 +205,14 @@
                                     <path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" />
                                 </svg>  
                             </button>
-                            <div class={{"rounded-xl w-full gap-4":true, "flex flex-col":currentviews[i] == "sentence", "grid grid-cols-2":currentviews[i] != "sentence"}}>
+                            <div class={{"rounded-xl w-full gap-5":true, "flex flex-col":currentviews[i] == "sentence", "grid grid-cols-2":currentviews[i] != "sentence"}}>
                         
                         
                                 {#await displays[i]}
                                 <p class="loading loading-dots"></p>
                                 {:then value}
                                 {#each value.examples as ex,index (index)}
-                                    <div class="bg-white rounded-xl w-full p-5 pt-6 flex flex-col relative">
+                                    <div class="bg-white rounded-xl w-full p-5 pt-6 flex flex-col relative shadow-sm">
                                         <p>{ex.example}</p>
                                         <p>({ex.translation})</p>
                                         <div class={{"absolute bottom-0 right-0":true, "w-1/11":currentviews[i]=="sentence", "w-1/5":currentviews[i] != "sentence"}}>
@@ -235,13 +235,13 @@
                 </div>
                 {/if}
                  {#if showContents[i]}
-                 <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-t-xl rounded-r-xl relative">
+                 <div class="flex justify-center w-full shadow-lg bg-white shadow-sm rounded-xl relative">
                     <div class="grow flex flex-col max-w-9/10 relative">
                         <div class="absolute top-0 right-0">
                         <Widgets word={word} wordbook_id={wordbook_id} onend={()=>{wordsc=words}} />
                         </div>
                         <div style={parent_style} class="w-full">
-                            <button use:fit={{min_size:5, max_size:20}}  onclick={() => {showbuttons[i]=!showbuttons[i]}} class="font-sans font-semibold pl-5 pr-1 pt-4 pb-1 text-2xl flex gap-5 items-center">
+                            <button use:fit={{min_size:5, max_size:23}}  onclick={() => {showbuttons[i]=!showbuttons[i];showbuttons.forEach((button,j)=>{if(j!=i){showbuttons[j]=false}})}} class="font-sans font-semibold pl-5 pr-1 pt-4 pb-1 text-2xl flex gap-5 items-center">
                                 <p>{!soundmode? (isFlipped? word.meaning: word.term) : `${word.term[0]}${Array(word.term.length-1).fill("_").join("")}`}</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-indigo-500">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
@@ -252,7 +252,7 @@
                         {#if shows[i]}
                         
                         <div style={parent_style}>
-                        <p use:fit={{min_size:8, max_size:20}} transition:fade={{duration:300}} class="text-gray-500 text-right font-sans p-1 pr-6">
+                        <p use:fit={{min_size:8, max_size:20}} transition:fade={{duration:300}} class="text-gray-500 text-right font-sans pr-12">
                         {isFlipped? word.term: word.meaning}
                         </p>
                         </div>
