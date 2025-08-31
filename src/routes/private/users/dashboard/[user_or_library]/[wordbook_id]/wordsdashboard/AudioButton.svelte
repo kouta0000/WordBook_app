@@ -33,7 +33,12 @@
         }
     });
 </script>
-<div class="w-full aspect-square my-auto p-2">
+<div class="w-full aspect-square my-auto p-2 relative">
+    {#if audio}
+<a href={audio.src} download={"sound"+word+".mp3"} class="size-4 absolute left-[100%] bottom-[100%] bg-white/20">
+    ⬇
+</a>
+{/if}
     <label class="swap">
         <!-- this hidden checkbox controls the state -->
         <input bind:checked={isChecked} disabled={isChecked} onchange={fetchAudio} type="checkbox" />
